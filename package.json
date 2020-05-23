@@ -1,0 +1,19 @@
+{
+  "name": "easyresttogql",
+  "version": "0.1.0",
+  "description": "A simple Package to convert your REST API into a GQL API",
+  "main": "index.js",
+  "scripts": {
+    "test": "yarn test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ramiromachado/easyRESTToGQL.git"
+  },
+  "author": "Ramiro Machado",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ramiromachado/easyRESTToGQL/issues"
+  },
+  "homepage": "https://github.com/ramiromachado/easyRESTToGQL#readme"
+}
