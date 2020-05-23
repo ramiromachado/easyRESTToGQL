@@ -4,7 +4,7 @@
   "description": "A simple Package to convert your REST API into a GQL API",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --recursive"
   },
   "repository": {
     "type": "git",
