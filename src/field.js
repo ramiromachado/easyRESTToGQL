@@ -1,9 +1,32 @@
+const { FieldWithoutNameError, FieldWithoutTypeError } = require('./errors');
+
 class Field{
 
-    constructor(config){
+    name;
+    type;
 
+    constructor(name, type){
+        if(!name) throw new FieldWithoutNameError();
+        if(!type) throw new FieldWithoutTypeError();
+        this.setName(name);
+        this.setType(type);
     }
 
+    getName(){
+        return this.name;
+    }
+
+    setName(name ) {
+        this.name = name;
+    }
+
+    getType(){
+        return this.type;
+    }
+
+    setType(type) {
+        this.type = type;
+    }
 
 }
 

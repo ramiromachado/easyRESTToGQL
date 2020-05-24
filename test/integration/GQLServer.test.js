@@ -115,8 +115,24 @@ describe('GQL Server', function() {
                 (() => testUtils.createEntityWithoutFields()).should.throw(testUtils.getEntityWithoutFieldsError());
             });
 
-            it('should fail if some entity has no fields', async () => {
+            it('should fail if some entity has no name', async () => {
+                // Testing
                 (() => testUtils.createEntityWithoutName()).should.throw(testUtils.getEntityWithoutNameError());
+            });
+
+            it('should fail if some entity has two fields with the same name', async () => {
+                // Testing
+                (() => testUtils.createEntityWitRepeatedFieldName()).should.throw(testUtils.getEntityWithRepeatedFieldError());
+            });
+
+            it('should fail if some field has no name', async () => {
+                // Testing
+                (() => testUtils.createFieldWithoutName()).should.throw(testUtils.getFieldWithoutNameError());
+            });
+
+            it('should fail if some field has no type', async () => {
+                // Testing
+                (() => testUtils.createFieldWithoutType()).should.throw(testUtils.getFieldWithoutTypeError());
             });
         });
     });

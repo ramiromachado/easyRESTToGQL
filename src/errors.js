@@ -1,3 +1,4 @@
+// TODO: Write better messages
 class NoPortConfiguredError extends Error {
     constructor(message) {
         super(message);
@@ -12,10 +13,10 @@ class PortIsTakenError extends Error {
     }
 }
 
-class APIUnreachableError extends Error {
+class RESTAPIUnreachableError extends Error {
     constructor(message) {
         super(message);
-        this.name = "APIUnreachableError";
+        this.name = "RESTAPIUnreachableError";
     }
 }
 
@@ -33,10 +34,34 @@ class EntityWithoutNameError extends Error {
     }
 }
 
+class EntityWithRepeatedFieldError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "EntityWithRepeatedFieldError";
+    }
+}
+
+class FieldWithoutNameError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "FieldWithoutNameError";
+    }
+}
+
+class FieldWithoutTypeError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "FieldWithoutTypeError";
+    }
+}
+
 module.exports = {
     NoPortConfiguredError,
     PortIsTakenError,
-    APIUnreachableError,
+    RESTAPIUnreachableError,
     EntityWithoutFieldsError,
-    EntityWithoutNameError
+    EntityWithoutNameError,
+    EntityWithRepeatedFieldError,
+    FieldWithoutNameError,
+    FieldWithoutTypeError
 };

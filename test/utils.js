@@ -3,7 +3,8 @@ const fs = require('fs');
 const jsonServer = require('json-server');
 
 const { Field, Entity, Errors } = require("../src/index");
-const { NoPortConfiguredError, PortIsTakenError, APIUnreachableError, EntityWithoutFieldsError, EntityWithoutNameError } = Errors;
+const { NoPortConfiguredError, PortIsTakenError, RESTAPIUnreachableError, EntityWithoutFieldsError,
+    EntityWithoutNameError, EntityWithRepeatedFieldError, FieldWithoutNameError, FieldWithoutTypeError } = Errors;
 
 class testUtils {
 
@@ -45,7 +46,7 @@ class testUtils {
     }
 
     getRESTAPIUnreachableError() {
-        return APIUnreachableError;
+        return RESTAPIUnreachableError;
     }
 
     getEntityWithoutFieldsError() {
@@ -54,6 +55,18 @@ class testUtils {
 
     getEntityWithoutNameError() {
         return EntityWithoutNameError;
+    }
+
+    getEntityWithRepeatedFieldError() {
+        return EntityWithRepeatedFieldError;
+    }
+
+    getFieldWithoutNameError() {
+        return FieldWithoutNameError;
+    }
+
+    getFieldWithoutTypeError() {
+        return FieldWithoutTypeError;
     }
 
     async cleanAndRestartRESTAPIServer() {
@@ -107,6 +120,18 @@ class testUtils {
 
     createEntityWithoutName() {
         return new Entity(undefined, this.getInvoiceURL(), [new Field("id", "string")]);
+    }
+
+    createEntityWitRepeatedFieldName() {
+        return new Entity("name", this.getInvoiceURL(), [new Field("id", "string"),new Field("id", "string")]);
+    }
+
+    createFieldWithoutName() {
+        return new Field(undefined, "string");
+    }
+
+    createFieldWithoutType() {
+        return new Field("id", undefined);
     }
 
     async getProductDataFromRest() {

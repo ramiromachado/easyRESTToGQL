@@ -1,4 +1,4 @@
-const { NoPortConfiguredError, PortIsTakenError } = require('./errors');
+const { NoPortConfiguredError, PortIsTakenError, RESTAPIUnreachableError} = require('./errors');
 
 class Server{
 
@@ -15,6 +15,7 @@ class Server{
 
     async start(){
         if(await this.isPortIsTaken(this.getPort())) throw new PortIsTakenError();
+        if(await this.thereIsSomeRESTAPIURLUnfetchable()) throw new RESTAPIUnreachableError();
 
         // Initialice gql server
         this.setState("START");
@@ -40,6 +41,10 @@ class Server{
         this.entities = entities;
     }
 
+    getEntities(){
+        return this.entities;
+    }
+
     // TODO: find a better way to do this
     async isPortIsTaken(port){
         return new Promise((resolve) => {
@@ -59,6 +64,10 @@ class Server{
 
             server.listen(port);
         });
+    }
+
+    async thereIsSomeRESTAPIURLUnfetchable(){
+        return this.getEntities().some(async entity => !(await entity.isTheRESTAPIURLFetchable()));
     }
 
 }
