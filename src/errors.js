@@ -1,7 +1,7 @@
-class NotPortConfiguredError extends Error {
+class NoPortConfiguredError extends Error {
     constructor(message) {
         super(message);
-        this.name = "NotPortConfiguredError";
+        this.name = "NoPortConfiguredError";
     }
 }
 
@@ -19,8 +19,24 @@ class APIUnreachableError extends Error {
     }
 }
 
+class EntityWithoutFieldsError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "EntityWithoutFieldsError";
+    }
+}
+
+class EntityWithoutNameError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "EntityWithoutNameError";
+    }
+}
+
 module.exports = {
-    NotPortConfiguredError,
+    NoPortConfiguredError,
     PortIsTakenError,
-    APIUnreachableError
+    APIUnreachableError,
+    EntityWithoutFieldsError,
+    EntityWithoutNameError
 };

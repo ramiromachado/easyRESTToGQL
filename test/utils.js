@@ -3,7 +3,7 @@ const fs = require('fs');
 const jsonServer = require('json-server');
 
 const { Field, Entity, Errors } = require("../src/index");
-const { NotPortConfiguredError, PortIsTakenError, APIUnreachableError } = Errors;
+const { NoPortConfiguredError, PortIsTakenError, APIUnreachableError, EntityWithoutFieldsError, EntityWithoutNameError } = Errors;
 
 class testUtils {
 
@@ -16,19 +16,52 @@ class testUtils {
 
     GQLPort = "4000";
 
-    getRestDBFile() { return this.restDBFile; }
-    getRestPort() { return this.restPort; }
-    getProductURL() { return this.productURL; }
-    getInvoiceURL() { return this.invoiceURL; }
-    getPort() { return this.GQLPort; }
-    getNotPortConfiguredError() { return NotPortConfiguredError; }
-    getPortIsTakenError() { return PortIsTakenError; }
-    getRESTAPIUnreachableError() { return APIUnreachableError; }
+    getRestDBFile() {
+        return this.restDBFile;
+    }
+
+    getRestPort() {
+        return this.restPort;
+    }
+
+    getProductURL() {
+        return this.productURL;
+    }
+
+    getInvoiceURL() {
+        return this.invoiceURL;
+    }
+
+    getPort() {
+        return this.GQLPort;
+    }
+
+    getNoPortConfiguredError() {
+        return NoPortConfiguredError;
+    }
+
+    getPortIsTakenError() {
+        return PortIsTakenError;
+    }
+
+    getRESTAPIUnreachableError() {
+        return APIUnreachableError;
+    }
+
+    getEntityWithoutFieldsError() {
+        return EntityWithoutFieldsError;
+    }
+
+    getEntityWithoutNameError() {
+        return EntityWithoutNameError;
+    }
 
     async cleanAndRestartRESTAPIServer() {
 
-        const invoices = [{ id: "000001", total: 993, productIds: ["001", "002"] },
-            { id: "000002", total: 125, productIds: ["003"] }];
+        const invoices = [
+            { id: "000001", total: 993, productIds: ["001", "002"] },
+            { id: "000002", total: 125, productIds: ["003"] }
+        ];
 
         const products = [
             { id: "001", value: 3.30 },
@@ -39,7 +72,7 @@ class testUtils {
         const DBData = JSON.stringify({ invoices, products });
         fs.writeFileSync(this.getRestDBFile(), DBData);
 
-        if(!this.RESTAPIserver){
+        if (!this.RESTAPIserver) {
             this.RESTAPIserver = jsonServer.create();
             const router = jsonServer.router(this.getRestDBFile());
             const middlewares = jsonServer.defaults();
@@ -51,25 +84,36 @@ class testUtils {
     }
 
     createProductEntity() {
-        return new Entity(this.getProductURL(), [
+        const entityName = "Product";
+        return new Entity(entityName, this.getProductURL(), [
             new Field("id", "string"),
             new Field("value", "number")
         ]);
     }
 
     createInvoiceEntity() {
-        return new Entity(this.getInvoiceURL(), [
+        const entityName = "Invoice";
+        return new Entity(entityName, this.getInvoiceURL(), [
             new Field("id", "string"),
             new Field("total", "number"),
             new Field("productIds", "array", "string")
         ]);
     }
 
-    async getProductDataFromRest(){
+    createEntityWithoutFields() {
+        const entityName = "withoutFields";
+        return new Entity(entityName, this.getInvoiceURL(), []);
+    }
+
+    createEntityWithoutName() {
+        return new Entity(undefined, this.getInvoiceURL(), [new Field("id", "string")]);
+    }
+
+    async getProductDataFromRest() {
         return this.fetchRESTAPIServer(this.getProductURL());
     }
 
-    async getInvoiceDataFromRest(){
+    async getInvoiceDataFromRest() {
         return this.fetchRESTAPIServer(this.getInvoiceURL());
     }
 
