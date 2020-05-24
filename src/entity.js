@@ -1,4 +1,4 @@
-const { EntityWithoutFieldsError, EntityWithoutNameError, EntityWithRepeatedFieldError, RESTAPIUnreachableError } = require('./errors');
+const { EntityWithoutFieldsError, EntityWithoutNameError, EntityWithRepeatedFieldError, EntityWithoutURLError } = require('./errors');
 
 class Entity {
 
@@ -8,6 +8,7 @@ class Entity {
 
     constructor(name, RESTAPIURL, fields) {
         if (!name) throw new EntityWithoutNameError();
+        if (!RESTAPIURL) throw new EntityWithoutURLError();
         if (!fields || (fields.length == 0)) throw new EntityWithoutFieldsError();
         if (this.thereIsARepeteadNameField(fields)) throw new EntityWithRepeatedFieldError();
         this.setName(name);
@@ -59,6 +60,31 @@ class Entity {
         } catch (err) {
             return false;
         }
+    }
+
+    // TODO: do it using template literals as functions
+    getQueryString(){
+        return `${this.getName()}: [${this.getName()}]!`
+    }
+
+    // TODO: do it using template literals as functions
+    getTypeString(){
+        const fieldsType = this.getFields().map(field => field.getTypeString()).join('\n');
+        return `type ${this.getName()} {
+            ${fieldsType}
+        }`;
+    }
+
+    getResolver(){
+        return (async () => {
+            const response = await fetch(this.getRESTAPIURL(), {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            const data = await response.json();
+            return data;
+        });
     }
 
 }

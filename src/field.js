@@ -16,7 +16,7 @@ class Field{
         return this.name;
     }
 
-    setName(name ) {
+    setName(name) {
         this.name = name;
     }
 
@@ -25,9 +25,25 @@ class Field{
     }
 
     setType(type) {
-        this.type = type;
+        this.type = this.generateType(type);
+    }
+
+    getTypeString(){
+        return `${this.getName()}: ${this.getType()}`;
+    }
+
+    generateType(type){
+        return typesMap[type];
     }
 
 }
 
+//TODO: Do this in abetter way
+typesMap = {
+    string: "String",
+    float: "Float",
+    int: "Int",
+    array: "String",
+    boolean: "Boolean"
+}
 module.exports = Field;

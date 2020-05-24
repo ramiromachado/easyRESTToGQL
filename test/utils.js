@@ -1,21 +1,27 @@
 require('isomorphic-fetch');
+const { createApolloFetch } = require('apollo-fetch');
+
 const fs = require('fs');
 const jsonServer = require('json-server');
 
-const { Field, Entity, Errors } = require("../src/index");
-const { NoPortConfiguredError, PortIsTakenError, RESTAPIUnreachableError, EntityWithoutFieldsError,
-    EntityWithoutNameError, EntityWithRepeatedFieldError, FieldWithoutNameError, FieldWithoutTypeError } = Errors;
+const { ArrayField, Field, Entity, Errors } = require("../src/index");
+const {
+    NoPortConfiguredError, NoEntitiesConfiguredError, PortIsTakenError, RESTAPIUnreachableError, EntityWithoutNameError,
+    EntityRepeatedName, EntityWithoutURLError, EntityWithoutFieldsError, EntityWithRepeatedFieldError,
+    FieldWithoutNameError, FieldWithoutTypeError
+} = Errors;
 
 class testUtils {
 
     RESTAPIserver;
-    restDBFile = './db.json';
+    restDBFile = './test/db.json';
     restPort = "3000";
-    restAPIURL = `localhost:${this.restPort}`;
+    restAPIURL = `http://localhost:${this.restPort}`;
     productURL = `${this.restAPIURL}/products`;
     invoiceURL = `${this.restAPIURL}/invoices`;
 
     GQLPort = "4000";
+    GQLURL = `http://localhost:${this.getPort()}/graphql`;
 
     getRestDBFile() {
         return this.restDBFile;
@@ -37,8 +43,16 @@ class testUtils {
         return this.GQLPort;
     }
 
+    getGQLURL() {
+        return this.GQLURL;
+    }
+
     getNoPortConfiguredError() {
         return NoPortConfiguredError;
+    }
+
+    getNoEntitiesConfiguredError() {
+        return NoEntitiesConfiguredError;
     }
 
     getPortIsTakenError() {
@@ -49,13 +63,22 @@ class testUtils {
         return RESTAPIUnreachableError;
     }
 
+    getEntityWithoutNameError() {
+        return EntityWithoutNameError;
+    }
+
+    getEntityRepeatedName() {
+        return EntityRepeatedName;
+    }
+
+    getEntityWithoutURLError() {
+        return EntityWithoutURLError;
+    }
+
     getEntityWithoutFieldsError() {
         return EntityWithoutFieldsError;
     }
 
-    getEntityWithoutNameError() {
-        return EntityWithoutNameError;
-    }
 
     getEntityWithRepeatedFieldError() {
         return EntityWithRepeatedFieldError;
@@ -69,7 +92,15 @@ class testUtils {
         return FieldWithoutTypeError;
     }
 
+    cleanRESTAPIServer() {
+        try {
+            fs.unlinkSync(this.getRestDBFile());
+        } catch(_) {}
+    }
+
     async cleanAndRestartRESTAPIServer() {
+
+        this.cleanRESTAPIServer();
 
         const invoices = [
             { id: "000001", total: 993, productIds: ["001", "002"] },
@@ -77,22 +108,23 @@ class testUtils {
         ];
 
         const products = [
-            { id: "001", value: 3.30 },
-            { id: "002", value: 6.90 },
-            { id: "003", value: 1.25 }
+            { id: "001", value: 3.30, isAvailable: true },
+            { id: "002", value: 6.90, isAvailable: false },
+            { id: "003", value: 1.25, isAvailable: true }
         ];
 
         const DBData = JSON.stringify({ invoices, products });
         fs.writeFileSync(this.getRestDBFile(), DBData);
 
         if (!this.RESTAPIserver) {
+            // TODO: make it start quiet
             this.RESTAPIserver = jsonServer.create();
             const router = jsonServer.router(this.getRestDBFile());
             const middlewares = jsonServer.defaults();
 
             this.RESTAPIserver.use(middlewares);
             this.RESTAPIserver.use(router);
-            this.RESTAPIserver.listen(this.getRestPort());
+            await this.RESTAPIserver.listen(this.getRestPort());
         }
     }
 
@@ -100,30 +132,60 @@ class testUtils {
         const entityName = "Product";
         return new Entity(entityName, this.getProductURL(), [
             new Field("id", "string"),
-            new Field("value", "number")
+            new Field("value", "float"),
+            new Field("isAvailable", "boolean")
         ]);
+    }
+
+    getProductGQLQuery() {
+        return `{
+            Product {
+                id
+                value
+                isAvailable
+            }
+        }`
     }
 
     createInvoiceEntity() {
         const entityName = "Invoice";
         return new Entity(entityName, this.getInvoiceURL(), [
             new Field("id", "string"),
-            new Field("total", "number"),
-            new Field("productIds", "array", "string")
+            new Field("total", "int"),
+            new ArrayField("productIds", "string")
         ]);
     }
 
-    createEntityWithoutFields() {
-        const entityName = "withoutFields";
-        return new Entity(entityName, this.getInvoiceURL(), []);
+    getInvoiceGQLQuery() {
+        return `{
+            Invoice {
+                id
+                total
+                productIds    
+            }
+        }`
     }
 
     createEntityWithoutName() {
         return new Entity(undefined, this.getInvoiceURL(), [new Field("id", "string")]);
     }
 
+
+
+    createEntityWithoutURL() {
+        return new Entity("withoutURL", undefined, [new Field("id", "string")]);
+    }
+
+    createEntityWithUnreachableURL() {
+        return new Entity("withoutURL", "unreachable", [new Field("id", "string")]);
+    }
+
+    createEntityWithoutFields() {
+        return new Entity("withoutFields", this.getInvoiceURL(), []);
+    }
+
     createEntityWitRepeatedFieldName() {
-        return new Entity("name", this.getInvoiceURL(), [new Field("id", "string"),new Field("id", "string")]);
+        return new Entity("name", this.getInvoiceURL(), [new Field("id", "string"), new Field("id", "string")]);
     }
 
     createFieldWithoutName() {
@@ -151,16 +213,9 @@ class testUtils {
         return await response.json();
     }
 
-    async fetchGQLServer(entity, data) {
-        const query = ``; // TODO: Make a proper query
-
-        const response = await fetch(`localhost:${this.getPort()}/graphql`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query }),
-        });
-
-        return response;
+    async fetchGQLServer(query) {
+        const fetch = createApolloFetch({ uri: this.getGQLURL() });
+        return fetch({ query });
     }
 }
 

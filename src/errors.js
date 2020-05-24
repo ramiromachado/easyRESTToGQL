@@ -6,6 +6,13 @@ class NoPortConfiguredError extends Error {
     }
 }
 
+class NoEntitiesConfiguredError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "NoEntitiesConfiguredError";
+    }
+}
+
 class PortIsTakenError extends Error {
     constructor(message) {
         super(message);
@@ -20,6 +27,27 @@ class RESTAPIUnreachableError extends Error {
     }
 }
 
+class EntityWithoutNameError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "EntityWithoutNameError";
+    }
+}
+
+class EntityRepeatedName extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "EntityRepeatedName";
+    }
+}
+
+class EntityWithoutURLError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "EntityWithoutURLError";
+    }
+}
+
 class EntityWithoutFieldsError extends Error {
     constructor(message) {
         super(message);
@@ -27,12 +55,6 @@ class EntityWithoutFieldsError extends Error {
     }
 }
 
-class EntityWithoutNameError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "EntityWithoutNameError";
-    }
-}
 
 class EntityWithRepeatedFieldError extends Error {
     constructor(message) {
@@ -57,10 +79,13 @@ class FieldWithoutTypeError extends Error {
 
 module.exports = {
     NoPortConfiguredError,
+    NoEntitiesConfiguredError,
     PortIsTakenError,
     RESTAPIUnreachableError,
-    EntityWithoutFieldsError,
     EntityWithoutNameError,
+    EntityRepeatedName,
+    EntityWithoutURLError,
+    EntityWithoutFieldsError,
     EntityWithRepeatedFieldError,
     FieldWithoutNameError,
     FieldWithoutTypeError

@@ -4,7 +4,7 @@
   "description": "A simple Package to convert your REST API into a GQL API",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --recursive"
+    "test": "mocha --recursive --exit"
   },
   "repository": {
     "type": "git",
@@ -17,10 +17,14 @@
   },
   "homepage": "https://github.com/ramiromachado/easyRESTToGQL#readme",
   "devDependencies": {
+    "apollo-fetch": "^0.7.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "isomorphic-fetch": "^2.2.1",
     "json-server": "^0.16.1",
     "mocha": "^7.1.2"
+  },
+  "dependencies": {
+    "graphql-yoga": "^1.18.3"
   }
 }
