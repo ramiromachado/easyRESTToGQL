@@ -1,7 +1,7 @@
-var assert = require('assert');
-var should = require('chai').should();
+const assert = require('assert');
+const should = require('chai').should();
 
-describe.skip('Service', function() {
+describe('Service', function() {
 
     describe('Success', function() {
         it('should start the service for a simple entity with valid url', function() {
