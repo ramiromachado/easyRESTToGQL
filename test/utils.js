@@ -14,7 +14,7 @@ const {
 class testUtils {
 
     RESTAPIserver;
-    restDBFile = './test/db.json';
+    restDBFile = './test/db.json'; // TODO: Replace this json for a js with a function that return what you want
     restPort = "3000";
     restAPIURL = `http://localhost:${this.restPort}`;
     productURL = `${this.restAPIURL}/products`;

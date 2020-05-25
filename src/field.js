@@ -33,17 +33,18 @@ class Field{
     }
 
     generateType(type){
-        return typesMap[type];
+        return this.getTypesMap()[type];
     }
 
-}
+    getTypesMap(){
+        return {
+            string: "String",
+            float: "Float",
+            int: "Int",
+            array: "String",
+            boolean: "Boolean"
+        }
+    }
 
-//TODO: Do this in abetter way
-typesMap = {
-    string: "String",
-    float: "Float",
-    int: "Int",
-    array: "String",
-    boolean: "Boolean"
 }
 module.exports = Field;

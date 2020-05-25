@@ -25,6 +25,7 @@
     "mocha": "^7.1.2"
   },
   "dependencies": {
-    "graphql-yoga": "^1.18.3"
+    "graphql-yoga": "^1.18.3",
+    "lodash": "^4.17.15"
   }
 }

@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const { EntityWithoutFieldsError, EntityWithoutNameError, EntityWithRepeatedFieldError, EntityWithoutURLError } = require('./errors');
 
 class Entity {
@@ -40,13 +42,8 @@ class Entity {
         this.fields = fields;
     }
 
-    //TODO: Think if there is a better way to do this
     thereIsARepeteadNameField(fields) {
-        return fields.some(fieldA => {
-            return fields.some(fieldB => {
-                return fieldA != fieldB && fieldA.getName() == fieldB.getName();
-            });
-        });
+        return _.uniqBy(fields, field => field.getName()).length != fields.length;
     }
 
     async isTheRESTAPIURLFetchable() {
@@ -62,14 +59,12 @@ class Entity {
         }
     }
 
-    // TODO: do it using template literals as functions
     getQueryString(){
-        return `${this.getName()}: [${this.getName()}]!`
+        return `${this.getName()}: [${this.getName()}]!`;
     }
 
-    // TODO: do it using template literals as functions
     getTypeString(){
-        const fieldsType = this.getFields().map(field => field.getTypeString()).join('\n');
+        const fieldsType = this.getFields().map(field => field.getTypeString``).join('\n');
         return `type ${this.getName()} {
             ${fieldsType}
         }`;

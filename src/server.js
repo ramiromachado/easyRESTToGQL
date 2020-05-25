@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const { GraphQLServer } = require('graphql-yoga');
 
 const {
@@ -87,46 +89,39 @@ class Server {
         return entitiesRESTAPIURLAreFetchable.some(isEntityRESTAPIURLFetchable => !isEntityRESTAPIURLFetchable);
     }
 
-    //TODO: Think if there is a better way to do this
     thereIsSomeFieldNameRepeated(entities){
-        return entities.some(entityA => {
-            return entities.some(entityB => {
-                return entityA != entityB && entityA.getName() == entityB.getName();
-            });
-        });
+        return _.uniqBy(entities, entity => entity.getName()).length != entities.length;
     }
 
-    // TODO: do it using template literals as functions
+    getQueryResolvers(){
+        return this.getEntities().reduce((resolvers, entity) => {
+            resolvers[entity.getName()] = entity.getResolver();
+            return resolvers;
+        }, {});
+    }
+
+    getTypeDefs(){
+        const queryList = this.queryList``;
+        const typeList = this.typeList``;
+        return `
+            ${queryList}
+            ${typeList}
+        `;
+    }
+
     queryList(){
-        const entitiesQueryList = this.getEntities().map(entity => entity.getQueryString()).join('\n');
+        const entitiesQueryList = this.getEntities().map(entity => entity.getQueryString``).join('\n');
         return `type Query {
            ${entitiesQueryList} 
         }`;
     }
 
-    // TODO: do it using template literals as functions
     typeList(){
-        return this.getEntities().map(entity => entity.getTypeString()).join('\n');
-    }
-
-    // TODO: find a better way to do this
-    getQueryResolvers(){
-        let resolvers = {};
-
-        this.getEntities().map(entity => resolvers[entity.getName()] = entity.getResolver());
-        return resolvers;
-    }
-
-    // TODO: do it using template literals as functions
-    getTypeDefs(){
-        return `
-            ${this.queryList()}
-            ${this.typeList()}
-        `;
+        return this.getEntities().map(entity => entity.getTypeString``).join('\n');
     }
 
     async startGQLServer() {
-        const typeDefs = this.getTypeDefs();
+        const typeDefs = this.getTypeDefs``;
         const queryResolvers = this.getQueryResolvers();
         const resolvers = {
             Query: queryResolvers
