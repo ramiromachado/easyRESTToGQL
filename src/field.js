@@ -1,4 +1,4 @@
-const { FieldWithoutNameError, FieldWithoutTypeError } = require('./errors');
+const { FieldWithoutNameError, FieldWithoutTypeError, FieldWithoutValidTypeError } = require('./errors');
 
 class Field{
 
@@ -33,7 +33,12 @@ class Field{
     }
 
     generateType(type){
-        return this.getTypesMap()[type];
+        const typeMapped = this.getTypesMap()[type];
+        if(typeMapped){
+            return typeMapped;
+        } else{
+            throw new FieldWithoutValidTypeError();
+        }
     }
 
     getTypesMap(){
@@ -42,7 +47,8 @@ class Field{
             float: "Float",
             int: "Int",
             array: "String",
-            boolean: "Boolean"
+            boolean: "Boolean",
+            object: "Object"
         }
     }
 

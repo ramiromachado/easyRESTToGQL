@@ -182,6 +182,11 @@ describe('GQL Server', function() {
                 // Testing
                 (() => testUtils.createFieldWithoutType()).should.throw(testUtils.getFieldWithoutTypeError());
             });
+
+            it('should fail if some field has invalid type', async () => {
+                // Testing
+                (() => testUtils.createFieldWithInvalidType()).should.throw(testUtils.getFieldWithoutValidTypeError());
+            });
         });
     });
 });

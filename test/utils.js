@@ -5,11 +5,6 @@ const fs = require('fs');
 const jsonServer = require('json-server');
 
 const { ArrayField, Field, Entity, Errors } = require("../src/index");
-const {
-    NoPortConfiguredError, NoEntitiesConfiguredError, PortIsTakenError, RESTAPIUnreachableError, EntityWithoutNameError,
-    EntityRepeatedName, EntityWithoutURLError, EntityWithoutFieldsError, EntityWithRepeatedFieldError,
-    FieldWithoutNameError, FieldWithoutTypeError
-} = Errors;
 
 class testUtils {
 
@@ -48,54 +43,58 @@ class testUtils {
     }
 
     getNoPortConfiguredError() {
-        return NoPortConfiguredError;
+        return Errors.NoPortConfiguredError;
     }
 
     getNoEntitiesConfiguredError() {
-        return NoEntitiesConfiguredError;
+        return Errors.NoEntitiesConfiguredError;
     }
 
     getPortIsTakenError() {
-        return PortIsTakenError;
+        return Errors.PortIsTakenError;
     }
 
     getRESTAPIUnreachableError() {
-        return RESTAPIUnreachableError;
+        return Errors.RESTAPIUnreachableError;
     }
 
     getEntityWithoutNameError() {
-        return EntityWithoutNameError;
+        return Errors.EntityWithoutNameError;
     }
 
     getEntityRepeatedName() {
-        return EntityRepeatedName;
+        return Errors.EntityRepeatedName;
     }
 
     getEntityWithoutURLError() {
-        return EntityWithoutURLError;
+        return Errors.EntityWithoutURLError;
     }
 
     getEntityWithoutFieldsError() {
-        return EntityWithoutFieldsError;
+        return Errors.EntityWithoutFieldsError;
     }
 
-
     getEntityWithRepeatedFieldError() {
-        return EntityWithRepeatedFieldError;
+        return Errors.EntityWithRepeatedFieldError;
     }
 
     getFieldWithoutNameError() {
-        return FieldWithoutNameError;
+        return Errors.FieldWithoutNameError;
     }
 
     getFieldWithoutTypeError() {
-        return FieldWithoutTypeError;
+        return Errors.FieldWithoutTypeError;
+    }
+
+    getFieldWithoutValidTypeError() {
+        return Errors.FieldWithoutValidTypeError;
     }
 
     cleanRESTAPIServer() {
         try {
             fs.unlinkSync(this.getRestDBFile());
-        } catch(_) {}
+        } catch (_) {
+        }
     }
 
     async cleanAndRestartRESTAPIServer() {
@@ -103,8 +102,8 @@ class testUtils {
         this.cleanRESTAPIServer();
 
         const invoices = [
-            { id: "000001", total: 993, productIds: ["001", "002"] },
-            { id: "000002", total: 125, productIds: ["003"] }
+            { id: "000001", total: 993, items: [{ productId: "001", quantity: 5 }, { productId: "002", quantity: 3 }] },
+            { id: "000002", total: 125, items: [{ productId: "003", quantity: 1 }] }
         ];
 
         const products = [
@@ -152,7 +151,7 @@ class testUtils {
         return new Entity(entityName, this.getInvoiceURL(), [
             new Field("id", "string"),
             new Field("total", "int"),
-            new ArrayField("productIds", "string")
+            new ArrayField("items", "object")
         ]);
     }
 
@@ -161,7 +160,7 @@ class testUtils {
             Invoice {
                 id
                 total
-                productIds    
+                items
             }
         }`
     }
@@ -169,7 +168,6 @@ class testUtils {
     createEntityWithoutName() {
         return new Entity(undefined, this.getInvoiceURL(), [new Field("id", "string")]);
     }
-
 
 
     createEntityWithoutURL() {
@@ -194,6 +192,10 @@ class testUtils {
 
     createFieldWithoutType() {
         return new Field("id", undefined);
+    }
+
+    createFieldWithInvalidType() {
+        return new Field("id", "invalidType");
     }
 
     async getProductDataFromRest() {

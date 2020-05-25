@@ -77,6 +77,13 @@ class FieldWithoutTypeError extends Error {
     }
 }
 
+class FieldWithoutValidTypeError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "FieldWithoutValidTypeError";
+    }
+}
+
 module.exports = {
     NoPortConfiguredError,
     NoEntitiesConfiguredError,
@@ -88,5 +95,6 @@ module.exports = {
     EntityWithoutFieldsError,
     EntityWithRepeatedFieldError,
     FieldWithoutNameError,
-    FieldWithoutTypeError
+    FieldWithoutTypeError,
+    FieldWithoutValidTypeError
 };

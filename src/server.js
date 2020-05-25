@@ -104,6 +104,7 @@ class Server {
         const queryList = this.queryList``;
         const typeList = this.typeList``;
         return `
+            scalar Object
             ${queryList}
             ${typeList}
         `;
