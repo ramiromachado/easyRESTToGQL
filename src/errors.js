@@ -1,86 +1,78 @@
-// TODO: Write better messages
 class NoPortConfiguredError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "NoPortConfiguredError";
+    constructor() {
+        super(`There is no port configured on the server`);
     }
 }
 
 class NoEntitiesConfiguredError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "NoEntitiesConfiguredError";
+    constructor() {
+        super(`There is no entity configured on the server`);
     }
 }
 
 class PortIsTakenError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "PortIsTakenError";
+    constructor(port) {
+        super(`The port ${port} is busy`);
     }
 }
 
 class RESTAPIUnreachableError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "RESTAPIUnreachableError";
+
+    constructor(RESTAPIURLs) {
+        if (RESTAPIURLs.length == 1) {
+            super(`The entity REST API URL ${RESTAPIURLs[0]} is unreachable`);
+        } else {
+            const allExectpLasturls = RESTAPIURLs.slice(0, RESTAPIURLs.length - 1).join(", ");
+            super(`The entity REST API URLs ${allExectpLasturls} and ${RESTAPIURLs[RESTAPIURLs.length-1]} are unreachable`);
+        }
     }
 }
 
 class EntityWithoutNameError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "EntityWithoutNameError";
+    constructor() {
+        super(`A entity was created without a name`);
     }
 }
 
 class EntityRepeatedName extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "EntityRepeatedName";
+    constructor() { //TODO: it would be nice to inform the repeated entity name
+        super(`Two entities were created with the same name`);
     }
 }
 
 class EntityWithoutURLError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "EntityWithoutURLError";
+    constructor(entittyName) {
+        super(`The entity ${entittyName} was created without REST API URL`);
     }
 }
 
 class EntityWithoutFieldsError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "EntityWithoutFieldsError";
+    constructor(entittyName) {
+        super(`The entity ${entittyName} was created without fields`);
     }
 }
 
-
 class EntityWithRepeatedFieldError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "EntityWithRepeatedFieldError";
+    constructor(entittyName) {
+        super(`The entity ${entittyName} was created with a repeated field`);
     }
 }
 
 class FieldWithoutNameError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "FieldWithoutNameError";
+    constructor() {
+        super(`A field was created without name`);
     }
 }
 
 class FieldWithoutTypeError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "FieldWithoutTypeError";
+    constructor(fieldName) {
+        super(`The field ${fieldName} was created without a type`);
     }
 }
 
 class FieldWithoutValidTypeError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "FieldWithoutValidTypeError";
+    constructor(fieldName, invalidType) {
+        super(`The field ${fieldName} was created with the invalid type "${invalidType}"`);
     }
 }
 

@@ -23,8 +23,8 @@ class Server {
     }
 
     async start() {
-        if (await this.isPortIsTaken(this.getPort())) throw new PortIsTakenError();
-        if (await this.thereIsSomeRESTAPIURLUnfetchable()) throw new RESTAPIUnreachableError();
+        if (await this.isPortIsTaken(this.getPort())) throw new PortIsTakenError(this.getPort());
+        await this.throwExceptionIfSomeRESTAPIURLIsUnreachable();
 
         await this.startGQLServer();
         this.setState("START");
@@ -81,12 +81,18 @@ class Server {
         });
     }
 
-    async thereIsSomeRESTAPIURLUnfetchable() {
+    async throwExceptionIfSomeRESTAPIURLIsUnreachable(){
+        const RESTAPIURLsUnfetchable = await this.getRESTAPIURLsUnfetchable();
+        if (RESTAPIURLsUnfetchable.length != 0) throw new RESTAPIUnreachableError(RESTAPIURLsUnfetchable);
+    }
+
+    async getRESTAPIURLsUnfetchable() {
+        // Using async map to make async filtering
         const entitiesRESTAPIURLAreFetchable = await Promise.all(this.getEntities().map(async entity => {
             return entity.isTheRESTAPIURLFetchable();
         }));
 
-        return entitiesRESTAPIURLAreFetchable.some(isEntityRESTAPIURLFetchable => !isEntityRESTAPIURLFetchable);
+        return this.getEntities().filter((_, index) => !entitiesRESTAPIURLAreFetchable[index]).map(entity => entity.getRESTAPIURL());
     }
 
     thereIsSomeFieldNameRepeated(entities){

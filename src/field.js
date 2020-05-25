@@ -7,7 +7,7 @@ class Field{
 
     constructor(name, type){
         if(!name) throw new FieldWithoutNameError();
-        if(!type) throw new FieldWithoutTypeError();
+        if(!type) throw new FieldWithoutTypeError(name);
         this.setName(name);
         this.setType(type);
     }
@@ -37,7 +37,7 @@ class Field{
         if(typeMapped){
             return typeMapped;
         } else{
-            throw new FieldWithoutValidTypeError();
+            throw new FieldWithoutValidTypeError(type);
         }
     }
 

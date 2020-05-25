@@ -10,9 +10,9 @@ class Entity {
 
     constructor(name, RESTAPIURL, fields) {
         if (!name) throw new EntityWithoutNameError();
-        if (!RESTAPIURL) throw new EntityWithoutURLError();
-        if (!fields || (fields.length == 0)) throw new EntityWithoutFieldsError();
-        if (this.thereIsARepeteadNameField(fields)) throw new EntityWithRepeatedFieldError();
+        if (!RESTAPIURL) throw new EntityWithoutURLError(name);
+        if (!fields || (fields.length == 0)) throw new EntityWithoutFieldsError(name);
+        if (this.thereIsARepeteadNameField(fields)) throw new EntityWithRepeatedFieldError(name);
         this.setName(name);
         this.setRESTAPIURL(RESTAPIURL);
         this.setFields(fields);
