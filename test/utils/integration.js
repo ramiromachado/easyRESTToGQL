@@ -1,12 +1,12 @@
 require('isomorphic-fetch');
 const { createApolloFetch } = require('apollo-fetch');
-
 const fs = require('fs');
 const jsonServer = require('json-server');
 
-const { ArrayField, Field, Entity, Errors } = require("../src/index");
+const { ArrayField, Field, Entity } = require("../../src/index");
+const serverUtils = require('./server');
 
-class testUtils {
+class integrationUtils {
 
     RESTAPIserver;
     restDBFile = './test/db.json'; // TODO: Replace this json for a js with a function that return what you want
@@ -17,8 +17,6 @@ class testUtils {
     clientURL = `${this.restAPIURL}/clients`;
     paymentURL = `${this.restAPIURL}/paymentss`;
 
-    GQLPort = "4000";
-    GQLURL = `http://localhost:${this.getPort()}/graphql`;
 
     getRestDBFile() {
         return this.restDBFile;
@@ -42,50 +40,6 @@ class testUtils {
 
     getPaymentURL() {
         return this.paymentURL;
-    }
-
-    getPort() {
-        return this.GQLPort;
-    }
-
-    getGQLURL() {
-        return this.GQLURL;
-    }
-
-    getNoPortConfiguredError() {
-        return Errors.NoPortConfiguredError;
-    }
-
-    getNoEntitiesConfiguredError() {
-        return Errors.NoEntitiesConfiguredError;
-    }
-
-    getPortIsTakenError() {
-        return Errors.PortIsTakenError;
-    }
-
-    getRESTAPIUnreachableError() {
-        return Errors.RESTAPIUnreachableError;
-    }
-
-    getEntityWithoutNameError() {
-        return Errors.EntityWithoutNameError;
-    }
-
-    getEntityRepeatedName() {
-        return Errors.EntityRepeatedName;
-    }
-
-    getEntityWithoutURLError() {
-        return Errors.EntityWithoutURLError;
-    }
-
-    getEntityWithoutFieldsError() {
-        return Errors.EntityWithoutFieldsError;
-    }
-
-    getEntityWithRepeatedFieldError() {
-        return Errors.EntityWithRepeatedFieldError;
     }
 
     cleanRESTAPIServer() {
@@ -168,8 +122,8 @@ class testUtils {
         const invoiceEntity = new Entity("Invoice", this.getInvoiceURL(), [
             new Field("id", "string"),
             new Field("total", "int"),
-            new Field("client", new ReferenceField(clientEntity, "clientId")),
-            new ArrayField("payments", new ReferenceField( paymentEntity, "paymentIds")),
+            new ReferenceField("client", clientEntity, "clientId"),
+            new ReferenceArrayField("payments", paymentEntity, "paymentIds"),
             new ArrayField("items", "object")
         ]);
 
@@ -229,27 +183,6 @@ class testUtils {
         }`
     }
 
-    createEntityWithoutName() {
-        return new Entity(undefined, this.getInvoiceURL(), [new Field("id", "string")]);
-    }
-
-
-    createEntityWithoutURL() {
-        return new Entity("withoutURL", undefined, [new Field("id", "string")]);
-    }
-
-    createEntityWithUnreachableURL() {
-        return new Entity("withoutURL", "unreachable", [new Field("id", "string")]);
-    }
-
-    createEntityWithoutFields() {
-        return new Entity("withoutFields", this.getInvoiceURL(), []);
-    }
-
-    createEntityWitRepeatedFieldName() {
-        return new Entity("name", this.getInvoiceURL(), [new Field("id", "string"), new Field("id", "string")]);
-    }
-
     async getProductDataFromRest() {
         return this.fetchRESTAPIServer(this.getProductURL());
     }
@@ -262,6 +195,10 @@ class testUtils {
         return this.fetchRESTAPIServer(this.getClientURL());
     }
 
+    async getPaymentDataFromRest() {
+        return this.fetchRESTAPIServer(this.getPaymentURL());
+    }
+
     async fetchRESTAPIServer(url) {
         const response = await fetch(url, {
             method: 'GET',
@@ -272,9 +209,9 @@ class testUtils {
     }
 
     async fetchGQLServer(query) {
-        const fetch = createApolloFetch({ uri: this.getGQLURL() });
+        const fetch = createApolloFetch({ uri: serverUtils.getGQLURL() });
         return fetch({ query });
     }
 }
 
-module.exports = new testUtils();
+module.exports = new integrationUtils();

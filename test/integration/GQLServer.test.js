@@ -5,18 +5,18 @@ const chaiAsPromised = require('chai-as-promised');
 const should = require('chai').should();
 chai.use(chaiAsPromised);
 
-const { Server } = require("../../src/index");
-const testUtils = require('../utils');
+const { Server, Errors } = require("../../src/index")
+const { integrationUtils, entityUtils, serverUtils } = require('../utils/index');
 
 describe('GQL Server', function() {
     beforeEach((done) => {
-        testUtils.cleanAndRestartRESTAPIServer()
+        integrationUtils.cleanAndRestartRESTAPIServer()
             .then(() => done())
             .catch((err) => done(err))
     });
 
     afterEach((done) => {
-        testUtils.cleanRESTAPIServer();
+        integrationUtils.cleanRESTAPIServer();
         done();
     });
 
@@ -36,8 +36,8 @@ describe('GQL Server', function() {
 
                     it('should run and reply fetching products list of elements', async () => {
                         // Setting up the GQL Server
-                        const productEntity = testUtils.createProductEntity();
-                        const port = testUtils.getPort();
+                        const productEntity = integrationUtils.createProductEntity();
+                        const port = serverUtils.getPort();
                         server = new Server(port, [productEntity]);
                         await server.start();
 
@@ -47,9 +47,9 @@ describe('GQL Server', function() {
                         serverState.should.to.be.equal('RUNNING');
 
                         // Testing if products data can be fetched
-                        const productsDataFromRest = (await testUtils.getProductDataFromRest());
+                        const productsDataFromRest = (await integrationUtils.getProductDataFromRest());
                         const { errors: productsErrorsFromGQL, data: { Product: productsDataFromGQL } } =
-                            (await testUtils.fetchGQLServer(testUtils.getProductGQLQuery()));
+                            (await integrationUtils.fetchGQLServer(integrationUtils.getProductGQLQuery()));
                         should.not.exist(productsErrorsFromGQL);
                         should.exist(productsDataFromGQL);
                         productsDataFromGQL.should.have.lengthOf(productsDataFromRest.length);
@@ -66,24 +66,29 @@ describe('GQL Server', function() {
                     // Reference by a plain field
                     it('should run and reply fetching clients data on invoice list of elements', async () => {
                         // Setting up the GQL Server
-                        const port = testUtils.getPort();
-                        const entities = testUtils.createInvoiceAndClientEntity();
+                        const port = serverUtils.getPort();
+                        const entities = integrationUtils.createInvoiceAndClientEntity();
 
                         server = new Server(port, entities);
                         await server.start();
 
                         // Fetch data from rest to compare with data fetched via GraphQL
-                        const invoicesDataFromRest = (await testUtils.getInvoiceDataFromRest());
-                        const clientsDataFromRest = (await testUtils.getClientDataFromRest());
+                        const invoicesDataFromRest = (await integrationUtils.getInvoiceDataFromRest());
+                        const clientsDataFromRest = (await integrationUtils.getClientDataFromRest());
+                        const paymentsDataFromRest = (await integrationUtils.getPaymentDataFromRest());
+
                         // Make the data looks like it will be from GQL
                         invoicesDataFromRest.forEach(invoice => {
                             invoice.client = clientsDataFromRest.find(client => client.id === invoice.clientId);
+                            invoice.payments = invoice.paymentIds.forEach(paymentId => {
+                                return paymentsDataFromRest.find(payment => payment.id === paymentId);
+                            });
                         });
 
                         // Testing if invoices data can be fetched and connect with the client info
-                        const data = (await testUtils.fetchGQLServer(testUtils.getInvoiceGQLQuery())); // remove this line
+                        const data = (await integrationUtils.fetchGQLServer(integrationUtils.getInvoiceGQLQuery())); // remove this line
                         const { errors: invoicesErrorsFromGQL, data: { Invoice: invoicesDataFromGQL } } =
-                            (await testUtils.fetchGQLServer(testUtils.getInvoiceGQLQuery()));
+                            (await integrationUtils.fetchGQLServer(integrationUtils.getInvoiceGQLQuery()));
                         should.not.exist(invoicesErrorsFromGQL);
                         should.exist(invoicesDataFromGQL);
                         invoicesDataFromGQL.should.have.lengthOf(invoicesDataFromRest.length);
@@ -94,24 +99,24 @@ describe('GQL Server', function() {
                     // Reference by an array field
                     it.skip('should run and reply fetching clients data on invoice list of elements', async () => {
                         // Setting up the GQL Server
-                        const port = testUtils.getPort();
-                        const entities = testUtils.createInvoiceAndClientEntity();
+                        const port = serverUtils.getPort();
+                        const entities = integrationUtils.createInvoiceAndClientEntity();
 
                         server = new Server(port, entities);
                         await server.start();
 
                         // Fetch data from rest to compare with data fetched via GraphQL
-                        const invoicesDataFromRest = (await testUtils.getInvoiceDataFromRest());
-                        const clientsDataFromRest = (await testUtils.getClientDataFromRest());
+                        const invoicesDataFromRest = (await integrationUtils.getInvoiceDataFromRest());
+                        const clientsDataFromRest = (await integrationUtils.getClientDataFromRest());
                         // Make the data looks like it will be from GQL
                         invoicesDataFromRest.forEach(invoice => {
                             invoice.client = clientsDataFromRest.find(client => client.id === invoice.clientId);
                         });
 
                         // Testing if invoices data can be fetched and connect with the client info
-                        const data = (await testUtils.fetchGQLServer(testUtils.getInvoiceGQLQuery())); // remove this line
+                        const data = (await integrationUtils.fetchGQLServer(integrationUtils.getInvoiceGQLQuery())); // remove this line
                         const { errors: invoicesErrorsFromGQL, data: { Invoice: invoicesDataFromGQL } } =
-                            (await testUtils.fetchGQLServer(testUtils.getInvoiceGQLQuery()));
+                            (await integrationUtils.fetchGQLServer(integrationUtils.getInvoiceGQLQuery()));
                         should.not.exist(invoicesErrorsFromGQL);
                         should.exist(invoicesDataFromGQL);
                         invoicesDataFromGQL.should.have.lengthOf(invoicesDataFromRest.length);
@@ -134,76 +139,23 @@ describe('GQL Server', function() {
 
         describe('Error', function() {
 
-            it('should fail without port configuration', async () => {
-                // Setting up the GQL Server
-                const productEntity = testUtils.createProductEntity();
-                const port = undefined;
-
-                // Testing
-                (() => {
-                    new Server(port, [productEntity]);
-                }).should.throw(testUtils.getNoPortConfiguredError());
-            });
-
-            it('should fail without entities configured', async () => {
-
-                // Setting up the GQL Server
-                const port = testUtils.getPort();
-
-                // Testing
-                (() => {
-                    new Server(port, []);
-                }).should.throw(testUtils.getNoEntitiesConfiguredError());
-            });
-
             it('should fail if selected port is taken', async () => {
                 // Setting up the GQL Server on the same port as the RESTAPIServer
-                const productEntity = testUtils.createProductEntity();
-                const port = testUtils.getRestPort();
+                const productEntity = integrationUtils.createProductEntity();
+                const port = integrationUtils.getRestPort();
                 const server = new Server(port, [productEntity]);
                 // Testing
-                return server.start().should.be.rejectedWith(testUtils.getPortIsTakenError());
+                return server.start().should.be.rejectedWith(Errors.PortIsTakenError);
             });
 
             it('should fail if some REST API service is unreachable', async () => {
                 // Setting up the GQL Server
-                const unreachableEntity = testUtils.createEntityWithUnreachableURL();
-                const port = testUtils.getPort();
+                const unreachableEntity = entityUtils.getUnreachableURLEntity();
+                const port = serverUtils.getPort();
                 const server = new Server(port, [unreachableEntity]);
 
                 // Testing
-                return server.start().should.be.rejectedWith(testUtils.getRESTAPIUnreachableError());
-            });
-
-            it('should fail if two entities has the same name', async () => {
-                // Setting up the GQL Server
-                const productEntity = testUtils.createProductEntity();
-                const productEntityRepeated = testUtils.createProductEntity();
-                const port = testUtils.getPort();
-                // Testing
-                (() => new Server(port, [productEntity, productEntityRepeated]))
-                    .should.throw(testUtils.getEntityRepeatedName());
-            });
-
-
-            it('should fail if some entity has no name', async () => {
-                // Testing
-                (() => testUtils.createEntityWithoutName()).should.throw(testUtils.getEntityWithoutNameError());
-            });
-
-            it('should fail if some entity has no URL', async () => {
-                // Testing
-                (() => testUtils.createEntityWithoutURL()).should.throw(testUtils.getEntityWithoutURLError());
-            });
-
-            it('should fail if some entity has no fields', async () => {
-                // Testing
-                (() => testUtils.createEntityWithoutFields()).should.throw(testUtils.getEntityWithoutFieldsError());
-            });
-
-            it('should fail if some entity has two fields with the same name', async () => {
-                // Testing
-                (() => testUtils.createEntityWitRepeatedFieldName()).should.throw(testUtils.getEntityWithRepeatedFieldError());
+                return server.start().should.be.rejectedWith(Errors.RESTAPIUnreachableError);
             });
         });
     });
