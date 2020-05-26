@@ -76,6 +76,24 @@ class FieldWithoutValidTypeError extends Error {
     }
 }
 
+class FieldWithoutAssociatedEntityError extends Error {
+    constructor(fieldName) {
+        super(`The reference field ${fieldName} was created without associated entity`);
+    }
+}
+
+class FieldWithoutAssociatedEntityFieldNameError extends Error {
+    constructor(fieldName) {
+        super(`The reference field ${fieldName} was created without associated entity field`);
+    }
+}
+
+class EntityHasNoFieldWithTheGivenName extends Error {
+    constructor(entityName, fieldName) {
+        super(`The entity ${entityName} has no field with the name "${fieldName}"`);
+    }
+}
+
 module.exports = {
     NoPortConfiguredError,
     NoEntitiesConfiguredError,
@@ -88,5 +106,8 @@ module.exports = {
     EntityWithRepeatedFieldError,
     FieldWithoutNameError,
     FieldWithoutTypeError,
-    FieldWithoutValidTypeError
+    FieldWithoutValidTypeError,
+    FieldWithoutAssociatedEntityError,
+    FieldWithoutAssociatedEntityFieldNameError,
+    EntityHasNoFieldWithTheGivenName
 };

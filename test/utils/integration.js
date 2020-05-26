@@ -3,7 +3,7 @@ const { createApolloFetch } = require('apollo-fetch');
 const fs = require('fs');
 const jsonServer = require('json-server');
 
-const { ArrayField, Field, Entity } = require("../../src/index");
+const { ArrayField, Field, ReferenceField, ArrayReferenceField, Entity } = require("../../src/index");
 const serverUtils = require('./server');
 
 class integrationUtils {
@@ -123,7 +123,7 @@ class integrationUtils {
             new Field("id", "string"),
             new Field("total", "int"),
             new ReferenceField("client", clientEntity, "clientId"),
-            new ReferenceArrayField("payments", paymentEntity, "paymentIds"),
+            new ArrayReferenceField("payments", paymentEntity, "paymentIds"),
             new ArrayField("items", "object")
         ]);
 

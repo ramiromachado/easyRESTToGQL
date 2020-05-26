@@ -39,6 +39,10 @@ class Entity {
         return this.fields;
     }
 
+    getField(fieldName){
+        return this.getFields().find(field => field.getName() === fieldName);
+    }
+
     setFields(fields) {
         this.fields = fields;
     }

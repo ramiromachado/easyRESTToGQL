@@ -20,6 +20,10 @@ class entityUtils {
         return new Entity("EntityWithAllTypeOfFields", "url", fields);
     }
 
+    getSimpleEntityWithFields(fields){
+        return new Entity("simpleEntityWithFields", "url", fields);
+    }
+
     getNoNameEntity() {
         const fields = [fieldUtils.getStringField()];
         return new Entity(undefined, "url", fields);

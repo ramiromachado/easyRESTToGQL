@@ -22,7 +22,7 @@ describe('Entities', function() {
         it.skip('should create an Enitity with nested fields', async () => {
         });
 
-        it('should create enitities with referenced fields', async () => {
+        describe('should create enitities with referenced fields', async () => {
 
             it('should create lineal referenced entities like A -> B', async () => {
                 const [a, b] = entityUtils.getTwoLinealReferencedEntities();

@@ -1,4 +1,4 @@
-const { Field, ArrayField } = require('../../src/index');
+const { Field, ArrayField, ReferenceField, ArrayReferenceField } = require('../../src/index');
 
 class fieldUtils {
 
@@ -42,28 +42,60 @@ class fieldUtils {
         return new ArrayField("objectArrayField", "object");
     }
 
-    getNoNameField(){
+    getReferenceField(entity, entityFieldName) {
+        return new ReferenceField("referenceField", entity, entityFieldName);
+    }
+
+    getArrayReferenceField(entity, entityFieldName) {
+        return new ArrayReferenceField("referenceField", entity, entityFieldName);
+    }
+
+    getNoNameField() {
         return new Field(undefined, "string");
     }
 
-    getNoTypeField(){
+    getNoTypeField() {
         return new Field("id", undefined);
     }
 
-    getInvalidTypeField(){
+    getInvalidTypeField() {
         return new Field("id", "invalidType");
     }
 
-    getNoNameArrayField(){
+    getNoNameArrayField() {
         return new Field(undefined, "string");
     }
 
-    getNoTypeArrayField(){
+    getNoTypeArrayField() {
         return new Field("id", undefined);
     }
 
-    getInvalidTypeArrayField(){
+    getInvalidTypeArrayField() {
         return new Field("id", "invalidType");
+    }
+
+    getNoNameReferenceField(associatedEntity, fieldName) {
+        return new ReferenceField(undefined, associatedEntity, fieldName);
+    }
+
+    getNoNameArrayReferenceField(associatedEntity, fieldName) {
+        return new ArrayReferenceField(undefined, associatedEntity, fieldName);
+    }
+
+    getNoAssociatedEntityReferenceField() {
+        return new ReferenceField("fieldName", undefined, "associatedEntityFieldName");
+    }
+
+    getNoAssociatedEntityArrayReferenceField() {
+        return new ArrayReferenceField("fieldName", undefined, "associatedEntityFieldName");
+    }
+
+    getNoAssociatedEntityFieldNameReferenceField(associatedEntity) {
+        return new ReferenceField("fieldName", associatedEntity, undefined);
+    }
+
+    getNoAssociatedEntityFieldNameArrayReferenceField(associatedEntity) {
+        return new ArrayReferenceField("fieldName", associatedEntity, undefined);
     }
 
 }
