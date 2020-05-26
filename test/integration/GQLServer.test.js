@@ -23,78 +23,111 @@ describe('GQL Server', function() {
     describe('GQL server running and responding', function() {
         describe('Success', function() {
 
-            describe('should run and respond with simple schema without connection between entities', async function() {
+            describe("should run and respond with simple schema (No nested fields)", async function() {
                 let server;
+
                 afterEach((done) => {
                     server.stop()
                         .then(_ => done())
                         .catch((err) => done(err));
                 });
 
-                it('should run and reply fetching entity list of elements', async () => {
-                    // Setting up the GQL Server
-                    const invoiceEntity = testUtils.createInvoiceEntity();
-                    const productEntity = testUtils.createProductEntity();
-                    const port = testUtils.getPort();
-                    server = new Server(port, [invoiceEntity, productEntity]);
-                    await server.start();
+                describe('schema without connection between entities', async function() {
 
-                    // Testing if the server is running
-                    const serverState = server.getState();
-                    serverState.should.to.be.a('string');
-                    serverState.should.to.be.equal('RUNNING');
+                    it('should run and reply fetching products list of elements', async () => {
+                        // Setting up the GQL Server
+                        const productEntity = testUtils.createProductEntity();
+                        const port = testUtils.getPort();
+                        server = new Server(port, [productEntity]);
+                        await server.start();
 
-                    // Testing if invoices data can be fetched
-                    const invoicesDataFromRest = (await testUtils.getInvoiceDataFromRest());
-                    const { errors: invoicesErrorsFromGQL, data: { Invoice: invoicesDataFromGQL } } =
-                        (await testUtils.fetchGQLServer(testUtils.getInvoiceGQLQuery()));
-                    should.not.exist(invoicesErrorsFromGQL);
-                    should.exist(invoicesDataFromGQL);
-                    invoicesDataFromGQL.should.have.lengthOf(invoicesDataFromRest.length);
-                    invoicesDataFromGQL.should.be.eql(invoicesDataFromRest);
+                        // Testing if the server is running
+                        const serverState = server.getState();
+                        serverState.should.to.be.a('string');
+                        serverState.should.to.be.equal('RUNNING');
 
-                    // Testing if products data can be fetched
-                    const productsDataFromRest = (await testUtils.getProductDataFromRest());
-                    const { errors: productsErrorsFromGQL, data: { Product: productsDataFromGQL } } =
-                        (await testUtils.fetchGQLServer(testUtils.getProductGQLQuery()));
-                    should.not.exist(productsErrorsFromGQL);
-                    should.exist(productsDataFromGQL);
-                    productsDataFromGQL.should.have.lengthOf(productsDataFromRest.length);
-                    productsDataFromGQL.should.be.eql(productsDataFromRest);
+                        // Testing if products data can be fetched
+                        const productsDataFromRest = (await testUtils.getProductDataFromRest());
+                        const { errors: productsErrorsFromGQL, data: { Product: productsDataFromGQL } } =
+                            (await testUtils.fetchGQLServer(testUtils.getProductGQLQuery()));
+                        should.not.exist(productsErrorsFromGQL);
+                        should.exist(productsDataFromGQL);
+                        productsDataFromGQL.should.have.lengthOf(productsDataFromRest.length);
+                        productsDataFromGQL.should.be.eql(productsDataFromRest);
+                    });
+
+                    it.skip('should run and reply fetching products filtering by different fields', async (done) => {
+                    });
+
                 });
 
-                it.skip('should run and reply fetching entity filtering by any field', async (done) => {
-                    // Setting up the GQL Server
-                    const invoiceEntity = testUtils.createInvoiceEntity();
-                    const productEntity = testUtils.createProductEntity();
-                    const port = testUtils.getPort();
-                    const server = new Server(port, [invoiceEntity, productEntity]);
-                    await server.start();
+                describe('schema with reference between entities', async function() {
 
-                    // Testing if the server is running
-                    const serverState = server.getState();
-                    serverState.should.to.be.a('string');
-                    serverState.should.to.be.equal('RUNNING');
+                    // Reference by a plain field
+                    it('should run and reply fetching clients data on invoice list of elements', async () => {
+                        // Setting up the GQL Server
+                        const port = testUtils.getPort();
+                        const entities = testUtils.createInvoiceAndClientEntity();
 
-                    // Testing if invoices data can be fetched
-                    const invoice1DataFromRest = (await testUtils.getInvoiceDataFromRest());
-                    const fetchedInvoiceResponse = (await testUtils.fetchGQLServer("invoice"));
-                    fetchedInvoiceResponse.status.should.to.be.equal(200);
-                    const { data: fetchedInvoiceData } = await fetchedInvoiceResponse.json();
-                    should.exist(fetchedInvoiceData);
-                    fetchedInvoiceData.should.be.equal(invoice1DataFromRest);
+                        server = new Server(port, entities);
+                        await server.start();
 
-                    // Testing if products data can be fetched
-                    const product1Data = (await testUtils.getProductDataFromRest()[0]);
-                    const fetchedProductResponse = (await testUtils.fetchGQLServer("product", { id: product1Data.id }));
-                    fetchedProductResponse.status.should.to.be.equal(200);
-                    const { data: fetchedProductData } = await fetchedProductResponse.json();
-                    should.exist(fetchedProductData);
-                    fetchedProductData.should.be.equal(product1Data);
+                        // Fetch data from rest to compare with data fetched via GraphQL
+                        const invoicesDataFromRest = (await testUtils.getInvoiceDataFromRest());
+                        const clientsDataFromRest = (await testUtils.getClientDataFromRest());
+                        // Make the data looks like it will be from GQL
+                        invoicesDataFromRest.forEach(invoice => {
+                            invoice.client = clientsDataFromRest.find(client => client.id === invoice.clientId);
+                        });
 
-                    done();
+                        // Testing if invoices data can be fetched and connect with the client info
+                        const data = (await testUtils.fetchGQLServer(testUtils.getInvoiceGQLQuery())); // remove this line
+                        const { errors: invoicesErrorsFromGQL, data: { Invoice: invoicesDataFromGQL } } =
+                            (await testUtils.fetchGQLServer(testUtils.getInvoiceGQLQuery()));
+                        should.not.exist(invoicesErrorsFromGQL);
+                        should.exist(invoicesDataFromGQL);
+                        invoicesDataFromGQL.should.have.lengthOf(invoicesDataFromRest.length);
+                        invoicesDataFromGQL.should.be.eql(invoicesDataFromRest);
+
+                    });
+
+                    // Reference by an array field
+                    it.skip('should run and reply fetching clients data on invoice list of elements', async () => {
+                        // Setting up the GQL Server
+                        const port = testUtils.getPort();
+                        const entities = testUtils.createInvoiceAndClientEntity();
+
+                        server = new Server(port, entities);
+                        await server.start();
+
+                        // Fetch data from rest to compare with data fetched via GraphQL
+                        const invoicesDataFromRest = (await testUtils.getInvoiceDataFromRest());
+                        const clientsDataFromRest = (await testUtils.getClientDataFromRest());
+                        // Make the data looks like it will be from GQL
+                        invoicesDataFromRest.forEach(invoice => {
+                            invoice.client = clientsDataFromRest.find(client => client.id === invoice.clientId);
+                        });
+
+                        // Testing if invoices data can be fetched and connect with the client info
+                        const data = (await testUtils.fetchGQLServer(testUtils.getInvoiceGQLQuery())); // remove this line
+                        const { errors: invoicesErrorsFromGQL, data: { Invoice: invoicesDataFromGQL } } =
+                            (await testUtils.fetchGQLServer(testUtils.getInvoiceGQLQuery()));
+                        should.not.exist(invoicesErrorsFromGQL);
+                        should.exist(invoicesDataFromGQL);
+                        invoicesDataFromGQL.should.have.lengthOf(invoicesDataFromRest.length);
+                        invoicesDataFromGQL.should.be.eql(invoicesDataFromRest);
+
+                    });
+
+                    // Reference by a plain field
+                    it.skip('should run and reply fetching clients data on invoice filtering by any field', async (done) => {
+                    });
+
+                    // Reference by an array field
+                    it.skip('should run and reply fetching clients data on invoice filtering by any field', async (done) => {
+                    });
+
                 });
-
             });
 
         });
@@ -103,12 +136,12 @@ describe('GQL Server', function() {
 
             it('should fail without port configuration', async () => {
                 // Setting up the GQL Server
-                const invoiceEntity = testUtils.createInvoiceEntity();
+                const productEntity = testUtils.createProductEntity();
                 const port = undefined;
 
                 // Testing
                 (() => {
-                    new Server(port, [invoiceEntity]);
+                    new Server(port, [productEntity]);
                 }).should.throw(testUtils.getNoPortConfiguredError());
             });
 
@@ -125,9 +158,9 @@ describe('GQL Server', function() {
 
             it('should fail if selected port is taken', async () => {
                 // Setting up the GQL Server on the same port as the RESTAPIServer
-                const invoiceEntity = testUtils.createInvoiceEntity();
+                const productEntity = testUtils.createProductEntity();
                 const port = testUtils.getRestPort();
-                const server = new Server(port, [invoiceEntity]);
+                const server = new Server(port, [productEntity]);
                 // Testing
                 return server.start().should.be.rejectedWith(testUtils.getPortIsTakenError());
             });
@@ -144,11 +177,11 @@ describe('GQL Server', function() {
 
             it('should fail if two entities has the same name', async () => {
                 // Setting up the GQL Server
-                const invoiceEntity = testUtils.createInvoiceEntity();
-                const invoiceEntityRepeated = testUtils.createInvoiceEntity();
+                const productEntity = testUtils.createProductEntity();
+                const productEntityRepeated = testUtils.createProductEntity();
                 const port = testUtils.getPort();
                 // Testing
-                (() => new Server(port, [invoiceEntity, invoiceEntityRepeated]))
+                (() => new Server(port, [productEntity, productEntityRepeated]))
                     .should.throw(testUtils.getEntityRepeatedName());
             });
 
@@ -171,21 +204,6 @@ describe('GQL Server', function() {
             it('should fail if some entity has two fields with the same name', async () => {
                 // Testing
                 (() => testUtils.createEntityWitRepeatedFieldName()).should.throw(testUtils.getEntityWithRepeatedFieldError());
-            });
-
-            it('should fail if some field has no name', async () => {
-                // Testing
-                (() => testUtils.createFieldWithoutName()).should.throw(testUtils.getFieldWithoutNameError());
-            });
-
-            it('should fail if some field has no type', async () => {
-                // Testing
-                (() => testUtils.createFieldWithoutType()).should.throw(testUtils.getFieldWithoutTypeError());
-            });
-
-            it('should fail if some field has invalid type', async () => {
-                // Testing
-                (() => testUtils.createFieldWithInvalidType()).should.throw(testUtils.getFieldWithoutValidTypeError());
             });
         });
     });

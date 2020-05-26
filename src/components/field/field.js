@@ -1,18 +1,18 @@
-const { FieldWithoutNameError, FieldWithoutTypeError, FieldWithoutValidTypeError } = require('./errors');
+const { FieldWithoutNameError, FieldWithoutTypeError, FieldWithoutValidTypeError } = require('../../errors');
 
-class Field{
+class Field {
 
     name;
     type;
 
-    constructor(name, type){
-        if(!name) throw new FieldWithoutNameError();
-        if(!type) throw new FieldWithoutTypeError(name);
+    constructor(name, type) {
+        if (!name) throw new FieldWithoutNameError();
+        if (!type) throw new FieldWithoutTypeError(name);
         this.setName(name);
         this.setType(type);
     }
 
-    getName(){
+    getName() {
         return this.name;
     }
 
@@ -20,7 +20,7 @@ class Field{
         this.name = name;
     }
 
-    getType(){
+    getType() {
         return this.type;
     }
 
@@ -28,29 +28,30 @@ class Field{
         this.type = this.generateType(type);
     }
 
-    getTypeString(){
+    getTypeString() {
         return `${this.getName()}: ${this.getType()}`;
     }
 
-    generateType(type){
+    generateType(type) {
         const typeMapped = this.getTypesMap()[type];
-        if(typeMapped){
+        if (typeMapped) {
             return typeMapped;
-        } else{
-            throw new FieldWithoutValidTypeError(type);
+        } else {
+            throw new FieldWithoutValidTypeError(this.getName(), type);
         }
     }
 
-    getTypesMap(){
+    getTypesMap() {
         return {
             string: "String",
             float: "Float",
             int: "Int",
-            array: "String",
             boolean: "Boolean",
-            object: "Object"
+            object: "Object",
+            array: "String"
         }
     }
 
 }
+
 module.exports = Field;

@@ -4,7 +4,7 @@ const { GraphQLServer } = require('graphql-yoga');
 
 const {
     NoPortConfiguredError, NoEntitiesConfiguredError, PortIsTakenError, RESTAPIUnreachableError, EntityRepeatedName
-} = require('./errors');
+} = require('../errors');
 
 class Server {
 

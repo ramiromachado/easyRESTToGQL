@@ -1,6 +1,7 @@
 const _ = require('lodash');
+require('isomorphic-fetch');
 
-const { EntityWithoutFieldsError, EntityWithoutNameError, EntityWithRepeatedFieldError, EntityWithoutURLError } = require('./errors');
+const { EntityWithoutFieldsError, EntityWithoutNameError, EntityWithRepeatedFieldError, EntityWithoutURLError } = require('../errors');
 
 class Entity {
 
