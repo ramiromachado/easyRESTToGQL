@@ -88,24 +88,14 @@ describe('Fields', function() {
         describe('should create reference fields successfully', async () => {
 
             it('should create simple reference field successfully', async () => {
-                // Creating the associatedEntity
-                const associatedFieldName = "id";
-                const associatedField = new Field(associatedFieldName, "string");
-                const associatedEntity = entityUtils.getSimpleEntityWithFields([associatedField]);
-
-                const referenceField = fieldUtils.getReferenceField(associatedEntity, associatedFieldName);
+                const referenceField = fieldUtils.getReferenceField();
 
                 // Testing
                 should.exist(referenceField);
             });
 
             it('should create reference array field successfully', async () => {
-                // Creating the associatedEntity
-                const associatedFieldName = "id";
-                const associatedField = new Field(associatedFieldName, "string");
-                const associatedEntity = entityUtils.getSimpleEntityWithFields([associatedField]);
-
-                const referenceArray = fieldUtils.getArrayReferenceField(associatedEntity, associatedFieldName);
+                const referenceArray = fieldUtils.getArrayReferenceField();
 
                 // Testing
                 should.exist(referenceArray);
@@ -153,74 +143,15 @@ describe('Fields', function() {
         describe('should fail creating reference fields with wrong data', async () => {
 
             it('should fail if a reference field has no name', async () => {
-                // Creating the associatedEntity
-                const associatedFieldName = "id";
-                const associatedField = new Field(associatedFieldName, "string");
-                const associatedEntity = entityUtils.getSimpleEntityWithFields([associatedField]);
-
                 // Testing
-                (() => fieldUtils.getNoNameReferenceField(associatedEntity, associatedFieldName)).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getNoNameReferenceField()).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if an array reference field has no name', async () => {
-                // Creating the associatedEntity
-                const associatedFieldName = "id";
-                const associatedField = new Field(associatedFieldName, "string");
-                const associatedEntity = entityUtils.getSimpleEntityWithFields([associatedField]);
-
                 // Testing
-                (() => fieldUtils.getNoNameArrayReferenceField(associatedEntity, associatedFieldName)).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getNoNameArrayReferenceField()).should.throw(Errors.FieldWithoutNameError);
             });
 
-            it('should fail if a reference field has no associated entity ', async () => {
-                // Testing
-                (() => fieldUtils.getNoAssociatedEntityReferenceField()).should.throw(Errors.FieldWithoutAssociatedEntityError);
-            });
-
-            it('should fail if an array reference field has no associated entity ', async () => {
-                // Testing
-                (() => fieldUtils.getNoAssociatedEntityArrayReferenceField()).should.throw(Errors.FieldWithoutAssociatedEntityError);
-            });
-
-            it('should fail if a reference field has no associated entity field', async () => {
-                // Creating the associatedEntity
-                const associatedFieldName = "id";
-                const associatedField = new Field(associatedFieldName, "string");
-                const associatedEntity = entityUtils.getSimpleEntityWithFields([associatedField]);
-
-                (() => fieldUtils.getNoAssociatedEntityFieldNameReferenceField(associatedEntity)).should.throw(Errors.FieldWithoutAssociatedEntityFieldNameError);
-            });
-
-            it('should fail if a reference field has no associated entity field', async () => {
-                // Creating the associatedEntity
-                const associatedFieldName = "id";
-                const associatedField = new Field(associatedFieldName, "string");
-                const associatedEntity = entityUtils.getSimpleEntityWithFields([associatedField]);
-
-                (() => fieldUtils.getNoAssociatedEntityFieldNameArrayReferenceField(associatedEntity)).should.throw(Errors.FieldWithoutAssociatedEntityFieldNameError);
-            });
-
-            it('should fail if the associated entity and the associated entity field name given does not match, for a reference field', async () => {
-                // Creating the associatedEntity
-                const associatedFieldName = "id";
-                const associatedField = new Field(associatedFieldName, "string");
-                const associatedEntity = entityUtils.getSimpleEntityWithFields([associatedField]);
-                const wrongAssociatedFieldName = "associatedEntityNonExistingField";
-
-                // Testing
-                (() => fieldUtils.getReferenceField(associatedEntity, wrongAssociatedFieldName)).should.throw(Errors.EntityHasNoFieldWithTheGivenName);
-            });
-
-            it('should fail if the associated entity and the associated entity field name given does not match, for an array reference field', async () => {
-                // Creating the associatedEntity
-                const associatedFieldName = "id";
-                const associatedField = new Field(associatedFieldName, "string");
-                const associatedEntity = entityUtils.getSimpleEntityWithFields([associatedField]);
-                const wrongAssociatedFieldName = "associatedEntityNonExistingField";
-
-                // Testing
-                (() => fieldUtils.getReferenceField(associatedEntity, wrongAssociatedFieldName)).should.throw(Errors.EntityHasNoFieldWithTheGivenName);
-        });
         });
     });
 });

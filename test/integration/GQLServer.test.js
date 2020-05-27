@@ -79,8 +79,8 @@ describe('GQL Server', function() {
 
                         // Make the data looks like it will be from GQL
                         invoicesDataFromRest.forEach(invoice => {
-                            invoice.client = clientsDataFromRest.find(client => client.id === invoice.clientId);
-                            invoice.payments = invoice.paymentIds.forEach(paymentId => {
+                            invoice.clientId = clientsDataFromRest.find(client => client.id === invoice.clientId);
+                            invoice.paymentIds = invoice.paymentIds.map(paymentId => {
                                 return paymentsDataFromRest.find(payment => payment.id === paymentId);
                             });
                         });

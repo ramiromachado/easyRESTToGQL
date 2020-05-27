@@ -42,12 +42,36 @@ class fieldUtils {
         return new ArrayField("objectArrayField", "object");
     }
 
-    getReferenceField(entity, entityFieldName) {
-        return new ReferenceField("referenceField", entity, entityFieldName);
+    getReferenceField() {
+        return new ReferenceField("referenceField");
     }
 
-    getArrayReferenceField(entity, entityFieldName) {
-        return new ArrayReferenceField("referenceField", entity, entityFieldName);
+    getArrayReferenceField() {
+        return new ArrayReferenceField("referenceField");
+    }
+
+    getAFields() {
+        const fields = []
+        fields.push(new Field("id", "string"));
+        fields.push(new Field("name", "string"));
+        fields.push(new ReferenceField("B"));
+        return fields;
+    }
+
+    getBFields() {
+        const fields = []
+        fields.push(new Field("id", "string"));
+        fields.push(new Field("name", "string"));
+        fields.push(new ReferenceField("C"));
+        return fields;
+    }
+
+    getCFields() {
+        const fields = []
+        fields.push(new Field("id", "string"));
+        fields.push(new Field("name", "string"));
+        fields.push(new ArrayReferenceField("As"));
+        return fields;
     }
 
     getNoNameField() {
@@ -63,39 +87,23 @@ class fieldUtils {
     }
 
     getNoNameArrayField() {
-        return new Field(undefined, "string");
+        return new ArrayField(undefined, "string");
     }
 
     getNoTypeArrayField() {
-        return new Field("id", undefined);
+        return new ArrayField("id", undefined);
     }
 
     getInvalidTypeArrayField() {
-        return new Field("id", "invalidType");
+        return new ArrayField("id", "invalidType");
     }
 
-    getNoNameReferenceField(associatedEntity, fieldName) {
-        return new ReferenceField(undefined, associatedEntity, fieldName);
+    getNoNameReferenceField() {
+        return new ReferenceField(undefined);
     }
 
-    getNoNameArrayReferenceField(associatedEntity, fieldName) {
-        return new ArrayReferenceField(undefined, associatedEntity, fieldName);
-    }
-
-    getNoAssociatedEntityReferenceField() {
-        return new ReferenceField("fieldName", undefined, "associatedEntityFieldName");
-    }
-
-    getNoAssociatedEntityArrayReferenceField() {
-        return new ArrayReferenceField("fieldName", undefined, "associatedEntityFieldName");
-    }
-
-    getNoAssociatedEntityFieldNameReferenceField(associatedEntity) {
-        return new ReferenceField("fieldName", associatedEntity, undefined);
-    }
-
-    getNoAssociatedEntityFieldNameArrayReferenceField(associatedEntity) {
-        return new ArrayReferenceField("fieldName", associatedEntity, undefined);
+    getNoNameArrayReferenceField() {
+        return new ArrayReferenceField(undefined);
     }
 
 }

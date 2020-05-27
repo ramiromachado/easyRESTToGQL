@@ -6,7 +6,7 @@ class ArrayField extends Field{
     }
 
     setType(type) {
-        this.type = `[${this.generateType(type)}]`;
+        this.type = `[${type}]`;
     }
 
 }

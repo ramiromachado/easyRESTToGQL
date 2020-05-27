@@ -1,28 +1,20 @@
 const ArrayField = require('./arrayField');
-const Errors = require('../../errors');
 
 class ArrayReferenceField extends ArrayField {
 
-    associatedEntityField;
-
-    constructor(name, associatedEntity, entityFieldName) {
-
-        if (!associatedEntity) throw new Errors.FieldWithoutAssociatedEntityError(name);
-
-        if (!entityFieldName) throw new Errors.FieldWithoutAssociatedEntityFieldNameError(name);
-
-        const associatedEntityField = associatedEntity.getField(entityFieldName);
-        if(!associatedEntityField) throw new Errors.EntityHasNoFieldWithTheGivenName(name);
-
-        super(name, associatedEntity.getName());
-        this.associatedEntityField = associatedEntityField;
+    constructor(name) {
+        super(name, "arrayReferenced");
     }
 
-    //TODO: Rewriting to not throwing an error is not the best way to create an ReferenceField
-    generateType() {
-
+    setReferencedEntityAndField(referencedEntity, referencedField) {
+        this.setType(referencedEntity.getName());
+        this.setResolver((async (referenceEntityItem) => {
+            const allReferencedItems = await (referencedEntity.getFetchAllFunction())();
+            return referenceEntityItem[this.getName()].map(x => {
+                return allReferencedItems.find(referencedItem => referencedItem[referencedField.getName()] === x);
+            });
+        }));
     }
-
 
 }
 

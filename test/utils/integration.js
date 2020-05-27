@@ -5,6 +5,7 @@ const jsonServer = require('json-server');
 
 const { ArrayField, Field, ReferenceField, ArrayReferenceField, Entity } = require("../../src/index");
 const serverUtils = require('./server');
+const entityUtils = require('./entity');
 
 class integrationUtils {
 
@@ -15,7 +16,7 @@ class integrationUtils {
     productURL = `${this.restAPIURL}/products`;
     invoiceURL = `${this.restAPIURL}/invoices`;
     clientURL = `${this.restAPIURL}/clients`;
-    paymentURL = `${this.restAPIURL}/paymentss`;
+    paymentURL = `${this.restAPIURL}/payments`;
 
 
     getRestDBFile() {
@@ -54,8 +55,20 @@ class integrationUtils {
         this.cleanRESTAPIServer();
 
         const invoices = [
-            { id: "IN-1", total: 99, clientId: "CL-2", paymentIds: ["PY-1"], items: [{ productId: "PR-1", quantity: 5 }, { productId: "PR-2", quantity: 3 }]},
-            { id: "IN-2", total: 125, clientId: "CL-1", paymentIds: ["PY-2", "PY-3"], items: [{ productId: "PR-3", quantity: 1 }] },
+            {
+                id: "IN-1",
+                total: 99,
+                clientId: "CL-2",
+                paymentIds: ["PY-1"],
+                items: [{ productId: "PR-1", quantity: 5 }, { productId: "PR-2", quantity: 3 }]
+            },
+            {
+                id: "IN-2",
+                total: 125,
+                clientId: "CL-1",
+                paymentIds: ["PY-2", "PY-3"],
+                items: [{ productId: "PR-3", quantity: 1 }]
+            },
             { id: "IN-3", total: 0, clientId: "CL-2", paymentIds: [], items: [] }
         ];
 
@@ -65,15 +78,29 @@ class integrationUtils {
         ];
 
         const payments = [
-            { id: "PY-1", amount:99, method:"CASH"},
-            { id: "PY-2", amount:74.5, method:"CASH"},
-            { id: "PY-3", amount:55.5, method:"CREDITCARD"}
+            { id: "PY-1", amount: 99, method: "CASH" },
+            { id: "PY-2", amount: 74.5, method: "CASH" },
+            { id: "PY-3", amount: 55.5, method: "CREDITCARD" }
         ];
 
         const products = [
-            { id: "PR-1", value: 3.30, isAvailable: true, stock: 1700, attributes: { height: "150cm" }, tags: [ "forYou", "2x1"] },
-            { id: "PR-2", value: 6.90, isAvailable: false, stock: 100, attributes: { color: "red" } , tags: [ "specialOffer"] },
-            { id: "PR-3", value: 1.25, isAvailable: true, stock: 3, attributes: { height: "150cm" } , tags: [] },
+            {
+                id: "PR-1",
+                value: 3.30,
+                isAvailable: true,
+                stock: 1700,
+                attributes: { height: "150cm" },
+                tags: ["forYou", "2x1"]
+            },
+            {
+                id: "PR-2",
+                value: 6.90,
+                isAvailable: false,
+                stock: 100,
+                attributes: { color: "red" },
+                tags: ["specialOffer"]
+            },
+            { id: "PR-3", value: 1.25, isAvailable: true, stock: 3, attributes: { height: "150cm" }, tags: [] },
         ];
 
         const DBData = JSON.stringify({ invoices, products, clients, payments });
@@ -122,12 +149,15 @@ class integrationUtils {
         const invoiceEntity = new Entity("Invoice", this.getInvoiceURL(), [
             new Field("id", "string"),
             new Field("total", "int"),
-            new ReferenceField("client", clientEntity, "clientId"),
-            new ArrayReferenceField("payments", paymentEntity, "paymentIds"),
+            new ReferenceField("clientId"),
+            new ArrayReferenceField("paymentIds"),
             new ArrayField("items", "object")
         ]);
 
-        return [clientEntity, invoiceEntity];
+        entityUtils.referenceBy(invoiceEntity, clientEntity, "clientId","id");
+        entityUtils.referenceBy(invoiceEntity, paymentEntity, "paymentIds","id");
+
+        return [clientEntity, invoiceEntity, paymentEntity];
     }
 
     getInvoiceGQLQuery() {
@@ -139,7 +169,7 @@ class integrationUtils {
                     id
                     name
                 }
-                pays {
+                paymentIds {
                   id
                   amount
                   method  

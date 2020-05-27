@@ -23,7 +23,7 @@ class RESTAPIUnreachableError extends Error {
             super(`The entity REST API URL ${RESTAPIURLs[0]} is unreachable`);
         } else {
             const allExectpLasturls = RESTAPIURLs.slice(0, RESTAPIURLs.length - 1).join(", ");
-            super(`The entity REST API URLs ${allExectpLasturls} and ${RESTAPIURLs[RESTAPIURLs.length-1]} are unreachable`);
+            super(`The entity REST API URLs ${allExectpLasturls} and ${RESTAPIURLs[RESTAPIURLs.length - 1]} are unreachable`);
         }
     }
 }
@@ -76,15 +76,21 @@ class FieldWithoutValidTypeError extends Error {
     }
 }
 
-class FieldWithoutAssociatedEntityError extends Error {
-    constructor(fieldName) {
-        super(`The reference field ${fieldName} was created without associated entity`);
+class ReferencedEntityIsMissingError extends Error {
+    constructor(entityName) {
+        super(`The ${entityName} try to reference an empty entity`);
     }
 }
 
-class FieldWithoutAssociatedEntityFieldNameError extends Error {
-    constructor(fieldName) {
-        super(`The reference field ${fieldName} was created without associated entity field`);
+class ReferenceFieldNameIsMissingError extends Error {
+    constructor(referenceEntityName, referencedEntityName) {
+        super(`The reference field that connects ${referenceEntityName} field and ${referencedEntityName} is empty`);
+    }
+}
+
+class ReferencedFieldNameIsMissingError extends Error {
+    constructor(referenceEntityName, referencedEntityName) {
+        super(`The referenced field that connects ${referenceEntityName} field and ${referencedEntityName} is empty`);
     }
 }
 
@@ -107,7 +113,8 @@ module.exports = {
     FieldWithoutNameError,
     FieldWithoutTypeError,
     FieldWithoutValidTypeError,
-    FieldWithoutAssociatedEntityError,
-    FieldWithoutAssociatedEntityFieldNameError,
+    ReferencedEntityIsMissingError,
+    ReferenceFieldNameIsMissingError,
+    ReferencedFieldNameIsMissingError,
     EntityHasNoFieldWithTheGivenName
 };

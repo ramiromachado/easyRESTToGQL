@@ -4,12 +4,14 @@ class Field {
 
     name;
     type;
+    resolver;
 
     constructor(name, type) {
         if (!name) throw new FieldWithoutNameError();
         if (!type) throw new FieldWithoutTypeError(name);
         this.setName(name);
-        this.setType(type);
+        this.setType(this.generateType(type));
+        this.setResolver((item) => item[this.getName()]) // Set identity as default resolver
     }
 
     getName() {
@@ -25,7 +27,15 @@ class Field {
     }
 
     setType(type) {
-        this.type = this.generateType(type);
+        this.type = type;
+    }
+
+    getResolver() {
+        return this.resolver;
+    }
+
+    setResolver(resolver) {
+        this.resolver = resolver;
     }
 
     getTypeString() {
@@ -48,7 +58,9 @@ class Field {
             int: "Int",
             boolean: "Boolean",
             object: "Object",
-            array: "String"
+            array: "String",
+            referenced: "Referenced", // TODO: Improve this
+            arrayReferenced: "ArrayReferenced" // TODO: Improve this
         }
     }
 

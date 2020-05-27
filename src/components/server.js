@@ -101,7 +101,14 @@ class Server {
 
     getQueryResolvers(){
         return this.getEntities().reduce((resolvers, entity) => {
-            resolvers[entity.getName()] = entity.getResolver();
+            resolvers[entity.getName()] = entity.getFetchAllFunction();
+            return resolvers;
+        }, {});
+    }
+
+    getTypeResolvers(){
+        return this.getEntities().reduce((resolvers, entity) => {
+            resolvers[entity.getName()] = entity.getTypeResolver();
             return resolvers;
         }, {});
     }
@@ -130,8 +137,10 @@ class Server {
     async startGQLServer() {
         const typeDefs = this.getTypeDefs``;
         const queryResolvers = this.getQueryResolvers();
+        const typesResolvers = this.getTypeResolvers();
         const resolvers = {
-            Query: queryResolvers
+            Query: queryResolvers,
+            ...typesResolvers
         };
 
         const GQLServer = new GraphQLServer({

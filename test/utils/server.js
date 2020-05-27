@@ -18,8 +18,13 @@ class serverUtils {
         const entities = [];
 
         entities.push(entityUtils.getWithAllBasicTypeOfFieldsEntity());
-        entities.push(...entityUtils.getTwoLinealReferencedEntities());
-        entities.push(...entityUtils.getThreeLoopReferencedEntities());
+
+        //Referenced entities
+        const { A, B, C } = entityUtils.getReferencedABCEntities();
+        entityUtils.referenceBy(A, B, "B", "id");
+        entityUtils.referenceBy(B, C, "C", "id");
+        entityUtils.referenceBy(C, A, "As", "id");
+        entities.push(A, B, C);
 
         return new Server(this.getPort(), entities);
     }
