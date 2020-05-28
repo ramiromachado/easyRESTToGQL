@@ -45,12 +45,17 @@ class Entity {
         if (!referencedFieldName) throw new Errors.ReferencedFieldNameIsMissingError(this.getName(), entityReferenced.getName());
 
         const referenceField = this.getField(referenceFieldName);
-        if (!referenceField) throw new Errors.EntityHasNoFieldWithTheGivenName(this.getName(), referenceFieldName);
+        if (!referenceField) throw new Errors.EntityHasNoFieldWithTheGivenNameError(this.getName(), referenceFieldName);
 
         const referencedField = entityReferenced.getField(referencedFieldName)
-        if (!referencedField) throw new Errors.EntityHasNoFieldWithTheGivenName(entityReferenced.getName(), referencedFieldName);
+        if (!referencedField) throw new Errors.EntityHasNoFieldWithTheGivenNameError(entityReferenced.getName(), referencedFieldName);
 
-        // TODO: test if the reference field is reference or arrayReference and if the referenced field is Referenceable
+        const referenceFieldIsReferenceType = (referenceField.getType() == "[ArrayReference]") || (referenceField.getType() == "Reference");
+        if(!referenceFieldIsReferenceType) throw new Errors.FieldIsNotReferenceTypeError(this.getName(), referenceField.getName());
+
+        const referencedFieldIsReferable = !((referencedField.getType() == "[ArrayReference]") || (referencedField.getType() == "Reference"));
+        if(!referencedFieldIsReferable) throw new Errors.FieldIsNotReferableError(entityReferenced.getName(), referencedField.getName());
+
         referenceField.setReferencedEntityAndField(entityReferenced, referencedField);
 
     }

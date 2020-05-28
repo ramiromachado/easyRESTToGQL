@@ -94,9 +94,21 @@ class ReferencedFieldNameIsMissingError extends Error {
     }
 }
 
-class EntityHasNoFieldWithTheGivenName extends Error {
+class EntityHasNoFieldWithTheGivenNameError extends Error {
     constructor(entityName, fieldName) {
         super(`The entity ${entityName} has no field with the name "${fieldName}"`);
+    }
+}
+
+class FieldIsNotReferenceTypeError extends Error {
+    constructor(entityName, fieldName) {
+        super(`The ${fieldName} in entity ${entityName} is not of ArrayReference or Reference type`);
+    }
+}
+
+class FieldIsNotReferableError extends Error {
+    constructor(entityName, fieldName) {
+        super(`The ${fieldName} in entity ${entityName} is not referable`);
     }
 }
 
@@ -116,5 +128,7 @@ module.exports = {
     ReferencedEntityIsMissingError,
     ReferenceFieldNameIsMissingError,
     ReferencedFieldNameIsMissingError,
-    EntityHasNoFieldWithTheGivenName
+    EntityHasNoFieldWithTheGivenNameError,
+    FieldIsNotReferenceTypeError,
+    FieldIsNotReferableError
 };

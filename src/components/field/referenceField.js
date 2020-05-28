@@ -2,7 +2,7 @@ const Field = require('./field');
 class ReferenceField extends Field {
 
     constructor(name) {
-        super(name, "referenced");
+        super(name, "reference");
     }
 
     setReferencedEntityAndField(referencedEntity, referencedField){

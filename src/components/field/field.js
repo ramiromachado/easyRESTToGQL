@@ -59,8 +59,8 @@ class Field {
             boolean: "Boolean",
             object: "Object",
             array: "String",
-            referenced: "Referenced", // TODO: Improve this
-            arrayReferenced: "ArrayReferenced" // TODO: Improve this
+            reference: "Reference",
+            arrayReference: "ArrayReference"
         }
     }
 

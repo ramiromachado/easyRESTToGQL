@@ -160,7 +160,7 @@ describe('Entities', function() {
             const AReferenceFieldName = "wrongName";
             const BReferencedFieldName = "id";
             // Testing
-            (() => entityUtils.referenceBy(A, B, AReferenceFieldName, BReferencedFieldName)).should.throw(Errors.EntityHasNoFieldWithTheGivenName);
+            (() => entityUtils.referenceBy(A, B, AReferenceFieldName, BReferencedFieldName)).should.throw(Errors.EntityHasNoFieldWithTheGivenNameError);
         });
 
         it('should fail if trying to reference an array field with a field name that is not in the reference Entity', async () => {
@@ -169,7 +169,7 @@ describe('Entities', function() {
             const CReferenceFieldName = "wrongName";
             const AReferencedFieldName = "id";
             // Testing
-            (() => entityUtils.referenceBy(C, A, CReferenceFieldName, AReferencedFieldName)).should.throw(Errors.EntityHasNoFieldWithTheGivenName);
+            (() => entityUtils.referenceBy(C, A, CReferenceFieldName, AReferencedFieldName)).should.throw(Errors.EntityHasNoFieldWithTheGivenNameError);
         });
 
         it('should fail if trying to reference a field with a field name that is not in the referenced Entity', async () => {
@@ -178,7 +178,7 @@ describe('Entities', function() {
             const AReferenceFieldName = "B";
             const BReferencedFieldName = "wrongName";
             // Testing
-            (() => entityUtils.referenceBy(A, B, AReferenceFieldName, BReferencedFieldName)).should.throw(Errors.EntityHasNoFieldWithTheGivenName);
+            (() => entityUtils.referenceBy(A, B, AReferenceFieldName, BReferencedFieldName)).should.throw(Errors.EntityHasNoFieldWithTheGivenNameError);
         });
 
         it('should fail if trying to reference an array field with a field name that is not in the referenced Entity', async () => {
@@ -187,7 +187,43 @@ describe('Entities', function() {
             const CReferenceFieldName = "As";
             const AReferencedFieldName = "wrongName";
             // Testing
-            (() => entityUtils.referenceBy(C, A, CReferenceFieldName, AReferencedFieldName)).should.throw(Errors.EntityHasNoFieldWithTheGivenName);
+            (() => entityUtils.referenceBy(C, A, CReferenceFieldName, AReferencedFieldName)).should.throw(Errors.EntityHasNoFieldWithTheGivenNameError);
+        });
+
+        it('should fail if trying to reference a field that is not Reference Type', async () => {
+            const { A, B } = entityUtils.getReferencedABCEntities();
+
+            const AReferenceFieldName = "name";
+            const BReferencedFieldName = "id";
+            // Testing
+            (() => entityUtils.referenceBy(A, B, AReferenceFieldName, BReferencedFieldName)).should.throw(Errors.FieldIsNotReferenceTypeError);
+        });
+
+        it('should fail if trying to reference an array field that is not ArrayReference Type', async () => {
+            const { C, A } = entityUtils.getReferencedABCEntities();
+
+            const CReferenceFieldName = "name";
+            const AReferencedFieldName = "id";
+            // Testing
+            (() => entityUtils.referenceBy(C, A, CReferenceFieldName, AReferencedFieldName)).should.throw(Errors.FieldIsNotReferenceTypeError);
+        });
+
+        it('should fail if trying to reference a field with a field that is not referable', async () => {
+            const { A, B } = entityUtils.getReferencedABCEntities();
+
+            const AReferenceFieldName = "B";
+            const BReferencedFieldName = "C";
+            // Testing
+            (() => entityUtils.referenceBy(A, B, AReferenceFieldName, BReferencedFieldName)).should.throw(Errors.FieldIsNotReferableError);
+        });
+
+        it('should fail if trying to reference an array field with a field name that is not referable', async () => {
+            const { C, A } = entityUtils.getReferencedABCEntities();
+
+            const CReferenceFieldName = "As";
+            const AReferencedFieldName = "B";
+            // Testing
+            (() => entityUtils.referenceBy(C, A, CReferenceFieldName, AReferencedFieldName)).should.throw(Errors.FieldIsNotReferableError);
         });
 
     });

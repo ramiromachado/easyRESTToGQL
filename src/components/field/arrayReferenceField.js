@@ -3,7 +3,7 @@ const ArrayField = require('./arrayField');
 class ArrayReferenceField extends ArrayField {
 
     constructor(name) {
-        super(name, "arrayReferenced");
+        super(name, "arrayReference");
     }
 
     setReferencedEntityAndField(referencedEntity, referencedField) {
