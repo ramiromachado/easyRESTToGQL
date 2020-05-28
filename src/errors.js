@@ -23,7 +23,7 @@ class RESTAPIUnreachableError extends Error {
             super(`The entity REST API URL ${RESTAPIURLs[0]} is unreachable`);
         } else {
             const allExectpLasturls = RESTAPIURLs.slice(0, RESTAPIURLs.length - 1).join(", ");
-            super(`The entity REST API URLs ${allExectpLasturls} and ${RESTAPIURLs[RESTAPIURLs.length-1]} are unreachable`);
+            super(`The entity REST API URLs ${allExectpLasturls} and ${RESTAPIURLs[RESTAPIURLs.length - 1]} are unreachable`);
         }
     }
 }
@@ -76,6 +76,42 @@ class FieldWithoutValidTypeError extends Error {
     }
 }
 
+class ReferencedEntityIsMissingError extends Error {
+    constructor(entityName) {
+        super(`The ${entityName} try to reference an empty entity`);
+    }
+}
+
+class ReferenceFieldNameIsMissingError extends Error {
+    constructor(referenceEntityName, referencedEntityName) {
+        super(`The reference field that connects ${referenceEntityName} field and ${referencedEntityName} is empty`);
+    }
+}
+
+class ReferencedFieldNameIsMissingError extends Error {
+    constructor(referenceEntityName, referencedEntityName) {
+        super(`The referenced field that connects ${referenceEntityName} field and ${referencedEntityName} is empty`);
+    }
+}
+
+class EntityHasNoFieldWithTheGivenNameError extends Error {
+    constructor(entityName, fieldName) {
+        super(`The entity ${entityName} has no field with the name "${fieldName}"`);
+    }
+}
+
+class FieldIsNotReferenceTypeError extends Error {
+    constructor(entityName, fieldName) {
+        super(`The ${fieldName} in entity ${entityName} is not of ArrayReference or Reference type`);
+    }
+}
+
+class FieldIsNotReferableError extends Error {
+    constructor(entityName, fieldName) {
+        super(`The ${fieldName} in entity ${entityName} is not referable`);
+    }
+}
+
 module.exports = {
     NoPortConfiguredError,
     NoEntitiesConfiguredError,
@@ -88,5 +124,11 @@ module.exports = {
     EntityWithRepeatedFieldError,
     FieldWithoutNameError,
     FieldWithoutTypeError,
-    FieldWithoutValidTypeError
+    FieldWithoutValidTypeError,
+    ReferencedEntityIsMissingError,
+    ReferenceFieldNameIsMissingError,
+    ReferencedFieldNameIsMissingError,
+    EntityHasNoFieldWithTheGivenNameError,
+    FieldIsNotReferenceTypeError,
+    FieldIsNotReferableError
 };
