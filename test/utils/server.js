@@ -21,9 +21,9 @@ class serverUtils {
 
         //Referenced entities
         const { A, B, C } = entityUtils.getReferencedABCEntities();
-        entityUtils.referenceBy(A, B, "B", "id");
-        entityUtils.referenceBy(B, C, "C", "id");
-        entityUtils.referenceBy(C, A, "As", "id");
+        entityUtils.referenceBy(A, B, "BId", "id");
+        entityUtils.referenceBy(B, C, "CId", "id");
+        entityUtils.referenceBy(C, A, "AIds", "id");
         entities.push(A, B, C);
 
         return new Server(this.getPort(), entities);

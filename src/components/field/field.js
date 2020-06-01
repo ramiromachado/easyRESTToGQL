@@ -1,15 +1,17 @@
-const { FieldWithoutNameError, FieldWithoutTypeError, FieldWithoutValidTypeError } = require('../../errors');
+const Errors = require('../../errors');
 
 class Field {
 
     name;
     type;
     resolver;
+    alias;
 
     constructor(name, type) {
-        if (!name) throw new FieldWithoutNameError();
-        if (!type) throw new FieldWithoutTypeError(name);
+        if (!name) throw new Errors.FieldWithoutNameError();
+        if (!type) throw new Errors.FieldWithoutTypeError(name);
         this.setName(name);
+        this.setAlias(name);
         this.setType(this.generateType(type));
         this.setResolver((item) => item[this.getName()]) // Set identity as default resolver
     }
@@ -38,8 +40,18 @@ class Field {
         this.resolver = resolver;
     }
 
+    getAlias() {
+        return this.alias;
+    }
+
+    setAlias(alias) {
+        if(!alias) throw new Errors.AliasWithoutNameError(this.getName());
+        this.alias = alias;
+        return this;
+    }
+
     getTypeString() {
-        return `${this.getName()}: ${this.getType()}`;
+        return `${this.getAlias()}: ${this.getType()}`;
     }
 
     generateType(type) {
@@ -47,7 +59,7 @@ class Field {
         if (typeMapped) {
             return typeMapped;
         } else {
-            throw new FieldWithoutValidTypeError(this.getName(), type);
+            throw new Errors.FieldWithoutValidTypeError(this.getName(), type);
         }
     }
 

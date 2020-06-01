@@ -110,7 +110,7 @@ class Entity {
 
     getTypeResolver() {
         return this.getFields().reduce((fieldsResolvers, field) => {
-            fieldsResolvers[field.getName()] = field.getResolver();
+            fieldsResolvers[field.getAlias()] = field.getResolver();
             return fieldsResolvers;
         }, {});
     }
