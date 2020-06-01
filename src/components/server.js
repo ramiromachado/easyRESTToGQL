@@ -16,7 +16,7 @@ class Server {
     constructor(port, entities) {
         if (!port) throw new NoPortConfiguredError();
         if (!entities || entities.length == 0) throw new NoEntitiesConfiguredError();
-        if (this.thereIsSomeFieldNameRepeated(entities)) throw new EntityRepeatedName();
+        if (this.thereIsSomeEntityNameRepeated(entities)) throw new EntityRepeatedName();
         this.setPort(port);
         this.setEntities(entities);
         this.setState("CREATED");
@@ -95,7 +95,7 @@ class Server {
         return this.getEntities().filter((_, index) => !entitiesRESTAPIURLAreFetchable[index]).map(entity => entity.getRESTAPIURL());
     }
 
-    thereIsSomeFieldNameRepeated(entities){
+    thereIsSomeEntityNameRepeated(entities){
         return _.uniqBy(entities, entity => entity.getName()).length != entities.length;
     }
 

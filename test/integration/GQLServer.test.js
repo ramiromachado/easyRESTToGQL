@@ -73,16 +73,19 @@ describe('GQL Server', function() {
                         await server.start();
 
                         // Fetch data from rest to compare with data fetched via GraphQL
-                        const invoicesDataFromRest = (await integrationUtils.getInvoiceDataFromRest());
+                        let invoicesDataFromRest = (await integrationUtils.getInvoiceDataFromRest());
                         const clientsDataFromRest = (await integrationUtils.getClientDataFromRest());
                         const paymentsDataFromRest = (await integrationUtils.getPaymentDataFromRest());
 
                         // Make the data looks like it will be from GQL
-                        invoicesDataFromRest.forEach(invoice => {
-                            invoice.clientId = clientsDataFromRest.find(client => client.id === invoice.clientId);
-                            invoice.paymentIds = invoice.paymentIds.map(paymentId => {
+                        invoicesDataFromRest = invoicesDataFromRest.map(invoice => {
+                            invoice.client = clientsDataFromRest.find(client => client.id === invoice.clientId);
+                            invoice.payments = invoice.paymentIds.map(paymentId => {
                                 return paymentsDataFromRest.find(payment => payment.id === paymentId);
                             });
+
+                            const {paymentIds, clientId, ...otherAttributes} = invoice
+                            return otherAttributes;
                         });
 
                         // Testing if invoices data can be fetched and connect with the client info

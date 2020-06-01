@@ -149,8 +149,8 @@ class integrationUtils {
         const invoiceEntity = new Entity("Invoice", this.getInvoiceURL(), [
             new Field("id", "string"),
             new Field("total", "int"),
-            new ReferenceField("clientId"),
-            new ArrayReferenceField("paymentIds"),
+            new ReferenceField("clientId").setAlias("client"),
+            new ArrayReferenceField("paymentIds").setAlias("payments"),
             new ArrayField("items", "object")
         ]);
 
@@ -165,11 +165,11 @@ class integrationUtils {
             Invoice {
                 id
                 total
-                clientId {
+                client {
                     id
                     name
                 }
-                paymentIds {
+                payments {
                   id
                   amount
                   method  

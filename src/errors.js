@@ -76,6 +76,12 @@ class FieldWithoutValidTypeError extends Error {
     }
 }
 
+class AliasWithoutNameError extends Error {
+    constructor(fieldName) {
+        super(`An empty name alias was set to the the field ${fieldName} `);
+    }
+}
+
 class ReferencedEntityIsMissingError extends Error {
     constructor(entityName) {
         super(`The ${entityName} try to reference an empty entity`);
@@ -125,6 +131,7 @@ module.exports = {
     FieldWithoutNameError,
     FieldWithoutTypeError,
     FieldWithoutValidTypeError,
+    AliasWithoutNameError,
     ReferencedEntityIsMissingError,
     ReferenceFieldNameIsMissingError,
     ReferencedFieldNameIsMissingError,

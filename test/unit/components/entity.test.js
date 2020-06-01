@@ -28,7 +28,7 @@ describe('Entities', function() {
             it('should create lineal referenced entities like A -> B', async () => {
                 const { A, B } = entityUtils.getReferencedABCEntities();
 
-                const AReferenceFieldName = "B";
+                const AReferenceFieldName = "BId";
                 const BReferencedFieldName = "id";
                 entityUtils.referenceBy(A, B, AReferenceFieldName, BReferencedFieldName);
 
@@ -40,7 +40,7 @@ describe('Entities', function() {
             it('should create lineal array referenced entities like C -> A', async () => {
                 const { A, C } = entityUtils.getReferencedABCEntities();
 
-                const CReferenceFieldName = "As";
+                const CReferenceFieldName = "AIds";
                 const AReferencedFieldName = "id";
                 entityUtils.referenceBy(C, A, CReferenceFieldName, AReferencedFieldName);
 
@@ -52,15 +52,15 @@ describe('Entities', function() {
             it('should create loop referenced entities like A -> B -> C ', async () => {
                 const { A, B, C } = entityUtils.getReferencedABCEntities();
 
-                const AReferenceFieldName = "B";
+                const AReferenceFieldName = "BId";
                 const BReferencedFieldName = "id";
                 entityUtils.referenceBy(A, B, AReferenceFieldName, BReferencedFieldName);
 
-                const BReferenceFieldName = "C";
+                const BReferenceFieldName = "CId";
                 const CReferencedFieldName = "id";
                 entityUtils.referenceBy(B, C, BReferenceFieldName, CReferencedFieldName);
 
-                const CReferenceFieldName = "As";
+                const CReferenceFieldName = "AIds";
                 const AReferencedFieldName = "id";
                 entityUtils.referenceBy(C, A, CReferenceFieldName, AReferencedFieldName);
 
@@ -102,7 +102,7 @@ describe('Entities', function() {
 
             const { A, B } = entityUtils.getReferencedABCEntities();
 
-            const AReferenceFieldName = "B";
+            const AReferenceFieldName = "BId";
             const BReferencedFieldName = "id";
 
             // Testing
@@ -112,7 +112,7 @@ describe('Entities', function() {
         it('should fail if trying to reference an array field with no associated entity', async () => {
             const { C, A } = entityUtils.getReferencedABCEntities();
 
-            const CReferenceFieldName = "As";
+            const CReferenceFieldName = "AIds";
             const AReferencedFieldName = "id";
             // Testing
             (() => entityUtils.referenceBy(C, undefined, CReferenceFieldName, AReferencedFieldName)).should.throw(Errors.ReferencedEntityIsMissingError);
@@ -121,7 +121,7 @@ describe('Entities', function() {
         it('should fail if trying to reference a field with no reference entity field name', async () => {
             const { A, B } = entityUtils.getReferencedABCEntities();
 
-            const AReferenceFieldName = "B";
+            const AReferenceFieldName = "BId";
             const BReferencedFieldName = "id";
             // Testing
             (() => entityUtils.referenceBy(A, B, undefined, BReferencedFieldName)).should.throw(Errors.ReferenceFieldNameIsMissingError);
@@ -130,7 +130,7 @@ describe('Entities', function() {
         it('should fail if trying to reference an array field with no reference field name', async () => {
             const { C, A } = entityUtils.getReferencedABCEntities();
 
-            const CReferenceFieldName = "As";
+            const CReferenceFieldName = "AIds";
             const AReferencedFieldName = "id";
             // Testing
             (() => entityUtils.referenceBy(C, A, undefined, AReferencedFieldName)).should.throw(Errors.ReferenceFieldNameIsMissingError);
@@ -139,7 +139,7 @@ describe('Entities', function() {
         it('should fail if trying to reference a field with no referenced entity field name', async () => {
             const { A, B } = entityUtils.getReferencedABCEntities();
 
-            const AReferenceFieldName = "B";
+            const AReferenceFieldName = "BId";
             const BReferencedFieldName = "id";
             // Testing
             (() => entityUtils.referenceBy(A, B, AReferenceFieldName, undefined)).should.throw(Errors.ReferencedFieldNameIsMissingError);
@@ -148,7 +148,7 @@ describe('Entities', function() {
         it('should fail if trying to reference an array field with no referenced field name', async () => {
             const { C, A } = entityUtils.getReferencedABCEntities();
 
-            const CReferenceFieldName = "As";
+            const CReferenceFieldName = "AIds";
             const AReferencedFieldName = "id";
             // Testing
             (() => entityUtils.referenceBy(C, A, CReferenceFieldName, undefined)).should.throw(Errors.ReferencedFieldNameIsMissingError);
@@ -175,7 +175,7 @@ describe('Entities', function() {
         it('should fail if trying to reference a field with a field name that is not in the referenced Entity', async () => {
             const { A, B } = entityUtils.getReferencedABCEntities();
 
-            const AReferenceFieldName = "B";
+            const AReferenceFieldName = "BId";
             const BReferencedFieldName = "wrongName";
             // Testing
             (() => entityUtils.referenceBy(A, B, AReferenceFieldName, BReferencedFieldName)).should.throw(Errors.EntityHasNoFieldWithTheGivenNameError);
@@ -184,7 +184,7 @@ describe('Entities', function() {
         it('should fail if trying to reference an array field with a field name that is not in the referenced Entity', async () => {
             const { C, A } = entityUtils.getReferencedABCEntities();
 
-            const CReferenceFieldName = "As";
+            const CReferenceFieldName = "AIds";
             const AReferencedFieldName = "wrongName";
             // Testing
             (() => entityUtils.referenceBy(C, A, CReferenceFieldName, AReferencedFieldName)).should.throw(Errors.EntityHasNoFieldWithTheGivenNameError);
@@ -211,8 +211,8 @@ describe('Entities', function() {
         it('should fail if trying to reference a field with a field that is not referable', async () => {
             const { A, B } = entityUtils.getReferencedABCEntities();
 
-            const AReferenceFieldName = "B";
-            const BReferencedFieldName = "C";
+            const AReferenceFieldName = "BId";
+            const BReferencedFieldName = "CId";
             // Testing
             (() => entityUtils.referenceBy(A, B, AReferenceFieldName, BReferencedFieldName)).should.throw(Errors.FieldIsNotReferableError);
         });
@@ -220,8 +220,8 @@ describe('Entities', function() {
         it('should fail if trying to reference an array field with a field name that is not referable', async () => {
             const { C, A } = entityUtils.getReferencedABCEntities();
 
-            const CReferenceFieldName = "As";
-            const AReferencedFieldName = "B";
+            const CReferenceFieldName = "AIds";
+            const AReferencedFieldName = "BId";
             // Testing
             (() => entityUtils.referenceBy(C, A, CReferenceFieldName, AReferencedFieldName)).should.throw(Errors.FieldIsNotReferableError);
         });

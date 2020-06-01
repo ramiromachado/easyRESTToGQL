@@ -54,7 +54,7 @@ class fieldUtils {
         const fields = []
         fields.push(new Field("id", "string"));
         fields.push(new Field("name", "string"));
-        fields.push(new ReferenceField("B"));
+        fields.push(new ReferenceField("BId"));
         return fields;
     }
 
@@ -62,7 +62,7 @@ class fieldUtils {
         const fields = []
         fields.push(new Field("id", "string"));
         fields.push(new Field("name", "string"));
-        fields.push(new ReferenceField("C"));
+        fields.push(new ReferenceField("CId"));
         return fields;
     }
 
@@ -70,7 +70,7 @@ class fieldUtils {
         const fields = []
         fields.push(new Field("id", "string"));
         fields.push(new Field("name", "string"));
-        fields.push(new ArrayReferenceField("As"));
+        fields.push(new ArrayReferenceField("AIds"));
         return fields;
     }
 
