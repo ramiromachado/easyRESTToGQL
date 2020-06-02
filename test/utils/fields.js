@@ -1,45 +1,48 @@
-const { Field, ArrayField, ReferenceField, ArrayReferenceField } = require('../../src/index');
+const { Fields } = require('../../src/index');
+
+const { Field, StringField, FloatField, IntField, BooleanField, ObjectField, StringArrayField, FloatArrayField, IntArrayField,
+    BooleanArrayField, ObjectArrayField, ReferenceField, ArrayReferenceField } = Fields;
 
 class fieldUtils {
 
     getStringField() {
-        return new Field("stringField", "string");
+        return new StringField("stringField");
     }
 
     getFloatField() {
-        return new Field("floatField", "float");
+        return new FloatField("floatField");
     }
 
     getIntField() {
-        return new Field("intField", "int");
+        return new IntField("intField");
     }
 
     getBooleanField() {
-        return new Field("booleanField", "boolean");
+        return new BooleanField("booleanField");
     }
 
     getObjectField() {
-        return new Field("objectField", "object");
+        return new ObjectField("objectField");
     }
 
     getStringArrayField() {
-        return new ArrayField("stringArrayField", "string");
+        return new StringArrayField("stringArrayField");
     }
 
     getFloatArrayField() {
-        return new ArrayField("floatArrayField", "float");
+        return new FloatArrayField("floatArrayField");
     }
 
     getIntArrayField() {
-        return new ArrayField("intArrayField", "int");
+        return new IntArrayField("intArrayField");
     }
 
     getBooleanArrayField() {
-        return new ArrayField("booleanArrayField", "boolean");
+        return new BooleanArrayField("booleanArrayField");
     }
 
     getObjectArrayField() {
-        return new ArrayField("objectArrayField", "object");
+        return new ObjectArrayField("objectArrayField");
     }
 
     getReferenceField() {
@@ -50,52 +53,40 @@ class fieldUtils {
         return new ArrayReferenceField("referenceField");
     }
 
+    getNoTypeField() {
+        return new Field();
+    }
+
     getAFields() {
         const fields = []
-        fields.push(new Field("id", "string"));
-        fields.push(new Field("name", "string"));
+        fields.push(new StringField("id"));
+        fields.push(new StringField("name"));
         fields.push(new ReferenceField("BId"));
         return fields;
     }
 
     getBFields() {
         const fields = []
-        fields.push(new Field("id", "string"));
-        fields.push(new Field("name", "string"));
+        fields.push(new StringField("id"));
+        fields.push(new StringField("name"));
         fields.push(new ReferenceField("CId"));
         return fields;
     }
 
     getCFields() {
         const fields = []
-        fields.push(new Field("id", "string"));
-        fields.push(new Field("name", "string"));
+        fields.push(new StringField("id"));
+        fields.push(new StringField("name"));
         fields.push(new ArrayReferenceField("AIds"));
         return fields;
     }
 
     getNoNameField() {
-        return new Field(undefined, "string");
-    }
-
-    getNoTypeField() {
-        return new Field("id", undefined);
-    }
-
-    getInvalidTypeField() {
-        return new Field("id", "invalidType");
+        return new StringField(undefined);
     }
 
     getNoNameArrayField() {
-        return new ArrayField(undefined, "string");
-    }
-
-    getNoTypeArrayField() {
-        return new ArrayField("id", undefined);
-    }
-
-    getInvalidTypeArrayField() {
-        return new ArrayField("id", "invalidType");
+        return new StringArrayField(undefined);
     }
 
     getNoNameReferenceField() {

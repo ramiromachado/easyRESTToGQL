@@ -70,12 +70,6 @@ class FieldWithoutTypeError extends Error {
     }
 }
 
-class FieldWithoutValidTypeError extends Error {
-    constructor(fieldName, invalidType) {
-        super(`The field ${fieldName} was created with the invalid type "${invalidType}"`);
-    }
-}
-
 class AliasWithoutNameError extends Error {
     constructor(fieldName) {
         super(`An empty name alias was set to the the field ${fieldName} `);
@@ -130,7 +124,6 @@ module.exports = {
     EntityWithRepeatedFieldError,
     FieldWithoutNameError,
     FieldWithoutTypeError,
-    FieldWithoutValidTypeError,
     AliasWithoutNameError,
     ReferencedEntityIsMissingError,
     ReferenceFieldNameIsMissingError,

@@ -3,7 +3,10 @@ const { createApolloFetch } = require('apollo-fetch');
 const fs = require('fs');
 const jsonServer = require('json-server');
 
-const { ArrayField, Field, ReferenceField, ArrayReferenceField, Entity } = require("../../src/index");
+const { Fields, Entity } = require("../../src/index");
+const { StringField, FloatField, IntField, BooleanField, ObjectField, StringArrayField, ObjectArrayField,
+    ReferenceField, ArrayReferenceField } = Fields;
+
 const serverUtils = require('./server');
 const entityUtils = require('./entity');
 
@@ -120,12 +123,12 @@ class integrationUtils {
 
     createProductEntity() {
         return new Entity("Product", this.getProductURL(), [
-            new Field("id", "string"),
-            new Field("value", "float"),
-            new Field("isAvailable", "boolean"),
-            new Field("stock", "int"),
-            new Field("attributes", "object"),
-            new ArrayField("tags", "string")
+            new StringField("id"),
+            new FloatField("value"),
+            new BooleanField("isAvailable"),
+            new IntField("stock"),
+            new ObjectField("attributes"),
+            new StringArrayField("tags")
         ]);
     }
 
@@ -147,11 +150,11 @@ class integrationUtils {
         const paymentEntity = this.createPaymentEntity();
 
         const invoiceEntity = new Entity("Invoice", this.getInvoiceURL(), [
-            new Field("id", "string"),
-            new Field("total", "int"),
+            new StringField("id"),
+            new IntField("total"),
             new ReferenceField("clientId").setAlias("client"),
             new ArrayReferenceField("paymentIds").setAlias("payments"),
-            new ArrayField("items", "object")
+            new ObjectArrayField("items")
         ]);
 
         entityUtils.referenceBy(invoiceEntity, clientEntity, "clientId","id");
@@ -181,8 +184,8 @@ class integrationUtils {
 
     createClientEntity() {
         return new Entity("Client", this.getClientURL(), [
-            new Field("id", "string"),
-            new Field("name", "string")
+            new StringField("id"),
+            new StringField("name")
         ]);
     }
 
@@ -197,9 +200,9 @@ class integrationUtils {
 
     createPaymentEntity() {
         return new Entity("Payment", this.getPaymentURL(), [
-            new Field("id", "string"),
-            new Field("amount", "float"),
-            new Field("method", "string")
+            new StringField("id"),
+            new FloatField("amount"),
+            new StringField("method")
         ]);
     }
 
