@@ -5,8 +5,8 @@ const chaiAsPromised = require('chai-as-promised');
 const should = require('chai').should();
 chai.use(chaiAsPromised);
 
-const { Field, Errors } = require('../../../src/index');
-const { fieldUtils, entityUtils } = require('../../utils/index');
+const { Errors } = require('../../../src/index');
+const { fieldUtils } = require('../../utils/index');
 
 describe('Fields', function() {
 
@@ -243,25 +243,6 @@ describe('Fields', function() {
                 (() => fieldUtils.getNoNameArrayField()).should.throw(Errors.FieldWithoutNameError);
             });
 
-            it('should fail if a field has no type', async () => {
-                // Testing
-                (() => fieldUtils.getNoTypeField()).should.throw(Errors.FieldWithoutTypeError);
-            });
-
-            it('should fail if an array field has no type', async () => {
-                // Testing
-                (() => fieldUtils.getNoTypeArrayField()).should.throw(Errors.FieldWithoutTypeError);
-            });
-
-            it('should fail if a field has invalid type', async () => {
-                // Testing
-                (() => fieldUtils.getInvalidTypeField()).should.throw(Errors.FieldWithoutValidTypeError);
-            });
-
-            it('should fail if an array field has invalid type', async () => {
-                // Testing
-                (() => fieldUtils.getInvalidTypeArrayField()).should.throw(Errors.FieldWithoutValidTypeError);
-            });
         });
 
         describe('should fail creating reference fields with wrong data', async () => {
@@ -274,6 +255,16 @@ describe('Fields', function() {
             it('should fail if an array reference field has no name', async () => {
                 // Testing
                 (() => fieldUtils.getNoNameArrayReferenceField()).should.throw(Errors.FieldWithoutNameError);
+            });
+
+            it('should fail if a field is created without type', async () => {
+                // Testing
+                (() => fieldUtils.getNoTypeField()).should.throw(Errors.FieldWithoutTypeError);
+            });
+
+            it('should fail if an array field is created without type', async () => {
+                // Testing
+                (() => fieldUtils.getNoTypeArrayField()).should.throw(Errors.FieldWithoutTypeError);
             });
 
         });
