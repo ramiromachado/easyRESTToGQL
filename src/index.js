@@ -7,5 +7,5 @@ module.exports = {
     Errors,
     Server,
     Entity,
-    ...Fields
+    Fields
 };

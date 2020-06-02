@@ -262,6 +262,11 @@ describe('Fields', function() {
                 (() => fieldUtils.getNoTypeField()).should.throw(Errors.FieldWithoutTypeError);
             });
 
+            it('should fail if an array field is created without type', async () => {
+                // Testing
+                (() => fieldUtils.getNoTypeArrayField()).should.throw(Errors.FieldWithoutTypeError);
+            });
+
         });
 
         describe('should fail adding an alias to a field with wrong data', async () => {

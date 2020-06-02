@@ -2,8 +2,7 @@ const _ = require('lodash');
 
 const { GraphQLServer } = require('graphql-yoga');
 
-const {
-    NoPortConfiguredError, NoEntitiesConfiguredError, PortIsTakenError, RESTAPIUnreachableError, EntityRepeatedName
+const { NoPortConfiguredError, NoEntitiesConfiguredError, PortIsTakenError, RESTAPIUnreachableError, EntityRepeatedName
 } = require('../errors');
 
 class Server {

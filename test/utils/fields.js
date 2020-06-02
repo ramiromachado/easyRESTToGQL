@@ -1,7 +1,7 @@
 const { Fields } = require('../../src/index');
 
-const { Field, StringField, FloatField, IntField, BooleanField, ObjectField, StringArrayField, FloatArrayField, IntArrayField,
-    BooleanArrayField, ObjectArrayField, ReferenceField, ArrayReferenceField } = Fields;
+const { Field, ArrayField, StringField, FloatField, IntField, BooleanField, ObjectField, StringArrayField,
+    FloatArrayField, IntArrayField, BooleanArrayField, ObjectArrayField, ReferenceField, ArrayReferenceField } = Fields;
 
 class fieldUtils {
 
@@ -54,7 +54,11 @@ class fieldUtils {
     }
 
     getNoTypeField() {
-        return new Field();
+        return new Field("fieldName");
+    }
+
+    getNoTypeArrayField() {
+        return new ArrayField("fieldName");
     }
 
     getAFields() {

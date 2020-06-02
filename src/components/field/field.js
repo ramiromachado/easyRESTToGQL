@@ -9,7 +9,8 @@ class Field {
 
     constructor(name, type) {
         if (!name) throw new Errors.FieldWithoutNameError();
-        if (!type) throw new Errors.FieldWithoutTypeError(name);
+
+        if (this.constructor == Field || !type) throw new Errors.FieldWithoutTypeError(name);
         this.setName(name);
         this.setAlias(name);
         this.setType(this.generateType(type));
@@ -55,12 +56,7 @@ class Field {
     }
 
     generateType(type) {
-        const typeMapped = this.getTypesMap()[type];
-        if (typeMapped) {
-            return typeMapped;
-        } else {
-            throw new Errors.FieldWithoutValidTypeError(this.getName(), type);
-        }
+        return this.getTypesMap()[type];
     }
 
     getTypesMap() {
