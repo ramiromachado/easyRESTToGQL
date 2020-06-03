@@ -4,7 +4,7 @@
   "description": "A simple Package to convert your REST API into a GQL API",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --recursive --exit"
+    "test": "nyc --reporter=lcov mocha --recursive --exit"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,8 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "json-server": "^0.16.1",
-    "mocha": "^7.1.2"
+    "mocha": "^7.1.2",
+    "nyc": "^15.1.0"
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",

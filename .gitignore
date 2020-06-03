@@ -3,3 +3,5 @@ node_modules/*
 *.note
 yarn.lock
 .examples/*
+coverage/*
+.nyc_output/*
