@@ -20,6 +20,7 @@ class integrationUtils {
     invoiceURL = `${this.restAPIURL}/invoices`;
     clientURL = `${this.restAPIURL}/clients`;
     paymentURL = `${this.restAPIURL}/payments`;
+    cashierURL = `${this.restAPIURL}/cashiers`;
 
 
     getRestDBFile() {
@@ -46,6 +47,10 @@ class integrationUtils {
         return this.paymentURL;
     }
 
+    getCashierURL() {
+        return this.cashierURL;
+    }
+
     cleanRESTAPIServer() {
         try {
             fs.unlinkSync(this.getRestDBFile());
@@ -60,6 +65,7 @@ class integrationUtils {
         const invoices = [
             {
                 id: "IN-1",
+                header: { date:"24/03/2019", counter:3, cashierId: "CA-1"},
                 total: 99,
                 clientId: "CL-2",
                 paymentIds: ["PY-1"],
@@ -67,12 +73,25 @@ class integrationUtils {
             },
             {
                 id: "IN-2",
+                header: { date:"24/03/2019", counter:2, cashierId: "CA-2"},
                 total: 125,
                 clientId: "CL-1",
                 paymentIds: ["PY-2", "PY-3"],
                 items: [{ productId: "PR-3", quantity: 1 }]
             },
-            { id: "IN-3", total: 0, clientId: "CL-2", paymentIds: [], items: [] }
+            {
+                id: "IN-3",
+                header: { date:"25/03/2019", counter:1, cashierId: "CA-1"},
+                total: 0,
+                clientId: "CL-2",
+                paymentIds: [],
+                items: []
+            }
+        ];
+
+        const cashiers = [
+            { id: "CA-1", name: "Cashier #1" },
+            { id: "CA-2", name: "Cashier #2" }
         ];
 
         const clients = [
@@ -103,10 +122,17 @@ class integrationUtils {
                 attributes: { color: "red" },
                 tags: ["specialOffer"]
             },
-            { id: "PR-3", value: 1.25, isAvailable: true, stock: 3, attributes: { height: "150cm" }, tags: [] },
+            {
+                id: "PR-3",
+                value: 1.25,
+                isAvailable: true,
+                stock: 3,
+                attributes: { height: "150cm" },
+                tags: []
+            }
         ];
 
-        const DBData = JSON.stringify({ invoices, products, clients, payments });
+        const DBData = JSON.stringify({ invoices, cashiers, products, clients, payments });
         fs.writeFileSync(this.getRestDBFile(), DBData);
 
         if (!this.RESTAPIserver) {
@@ -145,28 +171,43 @@ class integrationUtils {
         }`
     }
 
-    createInvoiceAndClientEntity() {
+    createInvoiceFullModel() {
         const clientEntity = this.createClientEntity();
+        const cashierEntity = this.createCashierEntity();
         const paymentEntity = this.createPaymentEntity();
+        const productEntity = this.createProductEntity();
+        const invoiceHeaderNestedEntity = this.createInvoiceHeaderNestedEntity();
+        const invoiceItemNestedEntity = this.createInvoiceItemNestedEntity();
 
         const invoiceEntity = new Entity("Invoice", this.getInvoiceURL(), [
             new StringField("id"),
+            new NestedField("header", invoiceHeaderNestedEntity.getName()),
             new IntField("total"),
             new ReferenceField("clientId").setAlias("client"),
             new ArrayReferenceField("paymentIds").setAlias("payments"),
-            new ObjectArrayField("items")
+            new NestedArrayField("items", invoiceItemNestedEntity.getName())
         ]);
 
         entityUtils.referenceBy(invoiceEntity, clientEntity, "clientId","id");
         entityUtils.referenceBy(invoiceEntity, paymentEntity, "paymentIds","id");
+        entityUtils.referenceBy(invoiceHeaderNestedEntity, cashierEntity, "cashierId","id");
+        entityUtils.referenceBy(invoiceItemNestedEntity, productEntity, "productId","id");
 
-        return [clientEntity, invoiceEntity, paymentEntity];
+        return [cashierEntity, clientEntity, invoiceEntity, paymentEntity, productEntity, invoiceHeaderNestedEntity, invoiceItemNestedEntity];
     }
 
     getInvoiceGQLQuery() {
         return `{
             Invoice {
                 id
+                header{
+                    date
+                    counter
+                    cashier{
+                        id
+                        name
+                    }
+                }
                 total
                 client {
                     id
@@ -177,7 +218,17 @@ class integrationUtils {
                   amount
                   method  
                 }
-                items
+                items {
+                    product{
+                        id
+                        value
+                        isAvailable
+                        stock
+                        attributes
+                        tags
+                    }
+                    quantity
+                }
             }
         }`
     }
@@ -185,17 +236,9 @@ class integrationUtils {
     createClientEntity() {
         return new Entity("Client", this.getClientURL(), [
             new StringField("id"),
-            new StringField("name")
+            new StringField("name"),
+            new NestedField("referrer", "Client")
         ]);
-    }
-
-    getClientGQLQuery() {
-        return `{
-            Client {
-                id
-                name
-            }
-        }`
     }
 
     createPaymentEntity() {
@@ -206,14 +249,26 @@ class integrationUtils {
         ]);
     }
 
-    getClientGQLQuery() {
-        return `{
-            Payment {
-                id
-                amount
-                method
-            }
-        }`
+    createInvoiceHeaderNestedEntity() {
+        return new NestedEntity("InvoiceHeader", this.getCashierURL(), [
+            new StringField("id"),
+            new StringField("name")
+        ]);
+    }
+
+    createInvoiceItemNestedEntity() {
+        return new NestedEntity("InvoiceItem", [
+            new StringField("productId").setAlias("product"),
+            new StringField("quantity")
+        ]);
+    }
+
+    createCashierEntity() {
+        return new Entity("Cashier",[
+            new StringField("date"),
+            new StringField("counter"),
+            new ReferenceField("cashierId").setAlias("cashier")
+        ]);
     }
 
     async getProductDataFromRest() {
@@ -230,6 +285,10 @@ class integrationUtils {
 
     async getPaymentDataFromRest() {
         return this.fetchRESTAPIServer(this.getPaymentURL());
+    }
+
+    async getCashiersDataFromRest() {
+        return this.fetchRESTAPIServer(this.getCashierURL());
     }
 
     async fetchRESTAPIServer(url) {

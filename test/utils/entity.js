@@ -20,10 +20,6 @@ class entityUtils {
         return new Entity("EntityWithAllTypeOfFields", "url", fields);
     }
 
-    getSimpleEntityWithFields(fields){
-        return new Entity("simpleEntityWithFields", "url", fields);
-    }
-
     getReferencedABCEntities(){
         // A has id, name and B fields
         // B has id, name and C fields
@@ -52,6 +48,11 @@ class entityUtils {
     getUnreachableURLEntity(){
         const fields = [fieldUtils.getStringField()];
         return new Entity("withoutURL", "unreachable", fields);
+    }
+
+    getAnotherUnreachableURLEntity(){
+        const fields = [fieldUtils.getStringField()];
+        return new Entity("anotherWithoutURL", "unreachable", fields);
     }
 
     getNoFieldsEntity() {

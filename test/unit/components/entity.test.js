@@ -6,20 +6,33 @@ const should = require('chai').should();
 chai.use(chaiAsPromised);
 
 const { Entity, Errors } = require('../../../src/index');
-const { fieldUtils, entityUtils } = require('../../utils/index');
+const { integrationUtils, fieldUtils, entityUtils } = require('../../utils/index');
 
 describe('Entities', function() {
 
     describe('Success', async () => {
 
-        it('should create an Enitity with all kind of basic fields', async () => {
+        it('should create an Entity with all kind of basic fields', async () => {
             const entity = entityUtils.getWithAllBasicTypeOfFieldsEntity();
 
             // Testing
             should.exist(entity);
         });
 
-        it.skip('should create an Enitity with nested fields', async () => {
+        describe('should create an Entity with nested fields and nested array fields', async () => {
+            it('should create an Entity with a nested field and a nested array field', async () => {
+                throw Error("implement");
+            });
+
+            it('should create an Entity with a two level nested field and a nested array field', async () => {
+                throw Error("implement");
+            });
+
+            it('should create an Entity with a circular type reference', async () => {
+                // An entity of type A has a nested field of type B that has a nested field of type C that has
+                // a nested field of type A
+                throw Error("implement");
+            });
         });
 
         describe('should create enitities with referenced fields', async () => {
@@ -71,9 +84,6 @@ describe('Entities', function() {
             });
         });
 
-        it.skip('should create an Enitity with nested referenced fields', async () => {
-        });
-
     });
 
     describe('Errors', async () => {
@@ -95,7 +105,7 @@ describe('Entities', function() {
         it('should fail if some entity has two fields with the same name', async () => {
             const fields = [fieldUtils.getStringField(), fieldUtils.getStringField()];
             // Testing
-            (() => new Entity("repeatedFields", this.getInvoiceURL(), fields).should.throw(Errors.EntityWithRepeatedFieldError));
+            (() => new Entity("repeatedFields", integrationUtils.getInvoiceURL(), fields)).should.throw(Errors.EntityWithRepeatedFieldError);
         });
 
         it('should fail if trying to reference a field with no associated entity', async () => {

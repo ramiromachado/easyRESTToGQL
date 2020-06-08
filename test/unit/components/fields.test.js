@@ -102,7 +102,14 @@ describe('Fields', function() {
             });
         });
 
-        it.skip('should create nested type fields successfully', async () => {
+        describe('should create nested type fields successfully', async () => {
+            it('should create a simple nested field successfully', async () => {
+                throw Error("implement");
+            });
+
+            it('should create an array simple nested field successfully', async () => {
+                throw Error("implement");
+            });
         });
 
         describe('should add an alias to a field successfully', async () => {
@@ -225,7 +232,12 @@ describe('Fields', function() {
                 referenceArray.getAlias().should.be.equals("aliasReferenceArray");
             });
 
-            it.skip('should add an alias to a nested type fields successfully', async () => {
+            it('should add an alias to a nested type field successfully', async () => {
+                throw Error("implement");
+            });
+
+            it('should add an alias to a nested array field successfully', async () => {
+                throw Error("implement");
             });
         });
     });
