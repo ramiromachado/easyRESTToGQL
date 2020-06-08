@@ -185,7 +185,7 @@ class integrationUtils {
             new IntField("total"),
             new ReferenceField("clientId").setAlias("client"),
             new ArrayReferenceField("paymentIds").setAlias("payments"),
-            new NestedArrayField("items", invoiceItemNestedEntity.getName())
+            new ArrayNestedField("items", invoiceItemNestedEntity.getName())
         ]);
 
         entityUtils.referenceBy(invoiceEntity, clientEntity, "clientId","id");

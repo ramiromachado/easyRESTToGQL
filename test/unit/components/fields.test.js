@@ -281,6 +281,26 @@ describe('Fields', function() {
 
         });
 
+        describe('should fail creating nested fields with wrong data', async () => {
+
+            it('should fail if a nested field has no name', async () => {
+                throw Error("");
+            });
+
+            it('should fail if a nested array field has no name', async () => {
+                throw Error("");
+            });
+
+            it('should fail if a field is created without type', async () => {
+                throw Error("");
+            });
+
+            it('should fail if an array field is created without type', async () => {
+                throw Error("");
+            });
+
+        });
+
         describe('should fail adding an alias to a field with wrong data', async () => {
             it('should fail if a alias has no name', async () => {
                 const booleanField = fieldUtils.getBooleanField();

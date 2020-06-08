@@ -51,5 +51,13 @@ describe('Server', function() {
             (() => new Server(serverUtils.getPort(), [withAllTypeOfFieldsEntity, withAllTypeOfFieldsEntityRepeated]))
                 .should.throw(Errors.EntityRepeatedName);
         });
+
+        it('should fail if a nested field refernce a non-existent entity', async () => {
+            throw Error("");
+        });
+
+        it('should fail if a nested array field reference a non-existent entity', async () => {
+            throw Error("");
+        });
     });
 });
