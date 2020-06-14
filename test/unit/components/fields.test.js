@@ -8,48 +8,48 @@ chai.use(chaiAsPromised);
 const { Errors } = require('../../../src/index');
 const { fieldUtils } = require('../../utils/index');
 
-describe('Fields', function() {
+describe.only('Fields', function() {
 
     describe('Success', async () => {
 
         describe('should create basic type fields successfully', async () => {
 
-            it('should create string field successfully', async () => {
+            it('should create a string field successfully', async () => {
                 const stringField = fieldUtils.getStringField();
 
                 // Testing
                 should.exist(stringField);
             });
 
-            it('should create float field successfully', async () => {
+            it('should create a float field successfully', async () => {
                 const floatField = fieldUtils.getFloatField();
 
                 // Testing
                 should.exist(floatField);
             });
 
-            it('should create int field successfully', async () => {
+            it('should create an int field successfully', async () => {
                 const intField = fieldUtils.getIntField();
 
                 // Testing
                 should.exist(intField);
             });
 
-            it('should create boolean field successfully', async () => {
+            it('should create a boolean field successfully', async () => {
                 const booleanField = fieldUtils.getBooleanField();
 
                 // Testing
                 should.exist(booleanField);
             });
 
-            it('should create object field successfully', async () => {
+            it('should create an object field successfully', async () => {
                 const objectField = fieldUtils.getObjectField();
 
                 // Testing
                 should.exist(objectField);
             });
 
-            it('should create array string field successfully', async () => {
+            it.only('should create an array string field successfully', async () => {
                 const stringArrayField = fieldUtils.getStringArrayField();
 
                 // Testing
@@ -104,11 +104,17 @@ describe('Fields', function() {
 
         describe('should create nested type fields successfully', async () => {
             it('should create a simple nested field successfully', async () => {
-                throw Error("implement");
+                const stringField = fieldUtils.getNestedField();
+
+                // Testing
+                should.exist(stringField);
             });
 
             it('should create an array simple nested field successfully', async () => {
-                throw Error("implement");
+                const stringField = fieldUtils.getArrayNestedField();
+
+                // Testing
+                should.exist(stringField);
             });
         });
 
@@ -233,11 +239,21 @@ describe('Fields', function() {
             });
 
             it('should add an alias to a nested type field successfully', async () => {
-                throw Error("implement");
+                const nestedField = fieldUtils.getNestedField();
+                nestedField.setAlias("aliasNestedField");
+
+                // Testing
+                should.exist(nestedField);
+                nestedField.getAlias().should.be.equals("aliasNestedField");
             });
 
             it('should add an alias to a nested array field successfully', async () => {
-                throw Error("implement");
+                const arrayNestedField = fieldUtils.getArrayNestedField();
+                arrayNestedField.setAlias("aliasArrayNestedField");
+
+                // Testing
+                should.exist(arrayNestedField);
+                arrayNestedField.getAlias().should.be.equals("aliasArrayNestedField");
             });
         });
     });
@@ -245,14 +261,59 @@ describe('Fields', function() {
     describe('Errors', async () => {
 
         describe('should fail creating basic type fields with wrong data', async () => {
-            it('should fail if a field has no name', async () => {
+            it('should fail if a string field has no name', async () => {
                 // Testing
-                (() => fieldUtils.getNoNameField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getNoNameStringField()).should.throw(Errors.FieldWithoutNameError);
             });
 
-            it('should fail if an array field has no name', async () => {
+            it('should fail if a float field has no name', async () => {
                 // Testing
-                (() => fieldUtils.getNoNameArrayField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getNoNameFloatField()).should.throw(Errors.FieldWithoutNameError);
+            });
+
+            it('should fail if an int field has no name', async () => {
+                // Testing
+                (() => fieldUtils.getNoNameIntField()).should.throw(Errors.FieldWithoutNameError);
+            });
+
+            it('should fail if a boolean field has no name', async () => {
+                // Testing
+                (() => fieldUtils.getNoNameBooleanField()).should.throw(Errors.FieldWithoutNameError);
+            });
+
+            it('should fail if an object field has no name', async () => {
+                // Testing
+                (() => fieldUtils.getNoNameObjectField()).should.throw(Errors.FieldWithoutNameError);
+            });
+
+            it('should fail if a string array field has no name', async () => {
+                // Testing
+                (() => fieldUtils.getNoNameStringArrayField()).should.throw(Errors.FieldWithoutNameError);
+            });
+
+            it('should fail if a float array field has no name', async () => {
+                // Testing
+                (() => fieldUtils.getNoNameFloatArrayField()).should.throw(Errors.FieldWithoutNameError);
+            });
+
+            it('should fail if a float array field has no name', async () => {
+                // Testing
+                (() => fieldUtils.getNoNameFloatArrayField()).should.throw(Errors.FieldWithoutNameError);
+            });
+
+            it('should fail if an int array field has no name', async () => {
+                // Testing
+                (() => fieldUtils.getNoNameIntArrayField()).should.throw(Errors.FieldWithoutNameError);
+            });
+
+            it('should fail if a boolean array field has no name', async () => {
+                // Testing
+                (() => fieldUtils.getNoNameBooleanArrayField()).should.throw(Errors.FieldWithoutNameError);
+            });
+
+            it('should fail if an object array field has no name', async () => {
+                // Testing
+                (() => fieldUtils.getNoNameObjectArrayField()).should.throw(Errors.FieldWithoutNameError);
             });
 
         });

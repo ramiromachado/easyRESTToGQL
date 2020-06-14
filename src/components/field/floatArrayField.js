@@ -2,7 +2,8 @@ const ArrayField = require('./arrayField');
 
 class FloatArrayField extends ArrayField{
     constructor(){
-        super(...arguments, "float");
+        const [ name ] = arguments;
+        super(name,"float");
     }
 
 }

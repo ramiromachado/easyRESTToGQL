@@ -3,7 +3,8 @@ const Field = require('./field');
 class FloatField extends Field {
 
     constructor() {
-        super(...arguments, 'float');
+        const [ name ] = arguments;
+        super(name,'float');
     }
 }
 

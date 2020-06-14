@@ -3,7 +3,8 @@ const Field = require('./field');
 class ObjectField extends Field {
 
     constructor() {
-        super(...arguments, 'object');
+        const [ name ] = arguments;
+        super(name, 'object');
     }
 }
 
