@@ -8,9 +8,9 @@ easyRESTToGQL has adopted the [Contributor Covenant](https://www.contributor-cov
 All work on easyRESTToGQL happens directly on GitHub. Both core team members and external contributors send pull requests which go through the same review process.
 
 ## Semantic Versioning
-easyRESTToGQL follows [semantic versioning](https://semver.org/). We release patch versions for critical bugfixes, minor versions for new features or non-essential changes, and major versions for any breaking changes. When we make breaking changes, we also introduce deprecation warnings in a minor version so that our users learn about the upcoming changes and migrate their code in advance.
+EasyRESTToGQL follows [semantic versioning](https://semver.org/). We release patch versions for critical bugfixes, minor versions for new features or non-essential changes, and major versions for any breaking changes. When we make breaking changes, we also introduce deprecation warnings in a minor version so that our users learn about the upcoming changes and migrate their code in advance.
 
-Every significant change is documented in the [changelog file](https://github.com/ramiromachado/easyRESTToGQL/blob/master/CHANGELOG.md).
+Every significant change is documented in the [changelog file](./CHANGELOG.md).
 
 ## Branch Organization
 Submit all changes directly to the [master branch](https://github.com/ramiromachado/easyRESTToGQL/tree/master). We don’t use separate branches for development or for upcoming releases. We do our best to keep master in good shape, with all tests passing.
@@ -36,5 +36,4 @@ Before submitting a pull request, please make sure the following is done:
 6. Make sure your code lints (npm lint).
 
 ## License
-By contributing to easyRESTToGQL, you agree that your contributions will be licensed under its MIT license.
-
+By contributing to easyRESTToGQL, you agree that your contributions will be licensed under its [MIT licensed](./LICENSE)
