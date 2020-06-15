@@ -72,6 +72,10 @@ class Field {
         }
     }
 
+    isNested(){
+        return false;
+    }
+
 }
 
 module.exports = Field;

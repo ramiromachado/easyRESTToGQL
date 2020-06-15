@@ -1,7 +1,7 @@
 const _ = require('lodash');
 require('isomorphic-fetch');
 
-const Errors = require('../errors');
+const Errors = require('../../errors');
 
 class Entity {
 
@@ -10,13 +10,30 @@ class Entity {
     fields;
 
     constructor(name, RESTAPIURL, fields) {
-        if (!name) throw new Errors.EntityWithoutNameError();
-        if (!RESTAPIURL) throw new Errors.EntityWithoutURLError(name);
-        if (!fields || (fields.length == 0)) throw new Errors.EntityWithoutFieldsError(name);
-        if (this.thereIsARepeteadNameField(fields)) throw new Errors.EntityWithRepeatedFieldError(name);
+        this.validateConstruction({name, RESTAPIURL, fields});
         this.setName(name);
         this.setRESTAPIURL(RESTAPIURL);
         this.setFields(fields);
+    }
+
+    validateConstruction(entityData){
+        const {name, RESTAPIURL, fields} = entityData;
+        this.validateName(name);
+        this.validateURL(name, RESTAPIURL);
+        this.validateFields(name, fields);
+    }
+
+    validateName(name){
+        if (!name) throw new Errors.EntityWithoutNameError();
+    }
+
+    validateURL(name, RESTAPIURL){
+        if (!RESTAPIURL) throw new Errors.EntityWithoutURLError(name);
+    }
+
+    validateFields(name, fields){
+        if (!fields || (fields.length == 0)) throw new Errors.EntityWithoutFieldsError(name);
+        if (this.thereIsARepeteadNameField(fields)) throw new Errors.EntityWithRepeatedFieldError(name);
     }
 
     getName() {
@@ -39,8 +56,12 @@ class Entity {
         return this.fields;
     }
 
+    getNestedFields(){
+        return this.fields.filter(field => field.isNested());
+    }
+
     referenceBy(entityReferenced, referenceFieldName, referencedFieldName) {
-        if (!entityReferenced) throw new Errors.ReferencedEntityIsMissingError(this.getName());
+        if (!entityReferenced) throw new Errors.ReferencedEntityIsMissingOrWrongError(this.getName());
         if (!referenceFieldName) throw new Errors.ReferenceFieldNameIsMissingError(this.getName(), entityReferenced.getName());
         if (!referencedFieldName) throw new Errors.ReferencedFieldNameIsMissingError(this.getName(), entityReferenced.getName());
 
@@ -66,6 +87,10 @@ class Entity {
 
     setFields(fields) {
         this.fields = fields;
+    }
+
+    isNested(){
+        return false;
     }
 
     thereIsARepeteadNameField(fields) {

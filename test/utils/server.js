@@ -26,7 +26,8 @@ class serverUtils {
         entityUtils.referenceBy(C, A, "AIds", "id");
         entities.push(A, B, C);
 
-        throw Error("add nestedEntities");
+        const {entity, nestedEntity} = entityUtils.getEntityWithNestedEntity();
+        entities.push(entity, nestedEntity);
 
         return new Server(this.getPort(), entities);
     }

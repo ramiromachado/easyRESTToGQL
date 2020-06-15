@@ -5,8 +5,10 @@ const chaiAsPromised = require('chai-as-promised');
 const should = require('chai').should();
 chai.use(chaiAsPromised);
 
-const { Entity, Errors } = require('../../../src/index');
+const { Entities, Errors } = require('../../../src/index');
 const { integrationUtils, fieldUtils, entityUtils } = require('../../utils/index');
+
+const { Entity } = Entities;
 
 describe('Entities', function() {
 
@@ -21,17 +23,38 @@ describe('Entities', function() {
 
         describe('should create an Entity with nested fields and nested array fields', async () => {
             it('should create an Entity with a nested field and a nested array field', async () => {
-                throw Error("implement");
+                const { entity, nestedEntity } = entityUtils.getEntityWithNestedEntity();
+
+                // Testing
+                should.exist(nestedEntity);
+                should.exist(entity);
             });
 
             it('should create an Entity with a two level nested field and a nested array field', async () => {
-                throw Error("implement");
+                // entity
+                const nestedEntityC = entityUtils.getNestedEntity("C");
+                const nestedEntityB = entityUtils.getNestedEntityWithNestedField("B", "C");
+                const entityA = entityUtils.getEntityWithNestedFieldAndNestedArrayField("A", "B");
+
+                // Testing
+                should.exist(nestedEntityC);
+                should.exist(nestedEntityB);
+                should.exist(entityA);
             });
 
             it('should create an Entity with a circular type reference', async () => {
                 // An entity of type A has a nested field of type B that has a nested field of type C that has
                 // a nested field of type A
-                throw Error("implement");
+                // entity
+                // entity
+                const nestedEntityC = entityUtils.getNestedEntityWithNestedField("C", "A");
+                const nestedEntityB = entityUtils.getNestedEntityWithNestedField("B", "C");
+                const nestedEntityA = entityUtils.getNestedEntityWithNestedField("A", "B");
+
+                // Testing
+                should.exist(nestedEntityC);
+                should.exist(nestedEntityB);
+                should.exist(nestedEntityA);
             });
         });
 
@@ -116,7 +139,7 @@ describe('Entities', function() {
             const BReferencedFieldName = "id";
 
             // Testing
-            (() => entityUtils.referenceBy(A, undefined, AReferenceFieldName, BReferencedFieldName)).should.throw(Errors.ReferencedEntityIsMissingError);
+            (() => entityUtils.referenceBy(A, undefined, AReferenceFieldName, BReferencedFieldName)).should.throw(Errors.ReferencedEntityIsMissingOrWrongError);
         });
 
         it('should fail if trying to reference an array field with no associated entity', async () => {
@@ -125,7 +148,7 @@ describe('Entities', function() {
             const CReferenceFieldName = "AIds";
             const AReferencedFieldName = "id";
             // Testing
-            (() => entityUtils.referenceBy(C, undefined, CReferenceFieldName, AReferencedFieldName)).should.throw(Errors.ReferencedEntityIsMissingError);
+            (() => entityUtils.referenceBy(C, undefined, CReferenceFieldName, AReferencedFieldName)).should.throw(Errors.ReferencedEntityIsMissingOrWrongError);
         });
 
         it('should fail if trying to reference a field with no reference entity field name', async () => {

@@ -3,9 +3,10 @@ const { createApolloFetch } = require('apollo-fetch');
 const fs = require('fs');
 const jsonServer = require('json-server');
 
-const { Fields, Entity } = require("../../src/index");
+const { Fields, Entities } = require("../../src/index");
 const { StringField, FloatField, IntField, BooleanField, ObjectField, StringArrayField, ObjectArrayField,
-    ReferenceField, ArrayReferenceField } = Fields;
+    ReferenceField, ArrayReferenceField, NestedField, ArrayNestedField } = Fields;
+const { Entity, NestedEntity } = Entities;
 
 const serverUtils = require('./server');
 const entityUtils = require('./entity');
@@ -65,7 +66,7 @@ class integrationUtils {
         const invoices = [
             {
                 id: "IN-1",
-                header: { date:"24/03/2019", counter:3, cashierId: "CA-1"},
+                header: { date:"24/03/2019", counter:"3", cashierId: "CA-1"},
                 total: 99,
                 clientId: "CL-2",
                 paymentIds: ["PY-1"],
@@ -73,7 +74,7 @@ class integrationUtils {
             },
             {
                 id: "IN-2",
-                header: { date:"24/03/2019", counter:2, cashierId: "CA-2"},
+                header: { date:"24/03/2019", counter:"2", cashierId: "CA-2"},
                 total: 125,
                 clientId: "CL-1",
                 paymentIds: ["PY-2", "PY-3"],
@@ -81,7 +82,7 @@ class integrationUtils {
             },
             {
                 id: "IN-3",
-                header: { date:"25/03/2019", counter:1, cashierId: "CA-1"},
+                header: { date:"25/03/2019", counter:"1", cashierId: "CA-1"},
                 total: 0,
                 clientId: "CL-2",
                 paymentIds: [],
@@ -249,8 +250,8 @@ class integrationUtils {
         ]);
     }
 
-    createInvoiceHeaderNestedEntity() {
-        return new NestedEntity("InvoiceHeader", this.getCashierURL(), [
+    createCashierEntity() {
+        return new Entity("InvoiceHeader", this.getCashierURL(), [
             new StringField("id"),
             new StringField("name")
         ]);
@@ -258,13 +259,13 @@ class integrationUtils {
 
     createInvoiceItemNestedEntity() {
         return new NestedEntity("InvoiceItem", [
-            new StringField("productId").setAlias("product"),
-            new StringField("quantity")
+            new ReferenceField("productId").setAlias("product"),
+            new IntField("quantity")
         ]);
     }
 
-    createCashierEntity() {
-        return new Entity("Cashier",[
+    createInvoiceHeaderNestedEntity() {
+        return new NestedEntity("Cashier",[
             new StringField("date"),
             new StringField("counter"),
             new ReferenceField("cashierId").setAlias("cashier")

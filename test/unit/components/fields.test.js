@@ -8,7 +8,7 @@ chai.use(chaiAsPromised);
 const { Errors } = require('../../../src/index');
 const { fieldUtils } = require('../../utils/index');
 
-describe.only('Fields', function() {
+describe('Fields', function() {
 
     describe('Success', async () => {
 
@@ -49,7 +49,7 @@ describe.only('Fields', function() {
                 should.exist(objectField);
             });
 
-            it.only('should create an array string field successfully', async () => {
+            it('should create an array string field successfully', async () => {
                 const stringArrayField = fieldUtils.getStringArrayField();
 
                 // Testing
@@ -345,19 +345,23 @@ describe.only('Fields', function() {
         describe('should fail creating nested fields with wrong data', async () => {
 
             it('should fail if a nested field has no name', async () => {
-                throw Error("");
+                // Testing
+                (() => fieldUtils.getNoNameNestedField()).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if a nested array field has no name', async () => {
-                throw Error("");
+                // Testing
+                (() => fieldUtils.getNoNameArrayNestedField()).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if a field is created without type', async () => {
-                throw Error("");
+                // Testing
+                (() => fieldUtils.getNoTypeNestedField()).should.throw(Errors.FieldWithoutTypeError);
             });
 
             it('should fail if an array field is created without type', async () => {
-                throw Error("");
+                // Testing
+                (() => fieldUtils.getNoTypeArrayNestedField()).should.throw(Errors.FieldWithoutTypeError);
             });
 
         });

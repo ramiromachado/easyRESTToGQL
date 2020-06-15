@@ -2,8 +2,8 @@ const Field = require('./field');
 
 class ArrayField extends Field{
     constructor(){
-        const [ name ] = arguments;
-        super(name);
+        const [ name, type ] = arguments;
+        super(name,type);
     }
 
     setType(type) {

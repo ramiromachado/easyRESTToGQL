@@ -22,7 +22,7 @@ class RESTAPIUnreachableError extends Error {
         if (RESTAPIURLs.length == 1) {
             super(`The entity REST API URL ${RESTAPIURLs[0]} is unreachable`);
         } else {
-            const allExectpLasturls = RESTAPIURLs.slice(0, RESTAPIURLs.length - 1).join(", ");
+            const allExectpLasturls = RESTAPIURLs.map(url => url + "").slice(0, RESTAPIURLs.length - 1).join(", ");
             super(`The entity REST API URLs ${allExectpLasturls} and ${RESTAPIURLs[RESTAPIURLs.length - 1]} are unreachable`);
         }
     }
@@ -76,7 +76,7 @@ class AliasWithoutNameError extends Error {
     }
 }
 
-class ReferencedEntityIsMissingError extends Error {
+class ReferencedEntityIsMissingOrWrongError extends Error {
     constructor(entityName) {
         super(`The ${entityName} try to reference an empty entity`);
     }
@@ -125,7 +125,7 @@ module.exports = {
     FieldWithoutNameError,
     FieldWithoutTypeError,
     AliasWithoutNameError,
-    ReferencedEntityIsMissingError,
+    ReferencedEntityIsMissingOrWrongError,
     ReferenceFieldNameIsMissingError,
     ReferencedFieldNameIsMissingError,
     EntityHasNoFieldWithTheGivenNameError,

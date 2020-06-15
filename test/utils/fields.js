@@ -1,7 +1,8 @@
 const { Fields } = require('../../src/index');
 
 const { Field, ArrayField, StringField, FloatField, IntField, BooleanField, ObjectField, StringArrayField,
-    FloatArrayField, IntArrayField, BooleanArrayField, ObjectArrayField, ReferenceField, ArrayReferenceField } = Fields;
+    FloatArrayField, IntArrayField, BooleanArrayField, ObjectArrayField, ReferenceField, ArrayReferenceField,
+    NestedField, ArrayNestedField } = Fields;
 
 class fieldUtils {
 
@@ -107,6 +108,30 @@ class fieldUtils {
 
     getNoTypeArrayField() {
         return new ArrayField("fieldName");
+    }
+
+    getNestedField(fieldName = "fieldName", entityName= "nestedEntityName") {
+        return new NestedField(fieldName, entityName);
+    }
+
+    getNoNameNestedField() {
+        return new NestedField(undefined, "nestedEntityName");
+    }
+
+    getNoTypeNestedField() {
+        return new NestedField("fieldName", undefined);
+    }
+
+    getArrayNestedField(fieldName = "fieldName", entityName= "nestedEntityName") {
+        return new ArrayNestedField(fieldName, entityName);
+    }
+
+    getNoNameArrayNestedField() {
+        return new ArrayNestedField(undefined, "nestedEntityName");
+    }
+
+    getNoTypeArrayNestedField() {
+        return new ArrayNestedField("fieldName", undefined);
     }
 
     getAFields() {

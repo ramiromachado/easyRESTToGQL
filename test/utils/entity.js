@@ -1,5 +1,6 @@
 const fieldUtils = require('./fields');
-const { Entity } = require('../../src/index');
+const { Entities } = require('../../src/index');
+const { NestedEntity, Entity } = Entities;
 
 class entityUtils {
 
@@ -18,6 +19,39 @@ class entityUtils {
         fields.push(fieldUtils.getObjectArrayField());
 
         return new Entity("EntityWithAllTypeOfFields", "url", fields);
+    }
+
+    getNestedEntity(nestedEntityName) {
+        return new NestedEntity(nestedEntityName, [fieldUtils.getStringField()]);
+    }
+
+    getNestedEntityWithNestedField(nestedEntityName, nestedNestedEntityName) {
+        const fields = [];
+        fields.push(fieldUtils.getNestedField(nestedNestedEntityName, nestedNestedEntityName));
+        fields.push(fieldUtils.getNestedField(nestedNestedEntityName+"s", nestedNestedEntityName));
+
+        return new NestedEntity(nestedEntityName, fields);
+    }
+
+    getEntityWithNestedFieldAndNestedArrayField(superEntityName, nestedEntityName) {
+        const fields = [];
+
+        fields.push(fieldUtils.getNestedField(nestedEntityName, nestedEntityName));
+        fields.push(fieldUtils.getNestedField(nestedEntityName+"s", nestedEntityName));
+        return new Entity(superEntityName, "url", fields);
+    }
+
+    getEntityWithNestedEntity() {
+        const nestedEntityName = "nestedEntity";
+        const nestedEntityFields = [fieldUtils.getStringField(),fieldUtils.getFloatField()];
+        const nestedEntity = new NestedEntity(nestedEntityName, nestedEntityFields);
+
+        const fields = [];
+        fields.push(fieldUtils.getNestedField(nestedEntity.getName(), nestedEntity.getName()));
+        fields.push(fieldUtils.getArrayNestedField(nestedEntity.getName()+"s", nestedEntity.getName()));
+        const entity = new Entity("entityWithNestedFields", "url", fields);
+
+        return { entity, nestedEntity};
     }
 
     getReferencedABCEntities(){

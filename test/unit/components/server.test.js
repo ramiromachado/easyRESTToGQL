@@ -52,12 +52,22 @@ describe('Server', function() {
                 .should.throw(Errors.EntityRepeatedName);
         });
 
-        it('should fail if a nested field refernce a non-existent entity', async () => {
-            throw Error("");
+        it('should fail if a nested field reference a non-existent entity', async () => {
+            // Setting up the GQL Server
+            const entityA = entityUtils.getEntityWithNestedFieldAndNestedArrayField("A","B");
+
+            // Testing
+            (() => new Server(serverUtils.getPort(), [entityA]))
+                .should.throw(Errors.ReferencedEntityIsMissingOrWrongError);
         });
 
-        it('should fail if a nested array field reference a non-existent entity', async () => {
-            throw Error("");
+        it('should fail if a nested field in a nested entity reference a non-existent entity', async () => {
+            // Setting up the GQL Server
+            const entityA = entityUtils.getNestedEntityWithNestedField("A","B");
+
+            // Testing
+            (() => new Server(serverUtils.getPort(), [entityA]))
+                .should.throw(Errors.ReferencedEntityIsMissingOrWrongError);
         });
     });
 });

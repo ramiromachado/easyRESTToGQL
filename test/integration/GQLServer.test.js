@@ -90,6 +90,9 @@ describe('GQL Server', function() {
                                 return {quantity: item.quantity, product};
                             });
 
+                            const {cashierId, ...otherHeaderAttributes} = invoice.header;
+                            invoice.header = otherHeaderAttributes;
+
                             const { paymentIds, clientId, ...otherAttributes } = invoice;
                             return otherAttributes;
                         });
