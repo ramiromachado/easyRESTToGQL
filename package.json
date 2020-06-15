@@ -4,7 +4,9 @@
   "description": "A simple Package to convert your REST API into a GQL API",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=lcov mocha --recursive --exit"
+    "test": "nyc --reporter=lcov mocha --recursive --exit",
+    "prettier": "echo Not implemented yet",
+    "lint": "echo Not implemented yet"
   },
   "repository": {
     "type": "git",
