@@ -2,8 +2,8 @@ const _ = require('lodash');
 
 const { GraphQLServer } = require('graphql-yoga');
 
-const { NoPortConfiguredError, NoEntitiesConfiguredError, PortIsTakenError, RESTAPIUnreachableError, EntityRepeatedName
-} = require('../errors');
+const { NoPortConfiguredError, NoEntitiesConfiguredError, PortIsTakenError, RESTAPIUnreachableError, EntityRepeatedName,
+    ReferencedEntityIsMissingOrWrongError } = require('../errors');
 
 class Server {
 
@@ -15,9 +15,16 @@ class Server {
     constructor(port, entities) {
         if (!port) throw new NoPortConfiguredError();
         if (!entities || entities.length == 0) throw new NoEntitiesConfiguredError();
-        if (this.thereIsSomeEntityNameRepeated(entities)) throw new EntityRepeatedName();
+
         this.setPort(port);
         this.setEntities(entities);
+
+        // TODO: Get the repeated Name to inform it
+        if (this.thereIsSomeEntityNameRepeated()) throw new EntityRepeatedName();
+
+        // TODO: Get the name to inform it
+        if (this.thereIsSomeNestedEntityWrongReferred()) throw new ReferencedEntityIsMissingOrWrongError();
+
         this.setState("CREATED");
     }
 
@@ -59,6 +66,10 @@ class Server {
         return this.entities;
     }
 
+    getNotNestedEntities(){
+        return this.getEntities().filter(entity => !entity.isNested());
+    }
+
     // TODO: find a better way to do this
     async isPortIsTaken(port) {
         return new Promise((resolve) => {
@@ -87,19 +98,19 @@ class Server {
 
     async getRESTAPIURLsUnfetchable() {
         // Using async map to make async filtering
-        const entitiesRESTAPIURLAreFetchable = await Promise.all(this.getEntities().map(async entity => {
+        const entitiesRESTAPIURLAreFetchable = await Promise.all(this.getNotNestedEntities().map(async entity => {
             return entity.isTheRESTAPIURLFetchable();
         }));
 
-        return this.getEntities().filter((_, index) => !entitiesRESTAPIURLAreFetchable[index]).map(entity => entity.getRESTAPIURL());
+        return this.getNotNestedEntities().filter((_, index) => !entitiesRESTAPIURLAreFetchable[index]).map(entity => entity.getRESTAPIURL());
     }
 
-    thereIsSomeEntityNameRepeated(entities){
-        return _.uniqBy(entities, entity => entity.getName()).length != entities.length;
+    thereIsSomeEntityNameRepeated(){
+        return _.uniqBy(this.getEntities(), entity => entity.getName()).length != this.getEntities().length;
     }
 
     getQueryResolvers(){
-        return this.getEntities().reduce((resolvers, entity) => {
+        return this.getNotNestedEntities().reduce((resolvers, entity) => {
             resolvers[entity.getName()] = entity.getFetchAllFunction();
             return resolvers;
         }, {});
@@ -122,8 +133,18 @@ class Server {
         `;
     }
 
+    thereIsSomeNestedEntityWrongReferred(){
+        const entities = this.getEntities();
+
+        const nestedFields = _.flatten(entities.map(entity => entity.getNestedFields()));
+        return nestedFields.some(field => {
+            //TODO: Match the exact type (this is a workaround for array fields)
+            return !entities.some(entity => field.getType().includes(entity.getName()));
+        });
+    }
+
     queryList(){
-        const entitiesQueryList = this.getEntities().map(entity => entity.getQueryString``).join('\n');
+        const entitiesQueryList = this.getNotNestedEntities().map(entity => entity.getQueryString``).join('\n');
         return `type Query {
            ${entitiesQueryList} 
         }`;

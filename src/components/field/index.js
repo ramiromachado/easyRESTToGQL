@@ -13,6 +13,8 @@ const BooleanArrayField = require('./booleanArrayField');
 const ObjectArrayField = require('./objectArrayField');
 const ReferenceField = require('./referenceField');
 const ArrayReferenceField = require('./arrayReferenceField');
+const NestedField = require('./nestedField');
+const ArrayNestedField = require('./arrayNestedField');
 
 module.exports = {
     Field,
@@ -28,5 +30,7 @@ module.exports = {
     BooleanArrayField,
     ObjectArrayField,
     ReferenceField,
-    ArrayReferenceField
+    ArrayReferenceField,
+    NestedField,
+    ArrayNestedField
 };

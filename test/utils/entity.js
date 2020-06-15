@@ -1,5 +1,6 @@
 const fieldUtils = require('./fields');
-const { Entity } = require('../../src/index');
+const { Entities } = require('../../src/index');
+const { NestedEntity, Entity } = Entities;
 
 class entityUtils {
 
@@ -20,8 +21,37 @@ class entityUtils {
         return new Entity("EntityWithAllTypeOfFields", "url", fields);
     }
 
-    getSimpleEntityWithFields(fields){
-        return new Entity("simpleEntityWithFields", "url", fields);
+    getNestedEntity(nestedEntityName) {
+        return new NestedEntity(nestedEntityName, [fieldUtils.getStringField()]);
+    }
+
+    getNestedEntityWithNestedField(nestedEntityName, nestedNestedEntityName) {
+        const fields = [];
+        fields.push(fieldUtils.getNestedField(nestedNestedEntityName, nestedNestedEntityName));
+        fields.push(fieldUtils.getNestedField(nestedNestedEntityName+"s", nestedNestedEntityName));
+
+        return new NestedEntity(nestedEntityName, fields);
+    }
+
+    getEntityWithNestedFieldAndNestedArrayField(superEntityName, nestedEntityName) {
+        const fields = [];
+
+        fields.push(fieldUtils.getNestedField(nestedEntityName, nestedEntityName));
+        fields.push(fieldUtils.getNestedField(nestedEntityName+"s", nestedEntityName));
+        return new Entity(superEntityName, "url", fields);
+    }
+
+    getEntityWithNestedEntity() {
+        const nestedEntityName = "nestedEntity";
+        const nestedEntityFields = [fieldUtils.getStringField(),fieldUtils.getFloatField()];
+        const nestedEntity = new NestedEntity(nestedEntityName, nestedEntityFields);
+
+        const fields = [];
+        fields.push(fieldUtils.getNestedField(nestedEntity.getName(), nestedEntity.getName()));
+        fields.push(fieldUtils.getArrayNestedField(nestedEntity.getName()+"s", nestedEntity.getName()));
+        const entity = new Entity("entityWithNestedFields", "url", fields);
+
+        return { entity, nestedEntity};
     }
 
     getReferencedABCEntities(){
@@ -52,6 +82,11 @@ class entityUtils {
     getUnreachableURLEntity(){
         const fields = [fieldUtils.getStringField()];
         return new Entity("withoutURL", "unreachable", fields);
+    }
+
+    getAnotherUnreachableURLEntity(){
+        const fields = [fieldUtils.getStringField()];
+        return new Entity("anotherWithoutURL", "unreachable", fields);
     }
 
     getNoFieldsEntity() {

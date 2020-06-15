@@ -51,5 +51,23 @@ describe('Server', function() {
             (() => new Server(serverUtils.getPort(), [withAllTypeOfFieldsEntity, withAllTypeOfFieldsEntityRepeated]))
                 .should.throw(Errors.EntityRepeatedName);
         });
+
+        it('should fail if a nested field reference a non-existent entity', async () => {
+            // Setting up the GQL Server
+            const entityA = entityUtils.getEntityWithNestedFieldAndNestedArrayField("A","B");
+
+            // Testing
+            (() => new Server(serverUtils.getPort(), [entityA]))
+                .should.throw(Errors.ReferencedEntityIsMissingOrWrongError);
+        });
+
+        it('should fail if a nested field in a nested entity reference a non-existent entity', async () => {
+            // Setting up the GQL Server
+            const entityA = entityUtils.getNestedEntityWithNestedField("A","B");
+
+            // Testing
+            (() => new Server(serverUtils.getPort(), [entityA]))
+                .should.throw(Errors.ReferencedEntityIsMissingOrWrongError);
+        });
     });
 });

@@ -2,7 +2,8 @@ const ArrayField = require('./arrayField');
 
 class IntArrayField extends ArrayField{
     constructor(){
-        super(...arguments, "int");
+        const [ name ] = arguments;
+        super(name,"int");
     }
 
 }
