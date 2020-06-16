@@ -66,6 +66,7 @@ class Field {
             int: "Int",
             boolean: "Boolean",
             object: "Object",
+            date: "Date",
             array: "String",
             reference: "Reference",
             arrayReference: "ArrayReference"

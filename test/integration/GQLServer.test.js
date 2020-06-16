@@ -23,7 +23,7 @@ describe('GQL Server', function() {
     describe('GQL server running and responding', function() {
         describe('Success', function() {
 
-            describe("should run and respond with simple schema (No nested fields)", async function() {
+            describe("should run and respond", async function() {
                 let server;
 
                 afterEach((done) => {

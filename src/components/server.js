@@ -128,6 +128,7 @@ class Server {
         const typeList = this.typeList``;
         return `
             scalar Object
+            scalar Date
             ${queryList}
             ${typeList}
         `;

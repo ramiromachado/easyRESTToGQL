@@ -49,6 +49,13 @@ describe('Fields', function() {
                 should.exist(objectField);
             });
 
+            it('should create a date field successfully', async () => {
+                const dateField = fieldUtils.getDateField();
+
+                // Testing
+                should.exist(dateField);
+            });
+
             it('should create an array string field successfully', async () => {
                 const stringArrayField = fieldUtils.getStringArrayField();
 
@@ -56,32 +63,39 @@ describe('Fields', function() {
                 should.exist(stringArrayField);
             });
 
-            it('should create array float field successfully', async () => {
+            it('should create an array float field successfully', async () => {
                 const floatArrayField = fieldUtils.getFloatArrayField();
 
                 // Testing
                 should.exist(floatArrayField);
             });
 
-            it('should create array int field successfully', async () => {
+            it('should create an array int field successfully', async () => {
                 const intArrayField = fieldUtils.getIntArrayField();
 
                 // Testing
                 should.exist(intArrayField);
             });
 
-            it('should create array boolean field successfully', async () => {
+            it('should create an array boolean field successfully', async () => {
                 const booleanArrayField = fieldUtils.getBooleanArrayField();
 
                 // Testing
                 should.exist(booleanArrayField);
             });
 
-            it('should create array object field successfully', async () => {
+            it('should create an array object field successfully', async () => {
                 const objectArrayField = fieldUtils.getObjectArrayField();
 
                 // Testing
                 should.exist(objectArrayField);
+            });
+
+            it('should create an array date field successfully', async () => {
+                const dateArrayField = fieldUtils.getDateArrayField();
+
+                // Testing
+                should.exist(dateArrayField);
             });
         });
 
@@ -166,7 +180,7 @@ describe('Fields', function() {
                 booleanField.getAlias().should.be.equals("aliasBooleanField");
             });
 
-            it('should add an alias to a object field successfully', async () => {
+            it('should add an alias to an object field successfully', async () => {
                 const objectField = fieldUtils.getObjectField();
                 objectField.setAlias("aliasObjectField");
 
@@ -175,7 +189,16 @@ describe('Fields', function() {
                 objectField.getAlias().should.be.equals("aliasObjectField");
             });
 
-            it('should add an alias to a array string field successfully', async () => {
+            it('should add an alias to an date field successfully', async () => {
+                const dateField = fieldUtils.getDateField();
+                dateField.setAlias("aliasDateField");
+
+                // Testing
+                should.exist(dateField);
+                dateField.getAlias().should.be.equals("aliasDateField");
+            });
+
+            it('should add an alias to an array string field successfully', async () => {
                 const stringArrayField = fieldUtils.getStringArrayField();
                 stringArrayField.setAlias("aliasStringArrayField");
 
@@ -184,7 +207,7 @@ describe('Fields', function() {
                 stringArrayField.getAlias().should.be.equals("aliasStringArrayField");
             });
 
-            it('should add an alias to a array float field successfully', async () => {
+            it('should add an alias to an array float field successfully', async () => {
                 const floatArrayField = fieldUtils.getFloatArrayField();
                 floatArrayField.setAlias("aliasFloatArrayField");
 
@@ -193,7 +216,7 @@ describe('Fields', function() {
                 floatArrayField.getAlias().should.be.equals("aliasFloatArrayField");
             });
 
-            it('should add an alias to a array int field successfully', async () => {
+            it('should add an alias to an array int field successfully', async () => {
                 const intArrayField = fieldUtils.getIntArrayField();
                 intArrayField.setAlias("aliasIntArrayField");
 
@@ -202,7 +225,7 @@ describe('Fields', function() {
                 intArrayField.getAlias().should.be.equals("aliasIntArrayField");
             });
 
-            it('should add an alias to a array boolean field successfully', async () => {
+            it('should add an alias to an array boolean field successfully', async () => {
                 const booleanArrayField = fieldUtils.getBooleanArrayField();
                 booleanArrayField.setAlias("aliasBooleanArrayField");
 
@@ -211,13 +234,22 @@ describe('Fields', function() {
                 booleanArrayField.getAlias().should.be.equals("aliasBooleanArrayField");
             });
 
-            it('should add an alias to a array object field successfully', async () => {
+            it('should add an alias to an array object field successfully', async () => {
                 const objectArrayField = fieldUtils.getObjectArrayField();
                 objectArrayField.setAlias("aliasObjectArrayField");
 
                 // Testing
                 should.exist(objectArrayField);
                 objectArrayField.getAlias().should.be.equals("aliasObjectArrayField");
+            });
+
+            it('should add an alias to an array date field successfully', async () => {
+                const dateArrayField = fieldUtils.getDateArrayField();
+                dateArrayField.setAlias("aliasDateDateField");
+
+                // Testing
+                should.exist(dateArrayField);
+                dateArrayField.getAlias().should.be.equals("aliasDateDateField");
             });
 
             it('should add an alias to a simple reference field successfully', async () => {
@@ -286,6 +318,11 @@ describe('Fields', function() {
                 (() => fieldUtils.getNoNameObjectField()).should.throw(Errors.FieldWithoutNameError);
             });
 
+            it('should fail if a date field has no name', async () => {
+                // Testing
+                (() => fieldUtils.getNoNameDateField()).should.throw(Errors.FieldWithoutNameError);
+            });
+
             it('should fail if a string array field has no name', async () => {
                 // Testing
                 (() => fieldUtils.getNoNameStringArrayField()).should.throw(Errors.FieldWithoutNameError);
@@ -314,6 +351,11 @@ describe('Fields', function() {
             it('should fail if an object array field has no name', async () => {
                 // Testing
                 (() => fieldUtils.getNoNameObjectArrayField()).should.throw(Errors.FieldWithoutNameError);
+            });
+
+            it('should fail if an date array field has no name', async () => {
+                // Testing
+                (() => fieldUtils.getNoNameDateArrayField()).should.throw(Errors.FieldWithoutNameError);
             });
 
         });
