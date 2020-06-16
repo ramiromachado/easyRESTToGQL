@@ -12,11 +12,13 @@ class entityUtils {
         fields.push(fieldUtils.getIntField());
         fields.push(fieldUtils.getBooleanField());
         fields.push(fieldUtils.getObjectField());
+        fields.push(fieldUtils.getDateField());
         fields.push(fieldUtils.getStringArrayField());
         fields.push(fieldUtils.getFloatArrayField());
         fields.push(fieldUtils.getIntArrayField());
         fields.push(fieldUtils.getBooleanArrayField());
         fields.push(fieldUtils.getObjectArrayField());
+        fields.push(fieldUtils.getDateArrayField());
 
         return new Entity("EntityWithAllTypeOfFields", "url", fields);
     }

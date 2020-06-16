@@ -1,8 +1,8 @@
 const { Fields } = require('../../src/index');
 
-const { Field, ArrayField, StringField, FloatField, IntField, BooleanField, ObjectField, StringArrayField,
-    FloatArrayField, IntArrayField, BooleanArrayField, ObjectArrayField, ReferenceField, ArrayReferenceField,
-    NestedField, ArrayNestedField } = Fields;
+const { Field, ArrayField, StringField, FloatField, IntField, BooleanField, ObjectField, DateField, StringArrayField,
+    FloatArrayField, IntArrayField, BooleanArrayField, ObjectArrayField, DateArrayField, ReferenceField,
+    ArrayReferenceField, NestedField, ArrayNestedField } = Fields;
 
 class fieldUtils {
 
@@ -46,6 +46,14 @@ class fieldUtils {
         return new ObjectField();
     }
 
+    getDateField() {
+        return new DateField("dateField");
+    }
+
+    getNoNameDateField() {
+        return new DateField();
+    }
+
     getStringArrayField() {
         return new StringArrayField("stringArrayField");
     }
@@ -84,6 +92,14 @@ class fieldUtils {
 
     getNoNameObjectArrayField() {
         return new ObjectArrayField(undefined);
+    }
+
+    getDateArrayField() {
+        return new DateArrayField("dateArrayField");
+    }
+
+    getNoNameDateArrayField() {
+        return new DateArrayField(undefined);
     }
 
     getReferenceField() {

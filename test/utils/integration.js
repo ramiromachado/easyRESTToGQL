@@ -4,8 +4,8 @@ const fs = require('fs');
 const jsonServer = require('json-server');
 
 const { Fields, Entities } = require("../../src/index");
-const { StringField, FloatField, IntField, BooleanField, ObjectField, StringArrayField, ObjectArrayField,
-    ReferenceField, ArrayReferenceField, NestedField, ArrayNestedField } = Fields;
+const { StringField, FloatField, IntField, BooleanField, ObjectField, DateField, StringArrayField, ReferenceField,
+    ArrayReferenceField, NestedField, ArrayNestedField } = Fields;
 const { Entity, NestedEntity } = Entities;
 
 const serverUtils = require('./server');
@@ -66,7 +66,7 @@ class integrationUtils {
         const invoices = [
             {
                 id: "IN-1",
-                header: { date:"24/03/2019", counter:"3", cashierId: "CA-1"},
+                header: { datetime: new Date(1592188158137), counter:"3", cashierId: "CA-1"},
                 total: 99,
                 clientId: "CL-2",
                 paymentIds: ["PY-1"],
@@ -74,7 +74,7 @@ class integrationUtils {
             },
             {
                 id: "IN-2",
-                header: { date:"24/03/2019", counter:"2", cashierId: "CA-2"},
+                header: { datetime: new Date(1592274534044), counter:"2", cashierId: "CA-2"},
                 total: 125,
                 clientId: "CL-1",
                 paymentIds: ["PY-2", "PY-3"],
@@ -82,7 +82,7 @@ class integrationUtils {
             },
             {
                 id: "IN-3",
-                header: { date:"25/03/2019", counter:"1", cashierId: "CA-1"},
+                header: { datetime: new Date(1592284534044), counter:"1", cashierId: "CA-1"},
                 total: 0,
                 clientId: "CL-2",
                 paymentIds: [],
@@ -202,7 +202,7 @@ class integrationUtils {
             Invoice {
                 id
                 header{
-                    date
+                    datetime
                     counter
                     cashier{
                         id
@@ -266,7 +266,7 @@ class integrationUtils {
 
     createInvoiceHeaderNestedEntity() {
         return new NestedEntity("Cashier",[
-            new StringField("date"),
+            new DateField("datetime"),
             new StringField("counter"),
             new ReferenceField("cashierId").setAlias("cashier")
         ]);
