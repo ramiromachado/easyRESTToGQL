@@ -94,6 +94,12 @@ class ReferencedFieldNameIsMissingError extends Error {
     }
 }
 
+class ReferenceFieldShouldNotOverrideResolverError extends Error {
+    constructor(fieldName) {
+        super(`The ${fieldName} is trying to override but is a Reference Field`);
+    }
+}
+
 class EntityHasNoFieldWithTheGivenNameError extends Error {
     constructor(entityName, fieldName) {
         super(`The entity ${entityName} has no field with the name "${fieldName}"`);
@@ -128,6 +134,7 @@ module.exports = {
     ReferencedEntityIsMissingOrWrongError,
     ReferenceFieldNameIsMissingError,
     ReferencedFieldNameIsMissingError,
+    ReferenceFieldShouldNotOverrideResolverError,
     EntityHasNoFieldWithTheGivenNameError,
     FieldIsNotReferenceTypeError,
     FieldIsNotReferableError

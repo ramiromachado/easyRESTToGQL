@@ -192,8 +192,8 @@ class integrationUtils {
             new IntField("total"),
             new ReferenceField("clientId").setAlias("client"),
             new ArrayReferenceField("paymentIds").setAlias("payments"),
-            new ArrayReferenceField("isAuthorizedByTheGovernment").setResolver(asyncTrue),
-            new ArrayReferenceField("areAllBarCodesReadCorrectly").setResolver(syncTrue),
+            new BooleanField("isAuthorizedByTheGovernment", { resolver: asyncTrue}),
+            new BooleanField("areAllBarCodesReadCorrectly", { resolver: syncTrue}),
             new ArrayNestedField("items", invoiceItemNestedEntity.getName())
         ]);
 
@@ -238,6 +238,8 @@ class integrationUtils {
                     }
                     quantity
                 }
+                isAuthorizedByTheGovernment
+                areAllBarCodesReadCorrectly
             }
         }`
     }
