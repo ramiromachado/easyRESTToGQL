@@ -2,9 +2,8 @@ const Field = require('./field');
 
 class BooleanField extends Field {
 
-    constructor() {
-        const [ name ] = arguments;
-        super(name, 'boolean');
+    constructor(name, config) {
+        super(name, 'boolean', config);
     }
 }
 

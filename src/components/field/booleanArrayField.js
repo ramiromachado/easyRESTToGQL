@@ -1,9 +1,8 @@
 const ArrayField = require('./arrayField');
 
 class BooleanArrayField extends ArrayField{
-    constructor(){
-        const [ name ] = arguments;
-        super(name, "boolean");
+    constructor(name, config){
+        super(name, "boolean", config);
     }
 
 }

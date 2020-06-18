@@ -1,9 +1,8 @@
 const ArrayField = require('./arrayField');
 
 class StringArrayField extends ArrayField{
-    constructor(){
-        const [ name ] = arguments;
-        super(name,"string");
+    constructor(name, config){
+        super(name, "string", config);
     }
 
 }

@@ -2,9 +2,8 @@ const Field = require('./field');
 
 class DateField extends Field {
 
-    constructor() {
-        const [ name ] = arguments;
-        super(name, 'date');
+    constructor(name, config) {
+        super(name, 'date', config);
     }
 }
 

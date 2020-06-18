@@ -7,14 +7,17 @@ class Field {
     resolver;
     alias;
 
-    constructor(name, type) {
-        if (!name) throw new Errors.FieldWithoutNameError();
+    constructor(name, type, config = {}) {
+        const {
+            resolver = (item) => item[this.getName()] // Set identity as default resolver
+        } = config;
 
+        if (!name) throw new Errors.FieldWithoutNameError();
         if (this.constructor == Field || !type) throw new Errors.FieldWithoutTypeError(name);
         this.setName(name);
         this.setAlias(name);
         this.setType(this.generateType(type));
-        this.setResolver((item) => item[this.getName()]) // Set identity as default resolver
+        this.setResolver(resolver)
     }
 
     getName() {
