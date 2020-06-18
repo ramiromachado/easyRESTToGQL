@@ -288,74 +288,380 @@ describe('Fields', function() {
                 arrayNestedField.getAlias().should.be.equals("aliasArrayNestedField");
             });
         });
+
+        describe('should set a resolver to a field successfully', async () => {
+            describe('should set a resolver when a field is created successfully', async () => {
+
+                it('should set a resolver to a string field successfully', async () => {
+                    const resolver = (data) => data;
+                    const stringField = fieldUtils.getStringField({ resolver });
+
+                    // Testing
+                    should.exist(stringField);
+                    stringField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should set a resolver to a float field successfully', async () => {
+                    const resolver = (data) => data;
+                    const floatField = fieldUtils.getFloatField({ resolver });
+
+                    // Testing
+                    should.exist(floatField);
+                    floatField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should set a resolver to a int field successfully', async () => {
+                    const resolver = (data) => data;
+                    const intField = fieldUtils.getIntField({ resolver });
+
+                    // Testing
+                    should.exist(intField);
+                    intField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should set a resolver to a boolean field successfully', async () => {
+                    const resolver = (data) => data;
+                    const booleanField = fieldUtils.getBooleanField({ resolver });
+
+                    // Testing
+                    should.exist(booleanField);
+                    booleanField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should set a resolver to an object field successfully', async () => {
+                    const resolver = (data) => data;
+                    const objectField = fieldUtils.getObjectField({ resolver });
+
+                    // Testing
+                    should.exist(objectField);
+                    objectField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should set a resolver to an date field successfully', async () => {
+                    const resolver = (data) => data;
+                    const dateField = fieldUtils.getDateField({ resolver });
+
+                    // Testing
+                    should.exist(dateField);
+                    dateField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should set a resolver to an array string field successfully', async () => {
+                    const resolver = (data) => data;
+                    const stringArrayField = fieldUtils.getStringArrayField({ resolver });
+
+                    // Testing
+                    should.exist(stringArrayField);
+                    stringArrayField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should set a resolver to an array float field successfully', async () => {
+                    const resolver = (data) => data;
+                    const floatArrayField = fieldUtils.getFloatArrayField({ resolver });
+
+                    // Testing
+                    should.exist(floatArrayField);
+                    floatArrayField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should set a resolver to an array int field successfully', async () => {
+                    const resolver = (data) => data;
+                    const intArrayField = fieldUtils.getIntArrayField({ resolver });
+
+                    // Testing
+                    should.exist(intArrayField);
+                    intArrayField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should set a resolver to an array boolean field successfully', async () => {
+                    const resolver = (data) => data;
+                    const booleanArrayField = fieldUtils.getBooleanArrayField({ resolver });
+
+                    // Testing
+                    should.exist(booleanArrayField);
+                    booleanArrayField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should set a resolver to an array object field successfully', async () => {
+                    const resolver = (data) => data;
+                    const objectArrayField = fieldUtils.getObjectArrayField({ resolver });
+
+                    // Testing
+                    should.exist(objectArrayField);
+                    objectArrayField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should set a resolver to an array date field successfully', async () => {
+                    const resolver = (data) => data;
+                    const dateArrayField = fieldUtils.getDateArrayField({ resolver });
+
+                    // Testing
+                    should.exist(dateArrayField);
+                    dateArrayField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should set a resolver to a nested type field successfully', async () => {
+                    const resolver = (data) => data;
+                    const nestedField = fieldUtils.getNestedField({ resolver });
+
+                    // Testing
+                    should.exist(nestedField);
+                    nestedField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should set a resolver to a nested array field successfully', async () => {
+                    const resolver = (data) => data;
+                    const arrayNestedField = fieldUtils.getArrayNestedField({ resolver });
+
+                    // Testing
+                    should.exist(arrayNestedField);
+                    arrayNestedField.getResolver().should.be.equals(resolver);
+                });
+            });
+
+            describe('should add a resolver to a field successfully', async () => {
+
+                it('should add twice a resolver to a string field (keeping the last one) successfully', async () => {
+                    const resolver = (data) => data;
+                    const resolver2 = (data) => data + data;
+                    const stringField = fieldUtils.getStringField();
+                    stringField.setResolver(resolver);
+                    stringField.setResolver(resolver2);
+
+                    // Testing
+                    should.exist(stringField);
+                    stringField.getResolver().should.be.equals(resolver2);
+                });
+
+                it('should add a resolver to a string field successfully', async () => {
+                    const resolver = (data) => data;
+                    const stringField = fieldUtils.getStringField();
+                    stringField.setResolver(resolver);
+
+                    // Testing
+                    should.exist(stringField);
+                    stringField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should add a resolver to a float field successfully', async () => {
+                    const resolver = (data) => data;
+                    const floatField = fieldUtils.getFloatField();
+                    floatField.setResolver(resolver);
+
+                    // Testing
+                    should.exist(floatField);
+                    floatField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should add a resolver to a int field successfully', async () => {
+                    const resolver = (data) => data;
+                    const intField = fieldUtils.getIntField();
+                    intField.setResolver(resolver);
+
+                    // Testing
+                    should.exist(intField);
+                    intField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should add a resolver to a boolean field successfully', async () => {
+                    const resolver = (data) => data;
+                    const booleanField = fieldUtils.getBooleanField();
+                    booleanField.setResolver(resolver);
+
+                    // Testing
+                    should.exist(booleanField);
+                    booleanField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should add a resolver to an object field successfully', async () => {
+                    const resolver = (data) => data;
+                    const objectField = fieldUtils.getObjectField();
+                    objectField.setResolver(resolver);
+
+                    // Testing
+                    should.exist(objectField);
+                    objectField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should add a resolver to an date field successfully', async () => {
+                    const resolver = (data) => data;
+                    const dateField = fieldUtils.getDateField();
+                    dateField.setResolver(resolver);
+
+                    // Testing
+                    should.exist(dateField);
+                    dateField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should add a resolver to an array string field successfully', async () => {
+                    const resolver = (data) => data;
+                    const stringArrayField = fieldUtils.getStringArrayField();
+                    stringArrayField.setResolver(resolver);
+
+                    // Testing
+                    should.exist(stringArrayField);
+                    stringArrayField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should add a resolver to an array float field successfully', async () => {
+                    const resolver = (data) => data;
+                    const floatArrayField = fieldUtils.getFloatArrayField();
+                    floatArrayField.setResolver(resolver);
+
+                    // Testing
+                    should.exist(floatArrayField);
+                    floatArrayField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should add a resolver to an array int field successfully', async () => {
+                    const resolver = (data) => data;
+                    const intArrayField = fieldUtils.getIntArrayField();
+                    intArrayField.setResolver(resolver);
+
+                    // Testing
+                    should.exist(intArrayField);
+                    intArrayField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should add a resolver to an array boolean field successfully', async () => {
+                    const resolver = (data) => data;
+                    const booleanArrayField = fieldUtils.getBooleanArrayField();
+                    booleanArrayField.setResolver(resolver);
+
+                    // Testing
+                    should.exist(booleanArrayField);
+                    booleanArrayField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should add a resolver to an array object field successfully', async () => {
+                    const resolver = (data) => data;
+
+                    const objectArrayField = fieldUtils.getObjectArrayField();
+                    objectArrayField.setResolver(resolver);
+
+                    // Testing
+                    should.exist(objectArrayField);
+                    objectArrayField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should add a resolver to an array date field successfully', async () => {
+                    const resolver = (data) => data;
+                    const dateArrayField = fieldUtils.getDateArrayField();
+                    dateArrayField.setResolver(resolver);
+
+                    // Testing
+                    should.exist(dateArrayField);
+                    dateArrayField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should add a resolver to a nested type field successfully', async () => {
+                    const resolver = (data) => data;
+                    const nestedField = fieldUtils.getNestedField();
+                    nestedField.setResolver(resolver);
+
+                    // Testing
+                    should.exist(nestedField);
+                    nestedField.getResolver().should.be.equals(resolver);
+                });
+
+                it('should add a resolver to a nested array field successfully', async () => {
+                    const resolver = (data) => data;
+                    const arrayNestedField = fieldUtils.getArrayNestedField();
+                    arrayNestedField.setResolver(resolver);
+
+                    // Testing
+                    should.exist(arrayNestedField);
+                    arrayNestedField.getResolver().should.be.equals(resolver);
+                });
+            });
+        });
     });
 
     describe('Errors', async () => {
 
         describe('should fail creating basic type fields with wrong data', async () => {
             it('should fail if a string field has no name', async () => {
+                const name = null;
+
                 // Testing
-                (() => fieldUtils.getNoNameStringField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getStringField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if a float field has no name', async () => {
+                const name = null;
+
                 // Testing
-                (() => fieldUtils.getNoNameFloatField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getFloatField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if an int field has no name', async () => {
+                const name = null;
+
                 // Testing
-                (() => fieldUtils.getNoNameIntField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getIntField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if a boolean field has no name', async () => {
+                const name = null;
+
                 // Testing
-                (() => fieldUtils.getNoNameBooleanField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getBooleanField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if an object field has no name', async () => {
+                const name = null;
+
                 // Testing
-                (() => fieldUtils.getNoNameObjectField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getObjectField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if a date field has no name', async () => {
+                const name = null;
+
                 // Testing
-                (() => fieldUtils.getNoNameDateField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getDateField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if a string array field has no name', async () => {
+                const name = null;
+
                 // Testing
-                (() => fieldUtils.getNoNameStringArrayField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getStringArrayField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if a float array field has no name', async () => {
-                // Testing
-                (() => fieldUtils.getNoNameFloatArrayField()).should.throw(Errors.FieldWithoutNameError);
-            });
+                const name = null;
 
-            it('should fail if a float array field has no name', async () => {
                 // Testing
-                (() => fieldUtils.getNoNameFloatArrayField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getFloatArrayField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if an int array field has no name', async () => {
+                const name = null;
+
                 // Testing
-                (() => fieldUtils.getNoNameIntArrayField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getIntArrayField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if a boolean array field has no name', async () => {
+                const name = null;
+
                 // Testing
-                (() => fieldUtils.getNoNameBooleanArrayField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getBooleanArrayField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if an object array field has no name', async () => {
+                const name = null;
+
                 // Testing
-                (() => fieldUtils.getNoNameObjectArrayField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getObjectArrayField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if an date array field has no name', async () => {
+                const name = null;
+
                 // Testing
-                (() => fieldUtils.getNoNameDateArrayField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getDateArrayField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
         });
@@ -363,13 +669,17 @@ describe('Fields', function() {
         describe('should fail creating reference fields with wrong data', async () => {
 
             it('should fail if a reference field has no name', async () => {
+                const name = null;
+
                 // Testing
-                (() => fieldUtils.getNoNameReferenceField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getReferenceField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if an array reference field has no name', async () => {
+                const name = null;
+
                 // Testing
-                (() => fieldUtils.getNoNameArrayReferenceField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getArrayReferenceField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if a field is created without type', async () => {
@@ -387,23 +697,29 @@ describe('Fields', function() {
         describe('should fail creating nested fields with wrong data', async () => {
 
             it('should fail if a nested field has no name', async () => {
+                const name = null;
                 // Testing
-                (() => fieldUtils.getNoNameNestedField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getNestedField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if a nested array field has no name', async () => {
+                const name = null;
                 // Testing
-                (() => fieldUtils.getNoNameArrayNestedField()).should.throw(Errors.FieldWithoutNameError);
+                (() => fieldUtils.getArrayNestedField({ name })).should.throw(Errors.FieldWithoutNameError);
             });
 
             it('should fail if a field is created without type', async () => {
+                const entityName = null;
+
                 // Testing
-                (() => fieldUtils.getNoTypeNestedField()).should.throw(Errors.FieldWithoutTypeError);
+                (() => fieldUtils.getNestedField({ entityName })).should.throw(Errors.FieldWithoutTypeError);
             });
 
             it('should fail if an array field is created without type', async () => {
+                const entityName = null;
+
                 // Testing
-                (() => fieldUtils.getNoTypeArrayNestedField()).should.throw(Errors.FieldWithoutTypeError);
+                (() => fieldUtils.getArrayNestedField({ entityName })).should.throw(Errors.FieldWithoutTypeError);
             });
 
         });
@@ -416,5 +732,38 @@ describe('Fields', function() {
                 (() => booleanField.setAlias()).should.throw(Errors.AliasWithoutNameError);
             });
         })
+
+        describe('should fail setting or adding a resolver to a reference field', async () => {
+            it('should set a resolver to a simple reference field successfully', async () => {
+                const resolver = (data) => data;
+
+                // Testing
+                (() => fieldUtils.getReferenceField({ resolver })).should.throw(Errors.AliasWithoutNameError);
+            });
+
+            it('should set a resolver to a reference array field successfully', async () => {
+                const resolver = (data) => data;
+                
+                // Testing
+                (() => fieldUtils.getArrayReferenceField({ resolver })).should.throw(Errors.AliasWithoutNameError);
+            });
+
+            it('should fails adding a resolver to a simple reference field', async () => {
+                const resolver = (data) => data;
+                const referenceField = fieldUtils.getReferenceField();
+
+                // Testing
+                (() => referenceField.setResolver(resolver)).should.throw(Errors.AliasWithoutNameError);
+            });
+
+            it('should fails add a resolver to a reference array field successfully', async () => {
+                const resolver = (data) => data;
+                const referenceArray = fieldUtils.getArrayReferenceField();
+
+                // Testing
+                (() => referenceArray.setResolver(resolver)).should.throw(Errors.AliasWithoutNameError);
+            });
+        })
+
     });
 });
