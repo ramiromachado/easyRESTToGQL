@@ -6,116 +6,88 @@ const { Field, ArrayField, StringField, FloatField, IntField, BooleanField, Obje
 
 class fieldUtils {
 
-    getStringField() {
-        return new StringField("stringField");
+    getStringField(fieldData = {} ) {
+        const {name = "stringField", resolver} = fieldData;
+        const config = {resolver};
+        return new StringField(name, config);
     }
 
-    getNoNameStringField() {
-        return new StringField(undefined);
+    getFloatField(fieldData = {} ) {
+        const {name = "floatField", resolver} = fieldData;
+        const config = {resolver};
+        return new FloatField(name, config);
     }
 
-    getFloatField() {
-        return new FloatField("floatField");
+    getIntField(fieldData = {} ) {
+        const {name = "intField", resolver} = fieldData;
+        const config = {resolver};
+        return new IntField(name, config);
     }
 
-    getNoNameFloatField() {
-        return new FloatField(undefined);
+    getBooleanField(fieldData = {} ) {
+        const {name = "booleanField", resolver} = fieldData;
+        const config = {resolver};
+        return new BooleanField(name, config);
     }
 
-    getIntField() {
-        return new IntField("intField");
+    getObjectField(fieldData = {} ) {
+        const {name = "ObjectField", resolver} = fieldData;
+        const config = {resolver};
+        return new ObjectField(name, config);
     }
 
-    getNoNameIntField() {
-        return new IntField(undefined);
+    getDateField(fieldData = {} ) {
+        const {name = "dateField", resolver} = fieldData;
+        const config = {resolver};
+        return new DateField(name, config);
     }
 
-    getBooleanField() {
-        return new BooleanField("booleanField");
+    getStringArrayField(fieldData = {} ) {
+        const {name = "stringArrayField", resolver} = fieldData;
+        const config = {resolver};
+        return new StringArrayField(name, config);
     }
 
-    getNoNameBooleanField() {
-        return new BooleanField(undefined);
+    getFloatArrayField(fieldData = {} ) {
+        const {name = "floatArrayField", resolver} = fieldData;
+        const config = {resolver};
+        return new FloatArrayField(name, config);
     }
 
-    getObjectField() {
-        return new ObjectField("objectField");
+    getIntArrayField(fieldData = {} ) {
+        const {name = "intArrayField", resolver} = fieldData;
+        const config = {resolver};
+        return new IntArrayField(name, config);
     }
 
-    getNoNameObjectField() {
-        return new ObjectField();
+    getBooleanArrayField(fieldData = {} ) {
+        const {name = "booleanArrayField", resolver} = fieldData;
+        const config = {resolver};
+        return new BooleanArrayField(name, config);
     }
 
-    getDateField() {
-        return new DateField("dateField");
+    getObjectArrayField(fieldData = {} ) {
+        const {name = "objectArrayField", resolver} = fieldData;
+        const config = {resolver};
+        return new ObjectArrayField(name, config);
     }
 
-    getNoNameDateField() {
-        return new DateField();
+    getDateArrayField(fieldData = {} ) {
+        const {name = "dateArrayField", resolver} = fieldData;
+        const config = {resolver};
+        return new DateArrayField(name, config);
     }
 
-    getStringArrayField() {
-        return new StringArrayField("stringArrayField");
+    getReferenceField(fieldData = {} ) {
+        const {name = "referenceField", resolver} = fieldData;
+        const config = {resolver};
+        return new ReferenceField(name, config);
     }
 
-    getNoNameStringArrayField() {
-        return new StringArrayField(undefined);
-    }
-
-    getFloatArrayField() {
-        return new FloatArrayField("floatArrayField");
-    }
-
-    getNoNameFloatArrayField() {
-        return new FloatArrayField(undefined);
-    }
-
-    getIntArrayField() {
-        return new IntArrayField("intArrayField");
-    }
-
-    getNoNameIntArrayField() {
-        return new IntArrayField(undefined);
-    }
-
-    getBooleanArrayField() {
-        return new BooleanArrayField("booleanArrayField");
-    }
-
-    getNoNameBooleanArrayField() {
-        return new BooleanArrayField(undefined);
-    }
-
-    getObjectArrayField() {
-        return new ObjectArrayField("objectArrayField");
-    }
-
-    getNoNameObjectArrayField() {
-        return new ObjectArrayField(undefined);
-    }
-
-    getDateArrayField() {
-        return new DateArrayField("dateArrayField");
-    }
-
-    getNoNameDateArrayField() {
-        return new DateArrayField(undefined);
-    }
-
-    getReferenceField() {
-        return new ReferenceField("referenceField");
-    }
-
-    getNoNameReferenceField() {
-        return new ReferenceField(undefined);
-    }
-
-    getArrayReferenceField() {
-        return new ArrayReferenceField("referenceField");
-    }
-
-    getNoNameArrayReferenceField() {
-        return new ArrayReferenceField(undefined);
+    getArrayReferenceField(fieldData = {} ) {
+        const {name = "referenceField", resolver} = fieldData;
+        const config = {resolver};
+        return new ArrayReferenceField(name, config);
     }
 
     getNoTypeField() {
@@ -126,28 +98,16 @@ class fieldUtils {
         return new ArrayField("fieldName");
     }
 
-    getNestedField(fieldName = "fieldName", entityName= "nestedEntityName") {
-        return new NestedField(fieldName, entityName);
+    getNestedField(fieldData = {}) {
+        const { name = "NestedField", entityName= "nestedEntityName", resolver } = fieldData;
+        const config = { resolver };
+        return new NestedField(name, entityName, config);
     }
 
-    getNoNameNestedField() {
-        return new NestedField(undefined, "nestedEntityName");
-    }
-
-    getNoTypeNestedField() {
-        return new NestedField("fieldName", undefined);
-    }
-
-    getArrayNestedField(fieldName = "fieldName", entityName= "nestedEntityName") {
-        return new ArrayNestedField(fieldName, entityName);
-    }
-
-    getNoNameArrayNestedField() {
-        return new ArrayNestedField(undefined, "nestedEntityName");
-    }
-
-    getNoTypeArrayNestedField() {
-        return new ArrayNestedField("fieldName", undefined);
+    getArrayNestedField(fieldData = {}) {
+        const { name = "ArrayNestedField", entityName= "nestedEntityName", resolver } = fieldData;
+        const config = { resolver };
+        return new ArrayNestedField(name, entityName, config);
     }
 
     getAFields() {

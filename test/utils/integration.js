@@ -180,12 +180,20 @@ class integrationUtils {
         const invoiceHeaderNestedEntity = this.createInvoiceHeaderNestedEntity();
         const invoiceItemNestedEntity = this.createInvoiceItemNestedEntity();
 
+        const asyncTrue = async () => {
+            return new Promise(resolve => setTimeout(() => resolve(true), 1000));
+        }
+
+        const syncTrue = () => true;
+
         const invoiceEntity = new Entity("Invoice", this.getInvoiceURL(), [
             new StringField("id"),
             new NestedField("header", invoiceHeaderNestedEntity.getName()),
             new IntField("total"),
             new ReferenceField("clientId").setAlias("client"),
             new ArrayReferenceField("paymentIds").setAlias("payments"),
+            new BooleanField("isAuthorizedByTheGovernment", { resolver: asyncTrue}),
+            new BooleanField("areAllBarCodesReadCorrectly", { resolver: syncTrue}),
             new ArrayNestedField("items", invoiceItemNestedEntity.getName())
         ]);
 
@@ -230,6 +238,8 @@ class integrationUtils {
                     }
                     quantity
                 }
+                isAuthorizedByTheGovernment
+                areAllBarCodesReadCorrectly
             }
         }`
     }

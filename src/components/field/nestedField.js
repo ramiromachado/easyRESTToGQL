@@ -2,8 +2,7 @@ const Field = require('./field');
 
 class NestedField extends Field{
     constructor(){
-        const [ name, type ] = arguments;
-        super(name,type);
+        super(...arguments);
     }
 
     generateType(type) {

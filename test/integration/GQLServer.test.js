@@ -93,6 +93,9 @@ describe('GQL Server', function() {
                             const {cashierId, ...otherHeaderAttributes} = invoice.header;
                             invoice.header = otherHeaderAttributes;
 
+                            invoice.isAuthorizedByTheGovernment = true; // asyncResolved
+                            invoice.areAllBarCodesReadCorrectly = true; // syncResolved
+
                             const { paymentIds, clientId, ...otherAttributes } = invoice;
                             return otherAttributes;
                         });

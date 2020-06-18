@@ -1,9 +1,8 @@
 const ArrayField = require('./arrayField');
 
 class DateArrayField extends ArrayField{
-    constructor(){
-        const [ name ] = arguments;
-        super(name,"date");
+    constructor(name, config){
+        super(name, "date", config);
     }
 
 }

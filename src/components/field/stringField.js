@@ -2,9 +2,8 @@ const Field = require('./field');
 
 class StringField extends Field {
 
-    constructor() {
-        const [ name ] = arguments;
-        super(name,'string');
+    constructor(name, config) {
+        super(name,'string', config);
     }
 }
 

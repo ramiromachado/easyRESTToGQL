@@ -27,30 +27,32 @@ class entityUtils {
         return new NestedEntity(nestedEntityName, [fieldUtils.getStringField()]);
     }
 
-    getNestedEntityWithNestedField(nestedEntityName, nestedNestedEntityName) {
+    getNestedEntityWithNestedField(name, entityName) {
         const fields = [];
-        fields.push(fieldUtils.getNestedField(nestedNestedEntityName, nestedNestedEntityName));
-        fields.push(fieldUtils.getNestedField(nestedNestedEntityName+"s", nestedNestedEntityName));
+        fields.push(fieldUtils.getNestedField({name, entityName}));
+        fields.push(fieldUtils.getArrayNestedField({name: name + "s", entityName}));
 
-        return new NestedEntity(nestedEntityName, fields);
+        return new NestedEntity(name, fields);
     }
 
-    getEntityWithNestedFieldAndNestedArrayField(superEntityName, nestedEntityName) {
+    getEntityWithNestedFieldAndNestedArrayField(name, entityName) {
         const fields = [];
 
-        fields.push(fieldUtils.getNestedField(nestedEntityName, nestedEntityName));
-        fields.push(fieldUtils.getNestedField(nestedEntityName+"s", nestedEntityName));
-        return new Entity(superEntityName, "url", fields);
+        fields.push(fieldUtils.getNestedField({name, entityName}));
+        fields.push(fieldUtils.getArrayNestedField({name: name + "s", entityName}));
+        return new Entity(name, "url", fields);
     }
 
     getEntityWithNestedEntity() {
         const nestedEntityName = "nestedEntity";
         const nestedEntityFields = [fieldUtils.getStringField(),fieldUtils.getFloatField()];
         const nestedEntity = new NestedEntity(nestedEntityName, nestedEntityFields);
+        const name = nestedEntity.getName();
+        const entityName = nestedEntity.getName();
 
         const fields = [];
-        fields.push(fieldUtils.getNestedField(nestedEntity.getName(), nestedEntity.getName()));
-        fields.push(fieldUtils.getArrayNestedField(nestedEntity.getName()+"s", nestedEntity.getName()));
+        fields.push(fieldUtils.getNestedField({name, entityName}));
+        fields.push(fieldUtils.getArrayNestedField({name: name + "s", entityName}));
         const entity = new Entity("entityWithNestedFields", "url", fields);
 
         return { entity, nestedEntity};

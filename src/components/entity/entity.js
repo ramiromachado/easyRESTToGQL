@@ -33,7 +33,7 @@ class Entity {
 
     validateFields(name, fields){
         if (!fields || (fields.length == 0)) throw new Errors.EntityWithoutFieldsError(name);
-        if (this.thereIsARepeteadNameField(fields)) throw new Errors.EntityWithRepeatedFieldError(name);
+        if (this.thereIsARepeatedNameField(fields)) throw new Errors.EntityWithRepeatedFieldError(name);
     }
 
     getName() {
@@ -93,7 +93,7 @@ class Entity {
         return false;
     }
 
-    thereIsARepeteadNameField(fields) {
+    thereIsARepeatedNameField(fields) {
         return _.uniqBy(fields, field => field.getName()).length != fields.length;
     }
 

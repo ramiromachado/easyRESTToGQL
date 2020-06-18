@@ -1,8 +1,11 @@
 const Field = require('./field');
+const Errors = require('../../errors');
+
 class ReferenceField extends Field {
 
-    constructor(name) {
-        super(name, "reference");
+    constructor(name, config = {}) {
+        if (config.resolver) throw new Errors.ReferenceFieldShouldNotOverrideResolverError(name);
+        super(name, "reference", config);
     }
 
     setReferencedEntityAndField(referencedEntity, referencedField){

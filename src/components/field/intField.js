@@ -2,9 +2,8 @@ const Field = require('./field');
 
 class IntField extends Field {
 
-    constructor() {
-        const [ name ] = arguments;
-        super(name,'int');
+    constructor(name, config) {
+        super(name,'int', config);
     }
 }
 
