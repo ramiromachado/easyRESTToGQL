@@ -38,7 +38,9 @@ describe('GQL Server', function() {
                         // Setting up the GQL Server
                         const productEntity = integrationUtils.createProductEntity();
                         const port = serverUtils.getPort();
-                        server = new Server(port, [productEntity]);
+                        const entities = [productEntity];
+                        const serverConfig = { port, entities};
+                        server = new Server(serverConfig);
                         await server.start();
 
                         // Testing if the server is running
@@ -67,8 +69,8 @@ describe('GQL Server', function() {
                         // Setting up the GQL Server
                         const port = serverUtils.getPort();
                         const entities = integrationUtils.createInvoiceFullModel();
-
-                        server = new Server(port, entities);
+                        const serverConfig = { port, entities};
+                        server = new Server(serverConfig);
                         await server.start();
 
                         // Fetch data from rest to compare with data fetched via GraphQL
@@ -124,7 +126,9 @@ describe('GQL Server', function() {
                 // Setting up the GQL Server on the same port as the RESTAPIServer
                 const productEntity = integrationUtils.createProductEntity();
                 const port = integrationUtils.getRestPort();
-                const server = new Server(port, [productEntity]);
+                const entities = [productEntity];
+                const serverConfig = { port, entities};
+                const server = new Server(serverConfig);
                 // Testing
                 return server.start().should.be.rejectedWith(Errors.PortIsTakenError);
             });
@@ -133,18 +137,22 @@ describe('GQL Server', function() {
                 // Setting up the GQL Server
                 const unreachableEntity = entityUtils.getUnreachableURLEntity();
                 const port = serverUtils.getPort();
-                const server = new Server(port, [unreachableEntity]);
+                const entities =  [unreachableEntity];
+                const serverConfig = { port, entities };
+                const server = new Server(serverConfig);
 
                 // Testing
                 return server.start().should.be.rejectedWith(Errors.RESTAPIUnreachableError);
             });
 
-            it('should fail if two REST API service is unreachables', async () => {
+            it('should fail if two REST API service is unreachable', async () => {
                 // Setting up the GQL Server
                 const unreachableEntity = entityUtils.getUnreachableURLEntity();
                 const anotherUnreachableEntity = entityUtils.getAnotherUnreachableURLEntity();
                 const port = serverUtils.getPort();
-                const server = new Server(port, [unreachableEntity, anotherUnreachableEntity]);
+                const entities = [unreachableEntity, anotherUnreachableEntity];
+                const serverConfig = { port, entities} ;
+                const server = new Server(serverConfig);
 
                 // Testing
                 return server.start().should.be.rejectedWith(Errors.RESTAPIUnreachableError);

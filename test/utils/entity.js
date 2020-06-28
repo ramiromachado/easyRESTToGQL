@@ -20,19 +20,25 @@ class entityUtils {
         fields.push(fieldUtils.getObjectArrayField());
         fields.push(fieldUtils.getDateArrayField());
 
-        return new Entity("EntityWithAllTypeOfFields", "url", fields);
+        const url = "url";
+        const entityConfig = { url, fields};
+
+        return new Entity("EntityWithAllTypeOfFields", entityConfig);
     }
 
     getNestedEntity(nestedEntityName) {
-        return new NestedEntity(nestedEntityName, [fieldUtils.getStringField()]);
+        const fields = [fieldUtils.getStringField()];
+        const entityConfig = { fields };
+        return new NestedEntity(nestedEntityName, entityConfig);
     }
 
     getNestedEntityWithNestedField(name, entityName) {
         const fields = [];
         fields.push(fieldUtils.getNestedField({name, entityName}));
         fields.push(fieldUtils.getArrayNestedField({name: name + "s", entityName}));
+        const entityConfig = { fields };
 
-        return new NestedEntity(name, fields);
+        return new NestedEntity(name, entityConfig);
     }
 
     getEntityWithNestedFieldAndNestedArrayField(name, entityName) {
@@ -40,20 +46,27 @@ class entityUtils {
 
         fields.push(fieldUtils.getNestedField({name, entityName}));
         fields.push(fieldUtils.getArrayNestedField({name: name + "s", entityName}));
-        return new Entity(name, "url", fields);
+
+        const url = "url";
+        const entityConfig = { url, fields };
+        return new Entity(name, entityConfig);
     }
 
     getEntityWithNestedEntity() {
         const nestedEntityName = "nestedEntity";
         const nestedEntityFields = [fieldUtils.getStringField(),fieldUtils.getFloatField()];
-        const nestedEntity = new NestedEntity(nestedEntityName, nestedEntityFields);
+        const nestedEntityConfig = { fields: nestedEntityFields};
+        const nestedEntity = new NestedEntity(nestedEntityName, nestedEntityConfig);
         const name = nestedEntity.getName();
         const entityName = nestedEntity.getName();
 
         const fields = [];
         fields.push(fieldUtils.getNestedField({name, entityName}));
         fields.push(fieldUtils.getArrayNestedField({name: name + "s", entityName}));
-        const entity = new Entity("entityWithNestedFields", "url", fields);
+
+        const url = "url";
+        const entityConfig = { url, fields};
+        const entity = new Entity("entityWithNestedFields", entityConfig);
 
         return { entity, nestedEntity};
     }
@@ -62,9 +75,19 @@ class entityUtils {
         // A has id, name and B fields
         // B has id, name and C fields
         // C has id, name and As fields
-        const A = new Entity("A", "url", fieldUtils.getAFields());
-        const B = new Entity("B", "url", fieldUtils.getBFields());
-        const C = new Entity("C", "url", fieldUtils.getCFields());
+        const url = "url";
+        const fieldsA = fieldUtils.getAFields();
+        const entityConfigA = { url, fields: fieldsA};
+
+        const fieldsB = fieldUtils.getBFields();
+        const entityConfigB = { url, fields: fieldsB};
+
+        const fieldsC = fieldUtils.getCFields();
+        const entityConfigC = { url, fields: fieldsC};
+
+        const A = new Entity("A", entityConfigA);
+        const B = new Entity("B", entityConfigB);
+        const C = new Entity("C", entityConfigC);
 
         return {A,B,C};
     }
@@ -75,27 +98,37 @@ class entityUtils {
 
     getNoNameEntity() {
         const fields = [fieldUtils.getStringField()];
-        return new Entity(undefined, "url", fields);
+        const url = "url";
+        const entityConfig = { url, fields};
+        return new Entity(undefined, entityConfig);
     }
 
     getNoURLEntity() {
+        const url = undefined;
         const fields = [fieldUtils.getStringField()];
-        return new Entity("withoutURL", undefined, fields);
+        const entityConfig = { url, fields};
+        return new Entity("withoutURL", entityConfig);
     }
 
     getUnreachableURLEntity(){
         const fields = [fieldUtils.getStringField()];
-        return new Entity("withoutURL", "unreachable", fields);
+        const url = "unreachable";
+        const entityConfig = { url, fields};
+        return new Entity("withoutURL", entityConfig);
     }
 
     getAnotherUnreachableURLEntity(){
         const fields = [fieldUtils.getStringField()];
-        return new Entity("anotherWithoutURL", "unreachable", fields);
+        const url = "unreachable";
+        const entityConfig = { url, fields};
+        return new Entity("anotherWithoutURL", entityConfig);
     }
 
     getNoFieldsEntity() {
         const fields = [];
-        return new Entity("withoutFields", "url", fields);
+        const url = "url";
+        const entityConfig = { url, fields};
+        return new Entity("withoutFields", entityConfig);
     }
 }
 

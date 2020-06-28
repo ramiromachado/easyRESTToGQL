@@ -29,7 +29,9 @@ class serverUtils {
         const {entity, nestedEntity} = entityUtils.getEntityWithNestedEntity();
         entities.push(entity, nestedEntity);
 
-        return new Server(this.getPort(), entities);
+        const port = this.getPort();
+        const serverConfig = { port, entities};
+        return new Server(serverConfig);
     }
 
 }
