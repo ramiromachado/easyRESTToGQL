@@ -149,14 +149,17 @@ class integrationUtils {
     }
 
     createProductEntity() {
-        return new Entity("Product", this.getProductURL(), [
+        const url = this.getProductURL();
+        const fields = [
             new StringField("id"),
             new FloatField("value"),
             new BooleanField("isAvailable"),
             new IntField("stock"),
             new ObjectField("attributes"),
             new StringArrayField("tags")
-        ]);
+        ];
+        const entityConfig = { url, fields};
+        return new Entity("Product", entityConfig);
     }
 
     getProductGQLQuery() {
@@ -186,7 +189,8 @@ class integrationUtils {
 
         const syncTrue = () => true;
 
-        const invoiceEntity = new Entity("Invoice", this.getInvoiceURL(), [
+        const url = this.getInvoiceURL();
+        const fields = [
             new StringField("id"),
             new NestedField("header", invoiceHeaderNestedEntity.getName()),
             new IntField("total"),
@@ -195,7 +199,9 @@ class integrationUtils {
             new BooleanField("isAuthorizedByTheGovernment", { resolver: asyncTrue}),
             new BooleanField("areAllBarCodesReadCorrectly", { resolver: syncTrue}),
             new ArrayNestedField("items", invoiceItemNestedEntity.getName())
-        ]);
+        ];
+        const entityConfig = { url, fields};
+        const invoiceEntity = new Entity("Invoice", entityConfig);
 
         entityUtils.referenceBy(invoiceEntity, clientEntity, "clientId","id");
         entityUtils.referenceBy(invoiceEntity, paymentEntity, "paymentIds","id");
@@ -245,41 +251,54 @@ class integrationUtils {
     }
 
     createClientEntity() {
-        return new Entity("Client", this.getClientURL(), [
+        const url = this.getClientURL();
+        const fields = [
             new StringField("id"),
             new StringField("name"),
             new NestedField("referrer", "Client")
-        ]);
+        ];
+        const entityConfig = { url, fields};
+        return new Entity("Client", entityConfig);
     }
 
     createPaymentEntity() {
-        return new Entity("Payment", this.getPaymentURL(), [
+        const url = this.getPaymentURL();
+        const fields = [
             new StringField("id"),
             new FloatField("amount"),
             new StringField("method")
-        ]);
+        ];
+        const entityConfig = { url, fields};
+        return new Entity("Payment", entityConfig);
     }
 
     createCashierEntity() {
-        return new Entity("InvoiceHeader", this.getCashierURL(), [
+        const url = this.getCashierURL();
+        const fields = [
             new StringField("id"),
             new StringField("name")
-        ]);
+        ];
+        const entityConfig = { url, fields};
+        return new Entity("InvoiceHeader", entityConfig);
     }
 
     createInvoiceItemNestedEntity() {
-        return new NestedEntity("InvoiceItem", [
+        const fields = [
             new ReferenceField("productId").setAlias("product"),
             new IntField("quantity")
-        ]);
+        ];
+        const entityConfig = { fields };
+        return new NestedEntity("InvoiceItem", entityConfig);
     }
 
     createInvoiceHeaderNestedEntity() {
-        return new NestedEntity("Cashier",[
+        const fields = [
             new DateField("datetime"),
             new StringField("counter"),
             new ReferenceField("cashierId").setAlias("cashier")
-        ]);
+        ];
+        const entityConfig = { fields };
+        return new NestedEntity("Cashier", entityConfig);
     }
 
     async getProductDataFromRest() {

@@ -7,8 +7,8 @@ const Entity = require('./entity.js');
 
 class NestedEntity extends Entity {
 
-    constructor(name, fields) {
-        super(name, undefined, fields);
+    constructor(name, nestedEntityConfig) {
+        super(name, nestedEntityConfig);
     }
 
     validateConstruction(entityData){

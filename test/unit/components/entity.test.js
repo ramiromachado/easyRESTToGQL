@@ -127,8 +127,10 @@ describe('Entities', function() {
 
         it('should fail if some entity has two fields with the same name', async () => {
             const fields = [fieldUtils.getStringField(), fieldUtils.getStringField()];
+            const url = integrationUtils.getInvoiceURL();
+            const entityConfig = { url, fields};
             // Testing
-            (() => new Entity("repeatedFields", integrationUtils.getInvoiceURL(), fields)).should.throw(Errors.EntityWithRepeatedFieldError);
+            (() => new Entity("repeatedFields", entityConfig)).should.throw(Errors.EntityWithRepeatedFieldError);
         });
 
         it('should fail if trying to reference a field with no associated entity', async () => {
