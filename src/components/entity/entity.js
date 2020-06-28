@@ -9,7 +9,11 @@ class Entity {
     RESTAPIURL;
     fields;
 
-    constructor(name, RESTAPIURL, fields) {
+    constructor(name, entityConfig) {
+        const {
+            url:RESTAPIURL,
+            fields
+        } = entityConfig;
         this.validateConstruction({name, RESTAPIURL, fields});
         this.setName(name);
         this.setRESTAPIURL(RESTAPIURL);

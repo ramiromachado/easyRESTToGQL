@@ -12,7 +12,8 @@ class Server {
     state;
     GraphQLServer;
 
-    constructor(port, entities) {
+    constructor(serverConfig) {
+        const { port, entities } = serverConfig;
         if (!port) throw new NoPortConfiguredError();
         if (!entities || entities.length == 0) throw new NoEntitiesConfiguredError();
 
