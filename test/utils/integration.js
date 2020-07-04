@@ -3,7 +3,7 @@ const { createApolloFetch } = require('apollo-fetch');
 const fs = require('fs');
 const jsonServer = require('json-server');
 
-const { Fields, Entities } = require("../../src/index");
+const { Fields, Entities } = require('../../src/index');
 const { StringField, FloatField, IntField, BooleanField, ObjectField, DateField, StringArrayField, ReferenceField,
     ArrayReferenceField, NestedField, ArrayNestedField } = Fields;
 const { Entity, NestedEntity } = Entities;

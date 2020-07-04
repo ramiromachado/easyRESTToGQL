@@ -1,3 +1,4 @@
+const CONSTANTS = require('../../constants.js');
 const Errors = require('../../errors');
 
 class Field {
@@ -59,21 +60,7 @@ class Field {
     }
 
     generateType(type) {
-        return this.getTypesMap()[type];
-    }
-
-    getTypesMap() {
-        return {
-            string: "String",
-            float: "Float",
-            int: "Int",
-            boolean: "Boolean",
-            object: "Object",
-            date: "Date",
-            array: "String",
-            reference: "Reference",
-            arrayReference: "ArrayReference"
-        }
+        return CONSTANTS.COMPONENTS.FIELD.TYPE_NAME[type];
     }
 
     isNested(){

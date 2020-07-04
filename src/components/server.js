@@ -1,7 +1,7 @@
 const _ = require('lodash');
-
 const { GraphQLServer } = require('graphql-yoga');
 
+const CONSTANTS = require('../constants.js');
 const { NoPortConfiguredError, NoEntitiesConfiguredError, PortIsTakenError, RESTAPIUnreachableError, EntityRepeatedName,
     ReferencedEntityIsMissingOrWrongError } = require('../errors');
 
@@ -26,7 +26,7 @@ class Server {
         // TODO: Get the name to inform it
         if (this.thereIsSomeNestedEntityWrongReferred()) throw new ReferencedEntityIsMissingOrWrongError();
 
-        this.setState("CREATED");
+        this.setState(CONSTANTS.COMPONENTS.SERVER.STATES.CREATED);
     }
 
     async start() {
@@ -34,21 +34,25 @@ class Server {
         await this.throwExceptionIfSomeRESTAPIURLIsUnreachable();
 
         await this.startGQLServer();
-        this.setState("START");
+        this.setState(CONSTANTS.COMPONENTS.SERVER.STATES.RUNNING);
     }
 
     async stop() {
-        if(this.getState() === "RUNNING" && this.GraphQLServer){
+        if(this.isRunning() && this.GraphQLServer){
             await this.GraphQLServer.close();
         }
     }
 
     setState(event) {
-        this.state = states[event];
+        this.state = CONSTANTS.COMPONENTS.SERVER.STATES[event];
     }
 
     getState() {
         return this.state;
+    }
+
+    isRunning(){
+        return this.state === CONSTANTS.COMPONENTS.SERVER.STATES.RUNNING;
     }
 
     setPort(port) {
@@ -181,11 +185,5 @@ class Server {
     }
 
 }
-
-const states = {
-    CREATED: "CREATED",
-    START: "RUNNING",
-    STOP: "STOPPED"
-};
 
 module.exports = Server;

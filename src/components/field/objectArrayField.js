@@ -1,8 +1,9 @@
+const CONSTANTS = require('../../constants.js');
 const ArrayField = require('./arrayField');
 
 class ObjectArrayField extends ArrayField{
     constructor(name, config){
-        super(name, "object", config);
+        super(name, CONSTANTS.COMPONENTS.FIELD.TYPE.OBJECT, config);
     }
 
 }

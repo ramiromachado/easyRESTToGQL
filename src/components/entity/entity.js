@@ -1,6 +1,7 @@
 const _ = require('lodash');
 require('isomorphic-fetch');
 
+const CONSTANTS = require('../constants');
 const Errors = require('../../errors');
 
 class Entity {
@@ -75,10 +76,12 @@ class Entity {
         const referencedField = entityReferenced.getField(referencedFieldName)
         if (!referencedField) throw new Errors.EntityHasNoFieldWithTheGivenNameError(entityReferenced.getName(), referencedFieldName);
 
-        const referenceFieldIsReferenceType = (referenceField.getType() == "[ArrayReference]") || (referenceField.getType() == "Reference");
+        const arrayReferenceType = `[${CONSTANTS.FIELD.TYPE_NAME[CONSTANTS.FIELD.TYPE.ARRAY_REFERENCE]}]`;
+        const referenceType = CONSTANTS.FIELD.TYPE_NAME[CONSTANTS.FIELD.TYPE.REFERENCE];
+        const referenceFieldIsReferenceType = (referenceField.getType() == arrayReferenceType) || (referenceField.getType() == referenceType);
         if(!referenceFieldIsReferenceType) throw new Errors.FieldIsNotReferenceTypeError(this.getName(), referenceField.getName());
 
-        const referencedFieldIsReferable = !((referencedField.getType() == "[ArrayReference]") || (referencedField.getType() == "Reference"));
+        const referencedFieldIsReferable = !((referencedField.getType() == arrayReferenceType) || (referencedField.getType() == referenceType));
         if(!referencedFieldIsReferable) throw new Errors.FieldIsNotReferableError(entityReferenced.getName(), referencedField.getName());
 
         referenceField.setReferencedEntityAndField(entityReferenced, referencedField);

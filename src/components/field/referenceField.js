@@ -1,3 +1,4 @@
+const CONSTANTS = require('../../constants.js');
 const Field = require('./field');
 const Errors = require('../../errors');
 
@@ -5,7 +6,7 @@ class ReferenceField extends Field {
 
     constructor(name, config = {}) {
         if (config.resolver) throw new Errors.ReferenceFieldShouldNotOverrideResolverError(name);
-        super(name, "reference", config);
+        super(name, CONSTANTS.COMPONENTS.FIELD.TYPE.REFERENCE, config);
     }
 
     setReferencedEntityAndField(referencedEntity, referencedField){
