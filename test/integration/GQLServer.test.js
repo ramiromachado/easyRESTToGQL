@@ -5,7 +5,7 @@ const chaiAsPromised = require('chai-as-promised');
 const should = require('chai').should();
 chai.use(chaiAsPromised);
 
-const { Server, Errors } = require("../../src/index")
+const { Server, Errors } = require('../../src/index')
 const { integrationUtils, entityUtils, serverUtils } = require('../utils/index');
 
 describe('GQL Server', function() {
@@ -23,7 +23,7 @@ describe('GQL Server', function() {
     describe('GQL server running and responding', function() {
         describe('Success', function() {
 
-            describe("should run and respond", async function() {
+            describe('should run and respond', async function() {
                 let server;
 
                 afterEach((done) => {

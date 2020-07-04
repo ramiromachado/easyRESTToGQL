@@ -1,3 +1,4 @@
+const CONSTANTS = require('../../constants.js');
 const ArrayField = require('./arrayField');
 const Errors = require('../../errors');
 
@@ -5,7 +6,7 @@ class ArrayReferenceField extends ArrayField {
 
     constructor(name, config = {}) {
         if (config.resolver) throw new Errors.ReferenceFieldShouldNotOverrideResolverError(name);
-        super(name, "arrayReference", config);
+        super(name, CONSTANTS.COMPONENTS.FIELD.TYPE.ARRAY_REFERENCE, config);
     }
     
     setReferencedEntityAndField(referencedEntity, referencedField) {
